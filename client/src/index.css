@@ -16,6 +16,11 @@
   font-family: 'Inter', sans-serif;
 }
 
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
 .btn-icon{
   @apply h-9 aspect-square hover:bg-white cursor-pointer rounded-md text-white hover:text-[var(--teal)];
 }

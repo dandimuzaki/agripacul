@@ -33,7 +33,14 @@ const handleAddToCart = (id) => {
           <h2 className='text-[var(--black)] font-bold'>{title}</h2>
           <p></p>
         </div>
-        <button onClick={() => handleAddToCart(id)} className='cursor-pointer items-end self-end w-fit rounded-full py-2 px-3 border border-2 border-[var(--teal)] text-[var(--teal)] text-sm active:border-[var(--dark-teal)] md:hover:bg-[var(--teal)] md:hover:text-white active:text-white font-bold'>Add to cart</button>
+        <button onClick={() => handleAddToCart(id)} className='
+        cursor-pointer w-fit
+        rounded-full py-2 px-3 
+        border-2 border-[var(--teal)] 
+        text-[var(--teal)] text-sm font-bold 
+        hover:bg-[var(--teal)] hover:text-white 
+        active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] active:text-white
+        '>Add to cart</button>
       </div>
     </div>
   );

@@ -9,11 +9,11 @@ import { Link, matchPath, useLocation } from 'react-router-dom';
 const Header = ({ cart }) => {
   const location = useLocation();
   const isHome = location.pathname === '/';
-  const isCategoryPage = matchPath('/:category', location.pathname);
+  const isCategoryPage = ['/vegetables', '/flowers', '/tools', '/salad'].includes(location.pathname);
   const isCheckout = location.pathname === '/checkout';
 
   return (
-    <div className={isHome || isCategoryPage ?'header-mobile':'header'}>
+    <div className={isHome || isCategoryPage ?'show header':'hide header'}>
       <Link to='/'>
         <div className='hidden logo-container cursor-pointer md:flex h-8 md:mr-2 items-center'>
           <img className='h-full' src={logo} />
