@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+.navbar-icon{
+  @apply flex flex-col items-center;
+}

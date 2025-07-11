@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+.header{
+  @apply items-center gap-3 px-5 py-3 z-150 bg-[var(--teal)] md:flex-row sticky top-0 hidden md:flex;
+}
+
+.header-mobile{
+  @apply items-center gap-3 px-5 py-3 z-150 bg-[var(--teal)] md:flex-row sticky top-0 flex;
+}

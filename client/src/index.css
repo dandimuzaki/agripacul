@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+*{
+  box-sizing: border-box;
+  /*border: 1px solid red;*/
+}
+
+:root{
+  --red: #FF4F0F;
+  --orange: #FFA673;
+  --teal: #31D29E;
+  --dark-teal: #25bd8d;
+  --black: #030711;
+  --grey: #A4A8B5;
+  --light-grey: #d1d4dd;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-icon{
+  @apply h-9 aspect-square hover:bg-white cursor-pointer rounded-md text-white hover:text-[var(--teal)];
+}
+
+body{
+  @apply bg-white;
+}

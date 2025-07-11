@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+.category{
+  @apply whitespace-nowrap text-sm py-2 px-3 text-[var(--red)] rounded-full bg-white border-2 border-[var(--red)];
+}
+
+.category-active{
+  @apply whitespace-nowrap text-sm py-2 px-3 font-bold text-white rounded-full bg-[var(--red)] border-2 border-[var(--red)];
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
