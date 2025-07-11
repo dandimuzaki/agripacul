@@ -40,7 +40,7 @@ export const CartProvider = ({ children }) => {
   const increaseQuantity = (id) => {
     const targetProduct = products.find((item) => item.id === id);
     if (targetProduct) {
-      setCart([...cart, targetProduct]);
+      setCart((prev) => [...prev, targetProduct]);
     }
   };
 

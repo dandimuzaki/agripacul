@@ -3,11 +3,10 @@ import PageNav from '../../Components/PageNav/PageNav';
 import { ChevronRight, LocationOn } from '@mui/icons-material';
 import CheckoutItem from '../../Components/CheckoutItem/CheckoutItem';
 import { useCheckout } from '../../context/CheckoutContext';
+import formatCurrency from '../../utils/format';
 
 const CheckoutPage = () => {
-  const { checkout, groupedCheckout } = useCheckout();
-
-  const totalPrice = checkout.reduce((acc, item) => acc + item.price, 0);
+  const { groupedCheckout, totalPrice } = useCheckout();
   const shippingCost = 14000;
   const totalBill = totalPrice + shippingCost;
 
@@ -69,20 +68,20 @@ const CheckoutPage = () => {
               <div className='flex justify-between'>
                 <p>Total Price</p>
                 <p>
-              Rp{totalPrice}
+              {formatCurrency(totalPrice)}
                 </p>
               </div>
               <div className='flex justify-between'>
                 <p>Total Shipping Cost</p>
-                <p>Rp{shippingCost}</p>
+                <p>{formatCurrency(shippingCost)}</p>
               </div>
               <div className='flex justify-between font-bold'>
                 <p>Total Bill</p>
-                <p>Rp{totalBill}</p>
+                <p>{formatCurrency(totalBill)}</p>
               </div>
             </div>
           </div>
-          <button className='rounded-lg bg-[var(--teal)] font-bold text-lg text-white p-2 w-full'>Pay</button>
+          <button className='active:bg-[var(--dark-teal)] rounded-lg bg-[var(--teal)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay</button>
 
         </div>
       </div>

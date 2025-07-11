@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CheckoutContext } from './CheckoutContext.jsx';
 import { useCart } from './CartContext.jsx';
 
@@ -6,18 +6,38 @@ export const CheckoutProvider = ({ children }) => {
   const { cart } = useCart();
   const [checkedItems, setCheckedItems] = useState([]);
   const [checkout, setCheckout] = useState([]);
+  const [isAllChecked, setIsAllChecked] = useState(false);
+
+  const totalPrice = checkout.reduce((acc, item) => acc + item.price, 0);
+
+  useEffect(() => {
+    setCheckout(cart.filter(item => checkedItems.includes(item.id)));
+  }, [cart, checkedItems]);
 
   const handleCheckout = (id) => {
     const isAlreadyChecked = checkedItems.includes(id);
     if (isAlreadyChecked) {
+      setIsAllChecked(false)
       setCheckedItems((prev) => prev.filter((itemId) => itemId !== id));
-      setCheckout((prev) => prev.filter((item) => item.id !== id));
     } else {
-      const productToAdd = cart.filter((item) => item.id === id);
-      setCheckedItems((prev) => [...prev, id]);
-      setCheckout((prev) => [...prev, ...productToAdd]);
-    }
+      setCheckedItems((prev) => [...prev, id]);    }
   };
+
+  const testCheckout = () => {
+    console.log(checkout)
+    console.log(checkedItems)
+  }
+
+  const checkAll = () => {
+    setIsAllChecked((prev) => !prev)
+    if (isAllChecked) {
+      setCheckedItems([]);
+      setCheckout([]);
+    } else {
+      setCheckedItems(cart.map(item => item.id));
+      setCheckout(cart);
+    }
+  }
 
   const groupedCheckout = Object.values(
     checkout.reduce((acc, curr) => {
@@ -35,7 +55,7 @@ export const CheckoutProvider = ({ children }) => {
   );
 
   return (
-    <CheckoutContext.Provider value={{ checkedItems, checkout, handleCheckout, groupedCheckout }}>
+    <CheckoutContext.Provider value={{ testCheckout, checkedItems, checkout, handleCheckout, checkAll, groupedCheckout, isAllChecked, totalPrice }}>
       {children}
     </CheckoutContext.Provider>
   );
