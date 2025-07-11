@@ -39,6 +39,11 @@ export const CheckoutProvider = ({ children }) => {
     }
   }
 
+  useEffect(() => {
+    const allId = cart.map(item => item.id);
+    setIsAllChecked(allId.length === checkedItems.length && allId.length > 0);
+  }, [cart, checkedItems]);
+
   const groupedCheckout = Object.values(
     checkout.reduce((acc, curr) => {
       const key = curr.id;
