@@ -1,4 +1,4 @@
-const product = [
+const products = [
   {
     'id': 1,
     'title': 'Selada Keriting',
@@ -73,4 +73,4 @@ const product = [
   }
 ];
 
-export default product;
+export default products;

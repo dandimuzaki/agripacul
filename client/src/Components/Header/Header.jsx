@@ -15,7 +15,7 @@ const Header = ({ cart }) => {
   return (
     <div className={isHome || isCategoryPage ?'show header':'hide header'}>
       <Link to='/'>
-        <div className='hidden logo-container cursor-pointer md:flex h-8 md:mr-2 items-center'>
+        <div className='hidden cursor-pointer md:flex md:h-8 md:mr-2 items-center'>
           <img className='h-full' src={logo} />
         </div>
       </Link>

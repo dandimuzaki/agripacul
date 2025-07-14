@@ -5,7 +5,7 @@
 }
 
 .show{
-  @apply flex sticky;
+  @apply flex fixed;
 }
 
 .hide{

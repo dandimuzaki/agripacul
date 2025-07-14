@@ -14,8 +14,9 @@ const HomePage = () => {
   }, [category, products]);
 
   return (
-    <>
-      <div className='z-100 bg-white px-5 py-3 flex flex-col gap-1 sticky top-15'>
+    <div>
+      <div className='h-20 w-full bg-red-500'></div>
+      <div className='z-100 bg-white px-5 py-3 flex flex-col gap-1 w-full sticky top-15'>
         <h2 className='text-lg font-bold'>Categories</h2>
         <Category />
         <p></p>
@@ -24,7 +25,7 @@ const HomePage = () => {
         {filteredProducts.map((product) => <ProductCard key={product.id} product={product} />)}
       </div>
       <div className='h-screen'></div>
-    </>
+    </div>
   );
 };
 
