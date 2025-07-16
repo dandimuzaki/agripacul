@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+.testimonial-card{
+  @apply min-w-[250px] flex flex-col bg-white overflow-hidden rounded-lg;
+}

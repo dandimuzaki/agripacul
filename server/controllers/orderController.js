@@ -1,4 +1,4 @@
-import Order from '../models/Order.js'
+import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
 export const addToOrders = async (req, res) => {
@@ -7,11 +7,11 @@ export const addToOrders = async (req, res) => {
     const newOrder = await Order.create(req.body);
 
     // 2. Extract product IDs from order items
-    const productIds = newOrder.items.map(item => item._id);
+    const productIds = newOrder.items.map((item) => item._id);
 
     // 3. Create a map of product ID to quantity
     const productMap = {};
-    newOrder.items.forEach(item => {
+    newOrder.items.forEach((item) => {
       productMap[item._id] = item.quantity;
     });
 
@@ -38,8 +38,8 @@ export const getOrders = async (req, res) => {
 
     // Combine filters
     const filters = {};
-    if (userId) {filters.user = userId} else {};
-    if (status) {filters.status = status} else {};
+    if (userId) {filters.user = userId;} else {};
+    if (status) {filters.status = status;} else {};
 
     const orders = await Order.find(filters);
 
@@ -57,13 +57,13 @@ export const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate('user').populate('items.product');
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' })
+      return res.status(404).json({ message: 'Order not found' });
     }
-    res.status(200).json(order)
+    res.status(200).json(order);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
 export const updateOrderStatus = async (req, res) => {
   try {

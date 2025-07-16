@@ -11,36 +11,36 @@ export const CheckoutProvider = ({ children }) => {
   const totalPrice = checkout.reduce((acc, item) => acc + item.price, 0);
 
   useEffect(() => {
-    setCheckout(cart.filter(item => checkedItems.includes(item.id)));
+    setCheckout(cart.filter((item) => checkedItems.includes(item.id)));
   }, [cart, checkedItems]);
 
   const handleCheckout = (id) => {
     const isAlreadyChecked = checkedItems.includes(id);
     if (isAlreadyChecked) {
-      setIsAllChecked(false)
+      setIsAllChecked(false);
       setCheckedItems((prev) => prev.filter((itemId) => itemId !== id));
     } else {
       setCheckedItems((prev) => [...prev, id]);    }
   };
 
   const testCheckout = () => {
-    console.log(checkout)
-    console.log(checkedItems)
-  }
+    console.log(checkout);
+    console.log(checkedItems);
+  };
 
   const checkAll = () => {
-    setIsAllChecked((prev) => !prev)
+    setIsAllChecked((prev) => !prev);
     if (isAllChecked) {
       setCheckedItems([]);
       setCheckout([]);
     } else {
-      setCheckedItems(cart.map(item => item.id));
+      setCheckedItems(cart.map((item) => item.id));
       setCheckout(cart);
     }
-  }
+  };
 
   useEffect(() => {
-    const allId = cart.map(item => item.id);
+    const allId = cart.map((item) => item.id);
     setIsAllChecked(allId.length === checkedItems.length && allId.length > 0);
   }, [cart, checkedItems]);
 

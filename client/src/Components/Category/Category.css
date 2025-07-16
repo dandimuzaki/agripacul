@@ -1,11 +1,11 @@
 @import 'tailwindcss';
 
 .category{
-  @apply whitespace-nowrap text-sm py-2 px-3 rounded-full border-2 border-[var(--red)];
+  @apply whitespace-nowrap text-sm py-2 px-4 rounded-full border-2 border-[var(--red)];
 }
 
 .inactive{
-  @apply text-[var(--red)] bg-white;
+  @apply text-[var(--red)];
 }
 
 .active{

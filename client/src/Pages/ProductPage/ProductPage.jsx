@@ -3,40 +3,40 @@ import React from 'react';
 import CartButton from '../../Components/CartButton/CartButton';
 import lettuce from '../../assets/lettuce.jpg';
 import BackButton from '../../Components/BackButton/BackButton';
+import './ProductPage.css';
 
 const ProductPage = () => {
   return (
-    <div>
-      <div className='p-3 bg-white flex justify-between bg-white sticky top-0'>
+    <div className=''>
+      <div className='md:hidden p-3 bg-white flex justify-between bg-white sticky top-0'>
         <BackButton />
         <CartButton />
       </div>
-      <div className='p-3 flex flex-col gap-3'>
-        <div className='w-full'>
-          <img className='w-full aspect-square rounded-lg object-cover' src={lettuce} alt='lettuce' />
+      <div className='product-page'>
+        <img className='product-img w-full aspect-square rounded-lg object-cover' src={lettuce} alt='lettuce' />
+        <button className='w-fit product-category py-2 px-4 rounded-full bg-[var(--light-turquoise)] text-[var(--black)] text-sm'>Vegetables</button>
+        <p className='product-title text-2xl font-bold text-[var(--black)]'>Lettuce</p>
+        <div className='product-rating flex gap-2 text-orange-500 text-sm items-center'>
+          <Star />
+          <span>4.8</span>
         </div>
-        <div className='flex justify-between flex-1'>
-          <div className='py-2 px-4 rounded-full bg-[var(--teal)] text-white text-sm'>Vegetables</div>
-          <div className='flex gap-2 text-orange-500 text-sm items-center'>
-            <Star />
-            <span>4.8</span>
-          </div>
+        <div className='product-price flex flex-col items-start'>
+          <p className='text-sm text-gray-300 line-through'>Rp15.000</p>
+          <p className='text-[var(--red)] font-bold'><span className='text-2xl'>Rp10.000 </span><span className=''>/ 300g</span></p>
         </div>
-        <div className='flex justify-between w-full items-center'>
-          <h2 className='text-2xl font-bold text-[var(--black)]'>Lettuce</h2>
-          <div className='flex flex-col items-end'>
-            <p className='text-sm text-gray-300 line-through'>Rp15.000</p>
-            <p className='text-md text-orange-500'>Rp10.000<span className='text-md'>/300g</span></p>
-          </div>
+        <div className='product-description'>
+          <h3 className='text-[var(--black)] font-bold'>Details</h3>
+          <p className='text-gray-500 text-sm'>
+            Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
+            Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
+            Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
+            Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
+          </p>
         </div>
-        <h3 className='text-[var(--black)] font-bold'>Details</h3>
-        <p className='text-gray-500 text-sm'>
-        Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
-        Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
-        Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
-        Selada adalah sayuran yang kaya akan vitamin dan serat yang bermanfaat bagi kesehatan tubuh.
-
-        </p>
+        <div className='product-button flex gap-3'>
+          <button className='py-2 px-4 bg-[var(--teal)] text-white font-bold rounded-full active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] border-[var(--teal)] border-2 cursor-pointer'>Add to Cart</button>
+          <button className='py-2 px-4 border-2 border-[var(--teal)] text-[var(--teal)] font-bold rounded-full active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] active:text-white cursor-pointer'>See Recipe</button>
+        </div>
       </div>
     </div>
   );

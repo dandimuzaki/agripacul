@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+.value-container{
+  display: grid;
+  grid-template-columns: 5fr 3fr 5fr 3fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: 
+  "image1 value1 image2 value2"
+  "image1 value3 image2 value4"
+  ;
+}
+
+.value{
+  @apply h-full w-full rounded-lg overflow-hidden bg-[var(--light-turquoise)];
+}
+
+.image1{
+  grid-area: image1;
+}
+
+.image2{
+  grid-area: image2;
+}
+
+.value1{
+  grid-area: value1;
+}
+
+.value2{
+  grid-area: value2;
+}
+
+.value3{
+  grid-area: value3;
+}
+
+.value4{
+  grid-area: value4;
+}
+

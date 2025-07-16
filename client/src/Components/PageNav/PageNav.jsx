@@ -7,7 +7,7 @@ const PageNav = ({ path, text }) => {
       <div className='relative h-9 md:h-fit md:flex'>
         <BackButton path={path} />
         <div className='h-9 w-full flex justify-center items-center z-1 md:block md:h-fit md:w-fit'>
-          <h2 className='font-bold text-xl text-[var(--black)]'>{text}</h2>
+          <p className='font-bold text-xl text-[var(--black)]'>{text}</p>
         </div>
       </div>
     </div>

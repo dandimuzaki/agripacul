@@ -1,10 +1,10 @@
 import React from 'react';
 import { ShoppingCartOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { useCart } from '../../context/CartContext'
+import { useCart } from '../../context/CartContext';
 
 const CartButton = () => {
-  const { groupedCart } = useCart()
+  const { groupedCart } = useCart();
   return (
     <Link to='/cart'>
       <button className='btn-icon relative bg-transparent'>

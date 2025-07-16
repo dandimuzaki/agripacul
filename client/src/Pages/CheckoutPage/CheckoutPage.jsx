@@ -11,7 +11,7 @@ const CheckoutPage = () => {
   const totalBill = totalPrice + shippingCost;
 
   return (
-    <div>
+    <div className='md:mt-15'>
       <PageNav path="/cart" text="Checkout" />
       <div className='p-3 md:p-5 flex gap-3 md:gap-5 md:flex-row flex-col'>
         <div className='flex flex-col gap-3 md:flex-2'>
@@ -63,12 +63,12 @@ const CheckoutPage = () => {
             </label>
           </fieldset>
           <div className='flex flex-col gap-2 text-black'>
-            <h2 className='font-bold text-md'>Check your order summary</h2>
+            <p className='font-bold text-md'>Check your order summary</p>
             <div className='flex flex-col gap-1 text-sm'>
               <div className='flex justify-between'>
                 <p>Total Price</p>
                 <p>
-              {formatCurrency(totalPrice)}
+                  {formatCurrency(totalPrice)}
                 </p>
               </div>
               <div className='flex justify-between'>

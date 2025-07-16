@@ -13,7 +13,10 @@
   --black: #030711;
   --grey: #A4A8B5;
   --light-grey: #d1d4dd;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Kumbh Sans', sans-serif;
+  --light-turquoise: #cfe7e0;
+  --light-green: #e3eeb2;
+  --light-blue: #c5d7f6;
 }
 
 html, body, #root {
@@ -22,7 +25,7 @@ html, body, #root {
 }
 
 .btn-icon{
-  @apply h-9 aspect-square hover:bg-white cursor-pointer rounded-md text-white hover:text-[var(--teal)];
+  @apply h-9 aspect-square hover:bg-white cursor-pointer rounded-full text-white hover:text-[var(--teal)];
 }
 
 body{

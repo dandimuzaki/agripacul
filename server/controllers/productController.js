@@ -1,4 +1,4 @@
-import Product from '../models/Product.js'
+import Product from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
   const { category, sort } = req.query;
@@ -24,21 +24,21 @@ export const getProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.productId)
+    const product = await Product.findById(req.params.productId);
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' })
+      return res.status(404).json({ message: 'Product not found' });
     }
-    res.status(200).json(product)
+    res.status(200).json(product);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
 export const createProduct = async (req, res) => {
-  const product = new Product(req.body)
-  const saved = await product.save()
-  res.status(201).json(saved)
-}
+  const product = new Product(req.body);
+  const saved = await product.save();
+  res.status(201).json(saved);
+};
 
 export const updateProductStock = async (req, res) => {
   try {
@@ -53,7 +53,7 @@ export const updateProductStock = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    
+
     product.stock = stock;
 
     const saved = await product.save();

@@ -1,13 +1,15 @@
 @import 'tailwindcss';
 
 .header{
-  @apply w-full items-center gap-3 px-5 py-3 z-150 bg-[var(--teal)] md:flex-row top-0;
+  @apply fixed top-0 md:flex w-full items-center gap-5 px-5 py-3 z-150 md:flex-row items-center;
+  background-color: transparent;
+  transition: background-color 0.3s ease-in-out;
 }
 
-.show{
-  @apply flex fixed;
+.scrolled{
+  background-color: var(--teal);
 }
 
-.hide{
-  @apply hidden md:flex md:sticky;
+.not-home{
+  background-color: var(--teal);
 }

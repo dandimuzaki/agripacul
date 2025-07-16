@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+.product-page{
+  @apply flex flex-col gap-5 p-5;
+}
+
+.product-img{
+  grid-area: product;
+}
+
+.product-category{
+  grid-area: category;
+}
+
+.product-title{
+  grid-area: title;
+}
+
+.product-rating{
+  grid-area: rating;
+}
+
+.product-price{
+  grid-area: price;
+}
+
+.product-description{
+  grid-area: description;
+}
+
+.product-button{
+  grid-area: button;
+}
+
+@media only screen and (min-width: 768px) {
+  .product-page{
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "product category"
+    "product title"
+    "product rating"
+    "product price"
+    "product description"
+    "product ."
+    "product button"
+    ;
+    @apply p-3 md:p-5 md:gap-y-3 md:gap-x-10 gap-3;
+  }
+}

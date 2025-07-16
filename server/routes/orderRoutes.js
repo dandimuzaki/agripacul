@@ -1,8 +1,8 @@
-import express from 'express'
-import { addToOrders, getOrderById, getOrders, updateOrderStatus } from './../controllers/orderController.js'
+import express from 'express';
+import { addToOrders, getOrderById, getOrders, updateOrderStatus } from './../controllers/orderController.js';
 
 
-const router = express.Router()
+const router = express.Router();
 
 router.post('/', addToOrders);
 router.get('/user/:userId', getOrders);

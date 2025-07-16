@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+.grid-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, minmax(200px, 1fr));
+  grid-template-areas: 
+  "vegetable food"
+  "flower tool"
+  "product ."
+  ;
+  padding: 0;
+}
+
+.grid-item{
+  @apply w-full md:h-full rounded-lg overflow-hidden relative md:flex;
+}
+
+.grid-img{
+  @apply object-cover absolute;
+}
+
+.vegetable{
+  grid-area: vegetable;
+}
+
+.food{
+  grid-area: food;
+}
+
+.flower{
+  grid-area: flower;
+}
+
+.tool{
+  grid-area: tool;
+}
+
+.product{
+  grid-area: product;
+  @apply w-full md:h-full rounded-lg overflow-hidden relative md:flex;
+}
+
+@media only screen and (min-width: 992px) {
+  .grid-container{
+    display: grid;
+    grid-template-columns: 5fr 2fr 1fr 1fr 2fr 2fr;
+    grid-template-rows: 220px 180px;
+    grid-template-areas: 
+    "product vegetable vegetable vegetable food food"
+    "product flower flower tool tool tool"
+    ;
+  }
+}
