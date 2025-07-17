@@ -17,7 +17,7 @@ const CartCard = ({ product }) => {
         <CheckBox fontSize='large' className={`${isChecked?'':'sr-only'} text-[var(--orange)] absolute top-[-4px] left-[-4px]`} />
       </div>
       <div className='aspect-square'>
-        <img className='object-cover w-full h-full rounded-md' src={lettuce} alt="lettuce" />
+        <img className='object-cover w-full h-full rounded-md' src={product.image} alt="lettuce" />
       </div>
       <div className='flex flex-col justify-between flex-1'>
         <div className='flex flex-col gap-1'>

@@ -10,6 +10,7 @@ import Header from './Components/Header/Header';
 import { CartProvider } from './context/CartProvider';
 import { ProductsProvider } from './context/ProductsProvider';
 import { CheckoutProvider } from './context/CheckoutProvider';
+import About from './Pages/About/About';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
                 <Route path='/product/1' element={<ProductPage />} />
                 <Route path='/cart' element={<CartPage />} />
                 <Route path='/checkout' element={<CheckoutPage />} />
+                <Route path='/about' element={<About/>}/>
 
               </Route>
             </Routes>

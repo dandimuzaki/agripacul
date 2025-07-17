@@ -29,11 +29,11 @@ const ProductCard = ({ product }) => {
             </Link>
             {/*<div className="promo rounded-sm p-1 text-red-500 bg-red-200 absolute top-2 left-2">10% OFF</div>*/}
           </div>
-          <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${product.weight ? ` / ${product.weight}` : ``}`}</span></h5>
+          <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${product.weight ? ` / ${product.weight}` : ''}`}</span></h5>
           <h4 className='text-[var(--black)] text-lg/6 font-bold'>{title}</h4>
-          <p></p>
         </div>
         <button onClick={() => handleAddToCart(id)} className='
+        mt-3
         cursor-pointer w-fit
         rounded-full py-2 px-4
         text-sm font-bold

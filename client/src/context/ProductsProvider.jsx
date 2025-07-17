@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 import { ProductsContext } from './ProductsContext.jsx';
-import lettuce from '../assets/lettuce.jpg'
-import tomato from '../assets/tomato.jpg'
-import cherry_tomato from '../assets/cherry_tomato.png'
-import bokchoy from '../assets/bokchoy.jpg'
-import product_chamomile from '../assets/product_chamomile.jpg'
-import product_sunflower from '../assets/product_sunflower.jpg'
-import shovel from '../assets/shovel.png'
-import salad_japanese from '../assets/salad_japanese.png'
-import salad_western from '../assets/salad_western.png'
-import corn from '../assets/corn.jpg'
+import lettuce from '../assets/lettuce.jpg';
+import tomato from '../assets/tomato.jpg';
+import cherry_tomato from '../assets/cherry_tomato.png';
+import bokchoy from '../assets/bokchoy.jpg';
+import product_chamomile from '../assets/product_chamomile.jpg';
+import product_sunflower from '../assets/product_sunflower.jpg';
+import shovel from '../assets/shovel.png';
+import salad_japanese from '../assets/salad_japanese.png';
+import salad_western from '../assets/salad_western.png';
+import corn from '../assets/corn.jpg';
 
 
 export const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
 
-  const img = [lettuce, tomato, bokchoy, cherry_tomato, corn, salad_western, salad_japanese, shovel, product_chamomile, product_sunflower]
+  const img = [lettuce, tomato, bokchoy, cherry_tomato, corn, salad_western, salad_japanese, shovel, product_chamomile, product_sunflower];
 
   useEffect(() => {
     const fetchProducts = async () => {

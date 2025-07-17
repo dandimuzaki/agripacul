@@ -33,7 +33,9 @@ const Header = ({ cart }) => {
       </Link>
       <nav className={`${isCheckout ? 'hidden' : 'lg:flex'} hidden items-center justify-center gap-2 h-9`}>
         <button className={`font-bold cursor-pointer rounded-full text-white h-full px-4 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>Ideas</button>
-        <button className={`shrink-0 font-bold cursor-pointer rounded-full text-white h-full px-4 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>About Us</button>
+        <Link to='/about'>
+          <button className={`font-bold cursor-pointer rounded-full text-white h-full px-4 py-2 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>About Us</button>
+        </Link>
         <button className={`flex gap-2 items-center justify-center font-bold cursor-pointer rounded-full text-white h-full pl-4 pr-2 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>Explore<ArrowDropDown/></button>
       </nav>
       <div className={isCheckout?'hidden':'gap-2 md:flex-row md:flex flex-1'}>

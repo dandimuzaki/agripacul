@@ -4,15 +4,20 @@ import CartButton from '../../Components/CartButton/CartButton';
 import lettuce from '../../assets/lettuce.jpg';
 import BackButton from '../../Components/BackButton/BackButton';
 import './ProductPage.css';
+import { useProducts } from '../../context/ProductsContext';
+import ProductCard from '../../Components/ProductCard/ProductCard';
 
 const ProductPage = () => {
+  const { products } = useProducts();
+  const filteredProducts = products.filter((product) => product.category === 'vegetables');
+
   return (
-    <div className=''>
+    <div className='md:pt-15 product-page'>
       <div className='md:hidden p-3 bg-white flex justify-between bg-white sticky top-0'>
         <BackButton />
         <CartButton />
       </div>
-      <div className='product-page'>
+      <div className='product-layout'>
         <img className='product-img w-full aspect-square rounded-lg object-cover' src={lettuce} alt='lettuce' />
         <button className='w-fit product-category py-2 px-4 rounded-full bg-[var(--light-turquoise)] text-[var(--black)] text-sm'>Vegetables</button>
         <p className='product-title text-2xl font-bold text-[var(--black)]'>Lettuce</p>
@@ -37,6 +42,10 @@ const ProductPage = () => {
           <button className='py-2 px-4 bg-[var(--teal)] text-white font-bold rounded-full active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] border-[var(--teal)] border-2 cursor-pointer'>Add to Cart</button>
           <button className='py-2 px-4 border-2 border-[var(--teal)] text-[var(--teal)] font-bold rounded-full active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] active:text-white cursor-pointer'>See Recipe</button>
         </div>
+      </div>
+      <div className='gap-3 product-recommendation px-15 py-5'>
+        <p className='col-span-6 mb-2 font-bold text-2xl'>Recommended for you</p>
+        {filteredProducts.map((product) => <ProductCard key={product.id} product={product} />)}
       </div>
     </div>
   );

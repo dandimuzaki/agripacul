@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
-.product-page{
-  @apply flex flex-col gap-5 p-5;
+.product-layout{
+  @apply flex flex-col gap-5 py-5 px-15;
 }
 
 .product-img{
@@ -32,8 +32,17 @@
   grid-area: button;
 }
 
+.product-recommendation{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.product-page{
+  background-image: linear-gradient(rgba(255,255,255,1),rgba(207, 231, 224, 1));
+}
+
 @media only screen and (min-width: 768px) {
-  .product-page{
+  .product-layout{
     display: grid;
     grid-template-columns: 4fr 7fr;
     grid-template-rows: auto;
@@ -46,6 +55,6 @@
     "product ."
     "product button"
     ;
-    @apply p-3 md:p-5 md:gap-y-3 md:gap-x-10 gap-3;
+    @apply md:gap-y-3 md:gap-x-10 gap-3;
   }
 }
