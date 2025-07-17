@@ -12,6 +12,7 @@ import { ProductsProvider } from './context/ProductsProvider';
 import { CheckoutProvider } from './context/CheckoutProvider';
 import About from './Pages/About/About';
 import OrderPage from './Pages/OrderPage/OrderPage';
+import TransactionDetail from './Components/TransactionDetail/TransactionDetail';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
                 <Route path='/orders' element={<OrderPage/>} />
                 <Route path='/profile' />
                 <Route path='/:category' element={<HomePage />} />
+                <Route path='/orders/1' element={<TransactionDetail/>}/>
               </Route>
 
               <Route element={<PlainLayout />}>
@@ -35,7 +37,6 @@ function App() {
                 <Route path='/cart' element={<CartPage />} />
                 <Route path='/checkout' element={<CheckoutPage />} />
                 <Route path='/about' element={<About/>}/>
-
               </Route>
             </Routes>
           </CheckoutProvider>

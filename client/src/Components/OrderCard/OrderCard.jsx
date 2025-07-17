@@ -1,6 +1,6 @@
 import React from 'react';
 import './OrderCard.css';
-import lettuce from '../../assets/lettuce.jpg'
+import lettuce from '../../assets/lettuce.jpg';
 
 const OrderCard = () => {
   return (
