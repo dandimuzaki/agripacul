@@ -40,7 +40,7 @@ const Header = ({ cart }) => {
       </nav>
       <div className={isCheckout?'hidden':'gap-2 md:flex-row md:flex flex-1'}>
         <div className="flex gap-3 flex-1">
-          <SearchBar />
+          <SearchBar placeholder="Find fresh vegetables and foods here" />
           <CartButton cart={cart} />
         </div>
 

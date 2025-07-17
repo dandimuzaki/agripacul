@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+
+.order-card{
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-areas: 
+  "info info"
+  "item total"
+  ;
+}
+
+.order-info{
+  grid-area: info;
+}
+
+.order-item{
+  grid-area: item;
+}
+
+.order-total{
+  grid-area: total;
+}
+
+.order-btn{
+  grid-area: btn;
+}

@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+.header-order{
+  @apply sticky top-15 w-full items-center gap-5 px-5 py-3 z-150 bg-white shadow-[0_6px_8px_rgba(0,0,0,0.2)];
+  transition: background-color 0.3s ease-in-out;
+}

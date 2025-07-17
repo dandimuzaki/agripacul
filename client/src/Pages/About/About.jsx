@@ -15,12 +15,12 @@ import team4 from '../../assets/team4.jpg';
 import hero from '../../assets/hero.jpg';
 import location from '../../assets/location.png';
 import { LocationOn } from '@mui/icons-material';
-import dandimuzaki from '../../assets/dandimuzaki.png'
-import fathia from '../../assets/fathia.png'
-import danur from '../../assets/danur.png'
-import toby from '../../assets/toby.png'
-import fikri from '../../assets/fikri.png'
-import haydar from '../../assets/haydar.jpeg'
+import dandimuzaki from '../../assets/dandimuzaki.png';
+import fathia from '../../assets/fathia.png';
+import danur from '../../assets/danur.png';
+import toby from '../../assets/toby.png';
+import fikri from '../../assets/fikri.png';
+import haydar from '../../assets/haydar.jpeg';
 import Footer from '../../Components/Footer/Footer';
 
 const About = () => {

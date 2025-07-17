@@ -11,6 +11,7 @@ import { CartProvider } from './context/CartProvider';
 import { ProductsProvider } from './context/ProductsProvider';
 import { CheckoutProvider } from './context/CheckoutProvider';
 import About from './Pages/About/About';
+import OrderPage from './Pages/OrderPage/OrderPage';
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
               <Route element={<NavbarLayout />}>
                 <Route path='/' element={<HomePage />} />
                 <Route path='/ideas' element={<CheckoutPage />} />
-                <Route path='/transactions' />
+                <Route path='/orders' element={<OrderPage/>} />
                 <Route path='/profile' />
                 <Route path='/:category' element={<HomePage />} />
               </Route>
