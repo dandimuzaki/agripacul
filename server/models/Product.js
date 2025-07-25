@@ -11,15 +11,12 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   category: String,
-  subcategory: String,
   rating: Number,
   location: String,
   stock: Number,
   image: String,
-  clusterLabel: String,
-  brand: String,
-  tags: [String],
-  sold: Number
+  sold: Number,
+  status: String,
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);

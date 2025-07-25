@@ -10,6 +10,7 @@ import shovel from '../assets/shovel.png';
 import salad_japanese from '../assets/salad_japanese.png';
 import salad_western from '../assets/salad_western.png';
 import corn from '../assets/corn.jpg';
+import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../services/productService.js';
 
 
 export const ProductsProvider = ({ children }) => {
@@ -17,137 +18,237 @@ export const ProductsProvider = ({ children }) => {
 
   const img = [lettuce, tomato, bokchoy, cherry_tomato, corn, salad_western, salad_japanese, shovel, product_chamomile, product_sunflower];
 
+  const product = [
+    {
+      'id': 1,
+      'title': 'Lettuce',
+      'description': '',
+      'price': 9000,
+      'weight': '300g',
+      'category': 'vegetables',
+      'rating': 4,
+      'stock': 25,
+      'image': img[0],
+      'sold': 200,
+    },
+    {
+      'id': 2,
+      'title': 'Tomato',
+      'description': '',
+      'price': 15000,
+      'weight': '500g',
+      'category': 'vegetables',
+      'rating': 4,
+      'stock': 25,
+      'image': img[1],
+      'sold': 200,
+    },
+    {
+      'id': 3,
+      'title': 'Bokchoy',
+      'description': '',
+      'price': 10000,
+      'weight': '300g',
+      'category': 'vegetables',
+      'rating': 4,
+      'stock': 25,
+      'image': img[2],
+      'sold': 200,
+    },
+    {
+      'id': 4,
+      'title': 'Cherry Tomato',
+      'description': '',
+      'price': 18000,
+      'weight': '500g',
+      'category': 'vegetables',
+      'rating': 5,
+      'stock': 25,
+      'image': img[3],
+      'sold': 200,
+    },
+    {
+      'id': 5,
+      'title': 'Sweet Corn',
+      'description': '',
+      'price': 17000,
+      'weight': '1kg',
+      'category': 'vegetables',
+      'rating': 5,
+      'stock': 25,
+      'image': img[4],
+      'sold': 200,
+    },
+    {
+      'id': 7,
+      'title': 'Veggie Salad Japanese Style',
+      'description': '',
+      'price': 10000,
+      'weight': 'cup',
+      'category': 'salad',
+      'rating': 5,
+      'stock': 25,
+      'image': img[6],
+      'sold': 200,
+    },
+    {
+      'id': 6,
+      'title': 'Veggie Salad Western Style',
+      'description': '',
+      'price': 10000,
+      'weight': 'cup',
+      'category': 'salad',
+      'rating': 4,
+      'stock': 25,
+      'image': img[5],
+      'sold': 200,
+    },
+    {
+      'id': 8,
+      'title': 'Hand Shovel',
+      'description': '',
+      'price': 30000,
+      'weight': '',
+      'category': 'tools',
+      'rating': 3,
+      'stock': 25,
+      'image': img[7],
+      'sold': 200,
+    },
+    {
+      'id': 9,
+      'title': 'Chamomile',
+      'description': '',
+      'price': 8000,
+      'weight': 'pcs',
+      'category': 'flowers',
+      'rating': 5,
+      'stock': 25,
+      'image': img[8],
+      'sold': 200,
+    },
+    {
+      'id': 10,
+      'title': 'Sunflower',
+      'description': '',
+      'price': 12000,
+      'weight': 'pcs',
+      'category': 'flowers',
+      'rating': 4,
+      'stock': 25,
+      'image': img[9],
+      'sold': 200,
+    }
+  ];
+
+  const fetchProducts = async () => {
+    try {
+      const data = await getAllProducts();
+      setProducts(data);
+    } catch (err) {
+      console.error('Failed to fetch products', err);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const product = [
-        {
-          'id': 1,
-          'title': 'Lettuce',
-          'description': '',
-          'price': 9000,
-          'weight': '300g',
-          'category': 'vegetables',
-          'rating': 4,
-          'stock': 25,
-          'image': img[0],
-          'sold': 200,
-        },
-        {
-          'id': 2,
-          'title': 'Tomato',
-          'description': '',
-          'price': 15000,
-          'weight': '500g',
-          'category': 'vegetables',
-          'rating': 4,
-          'stock': 25,
-          'image': img[1],
-          'sold': 200,
-        },
-        {
-          'id': 3,
-          'title': 'Bokchoy',
-          'description': '',
-          'price': 10000,
-          'weight': '300g',
-          'category': 'vegetables',
-          'rating': 4,
-          'stock': 25,
-          'image': img[2],
-          'sold': 200,
-        },
-        {
-          'id': 4,
-          'title': 'Cherry Tomato',
-          'description': '',
-          'price': 18000,
-          'weight': '500g',
-          'category': 'vegetables',
-          'rating': 5,
-          'stock': 25,
-          'image': img[3],
-          'sold': 200,
-        },
-        {
-          'id': 5,
-          'title': 'Sweet Corn',
-          'description': '',
-          'price': 17000,
-          'weight': '1kg',
-          'category': 'vegetables',
-          'rating': 5,
-          'stock': 25,
-          'image': img[4],
-          'sold': 200,
-        },
-        {
-          'id': 7,
-          'title': 'Veggie Salad Japanese Style',
-          'description': '',
-          'price': 10000,
-          'weight': 'cup',
-          'category': 'salad',
-          'rating': 5,
-          'stock': 25,
-          'image': img[6],
-          'sold': 200,
-        },
-        {
-          'id': 6,
-          'title': 'Veggie Salad Western Style',
-          'description': '',
-          'price': 10000,
-          'weight': 'cup',
-          'category': 'salad',
-          'rating': 4,
-          'stock': 25,
-          'image': img[5],
-          'sold': 200,
-        },
-        {
-          'id': 8,
-          'title': 'Hand Shovel',
-          'description': '',
-          'price': 30000,
-          'weight': '',
-          'category': 'tools',
-          'rating': 3,
-          'stock': 25,
-          'image': img[7],
-          'sold': 200,
-        },
-        {
-          'id': 9,
-          'title': 'Chamomile',
-          'description': '',
-          'price': 8000,
-          'weight': 'pcs',
-          'category': 'flowers',
-          'rating': 5,
-          'stock': 25,
-          'image': img[8],
-          'sold': 200,
-        },
-        {
-          'id': 10,
-          'title': 'Sunflower',
-          'description': '',
-          'price': 12000,
-          'weight': 'pcs',
-          'category': 'flowers',
-          'rating': 4,
-          'stock': 25,
-          'image': img[9],
-          'sold': 200,
-        }
-      ];
-      setProducts(product);
-    };
     fetchProducts();
   }, []);
 
+  const [formProduct, setFormProduct] = useState({
+    'title': '',
+    'description': '',
+    'price': 0,
+    'weight': '',
+    'category': '',
+    'rating': 0,
+    'stock': 0,
+    'image': '',
+    'sold': 0,
+    'status': ''
+  });
+
+  const [productDetails, setProductDetails] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const handleAdd = () => {
+    setProductDetails(null);
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handleEdit = (product) => {
+    setProductDetails(product);
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (productDetails) {
+      try {
+        await updateProduct(productDetails._id, formProduct);
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
+            product._id === productDetails._id ? { ...product, ...formProduct } : product
+          )
+        );
+      } catch (err) {
+        console.error('Update failed', err);
+      }
+    } else {
+      try {
+        const newProduct = await createProduct(formProduct);
+        setProducts((prev) => [...prev, newProduct]);
+      } catch (err) {
+        console.error('Add product failed', err);
+      }
+    }
+    onCloseModal();
+  };
+
+  const onCloseModal = () => {
+    setProductDetails(null);
+    setFormProduct({
+      'title': '',
+      'description': '',
+      'price': 0,
+      'weight': '',
+      'category': '',
+      'rating': 0,
+      'stock': 0,
+      'image': '',
+      'sold': 0,
+      'status': ''
+    });
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handleDelete = (product) => {
+    setIsConfirmOpen((prev) => !prev);
+    setProductDetails(product);
+  };
+
+  const onCloseConfirm = () => {
+    setIsConfirmOpen((prev) => !prev);
+  };
+
+  const submitDelete = async () => {
+    try {
+      await deleteProduct(productDetails._id);
+      setProducts((prev) => prev.filter((product) => product._id != productDetails._id));
+    } catch (err) {
+      console.error('Delete product failed', err);
+    }
+    console.log(productDetails._id);
+  };
+
   return (
-    <ProductsContext.Provider value={{ products, setProducts }}>
+    <ProductsContext.Provider value={{
+      products, setProducts,
+      productDetails, setProductDetails,
+      isModalOpen, setIsModalOpen,
+      isConfirmOpen, setIsConfirmOpen,
+      handleAdd, handleEdit, handleSubmit, onCloseModal, handleDelete, onCloseConfirm, submitDelete,
+      formProduct, setFormProduct }}>
       {children}
     </ProductsContext.Provider>
   );

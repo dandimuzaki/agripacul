@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+
+.hero{
+  background-image: linear-gradient(rgba(0,0,0,0.3)), url('../../../assets/hero.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.product-banner{
+  background-image: linear-gradient(rgba(255,255,255,1),rgba(255,255,255,1),rgba(207, 231, 224, 1));
+}
+
+.testimonials{
+  grid-template-columns: 2fr 3fr;
+}
+
+.overlay{
+  background-image: linear-gradient(to right, rgba(207, 231, 224, 0),rgb(207, 231, 224),rgb(207, 231, 224));
+}
+
+h2{
+  @apply text-2xl md:text-4xl font-[800] mb-5;
+}

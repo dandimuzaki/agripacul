@@ -1,0 +1,126 @@
+@import 'tailwindcss';
+
+.about-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 3fr;
+  grid-template-rows: 2fr 1fr;
+  grid-template-areas: 
+  "about about about team"
+  "img1 img2 img3 team"
+  ;
+}
+
+.about-item{
+  @apply h-full w-full rounded-lg overflow-hidden;
+}
+
+.about{
+  grid-area: about;
+}
+
+.team{
+  grid-area: team;
+  background-image: linear-gradient(rgba(0,0,0,0.3)),url('../../../assets/team.jpg');
+  @apply bg-cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mean{
+  grid-area: mean;
+}
+
+.about-img-1{
+  grid-area: img1;
+}
+
+.about-img-2{
+  grid-area: img2;
+}
+
+.about-img-3{
+  grid-area: img3;
+}
+
+.vision{
+  background-image: linear-gradient(to right, rgba(49, 210, 158,0.4), rgba(49, 210, 158,1)),url('../../../assets/view2.jpg');
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  grid-template-columns: 5fr 5fr 3fr;
+  grid-template-areas: 
+  "vision-1 vision-2 vision-3"
+  ;
+}
+
+.vision-1{
+  grid-area: vision-1;
+}
+
+.vision-2{
+  grid-area: vision-2;
+}
+
+.vision-3{
+  grid-area: vision-3;
+}
+
+.achievement{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: minmax(200px,1fr);
+}
+
+.achievement-item{
+  @apply rounded-lg gap-5;
+}
+
+.farm{
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-areas: 
+  "title location img"
+  "desc location img"
+  "btn location img"
+  ;
+}
+
+.farm-title{
+  grid-area: title;
+}
+
+.farm-img{
+  grid-area: img;
+}
+
+.farm-desc{
+  grid-area: desc;
+}
+
+.farm-btn{
+  grid-area: btn;
+}
+
+.farm-location{
+  grid-area: location;
+  background-image: linear-gradient(rgba(0,0,0,0.2)),url('../../../assets/location.png');
+  background-size: cover;
+  @apply rounded-lg cursor-pointer;
+}
+
+.farm-location:hover{
+  background-image: linear-gradient(rgba(0,0,0,0.5)),url('../../../assets/location.png');
+}
+
+.member{
+  display: grid;
+  grid-template-columns: repeat(6,1fr);
+}
+
+.name{
+
+}
+
+.name:hover{
+  @apply text-white text-sm w-full font-bold absolute bottom-3 text-center;
+}

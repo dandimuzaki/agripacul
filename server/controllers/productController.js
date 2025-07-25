@@ -40,24 +40,36 @@ export const createProduct = async (req, res) => {
   res.status(201).json(saved);
 };
 
-export const updateProductStock = async (req, res) => {
+export const updateProduct = async (req, res) => {
   try {
     const { productId } = req.params;
-    const { stock } = req.body;
-
-    if (typeof stock !== 'number' || stock < 0) {
-      return res.status(400).json({ message: 'Invalid stock value' });
-    }
+    const updatedProduct = req.body;
 
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    product.stock = stock;
+    Object.keys(updatedProduct).forEach((key) => {
+      product[key] = updatedProduct[key];
+    });
 
     const saved = await product.save();
     res.status(200).json(saved);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    console.log('Trying to delete product:', productId);
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.status(200).json({ message: 'Product deleted', product: deletedProduct });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
