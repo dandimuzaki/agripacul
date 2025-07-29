@@ -9,8 +9,7 @@ router.post('/', upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-  const imageUrl = req.file.path
-  res.json({ imageUrl })
+  return res.json({ secure_url: req.file.path });
 })
 
 export default router
