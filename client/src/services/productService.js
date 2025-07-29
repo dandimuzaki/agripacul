@@ -5,7 +5,7 @@ export const getAllProducts = async () => {
   return res.data;
 };
 
-export const fetchProductDetails = async (id) => {
+export const fetchselectedProduct = async (id) => {
   const res = await axios.get(`https://agripacul-production.up.railway.app/api/product/${id}`);
   return res.data;
 };

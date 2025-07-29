@@ -1,27 +1,36 @@
 import React from 'react';
-import { useProducts } from '../../context/ProductsContext';
-import { Close, DeleteOutlined } from '@mui/icons-material';
+import { Button } from '../ui/button';
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
 
-const Confirmation = ({ type }) => {
-  const { isConfirmOpen, onCloseConfirm, submitDelete } = useProducts();
+const Confirmation = ({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  children,
+  confirmText,
+  cancelText,
+  loading = false,
+}) => {
   return (
-    <div className={`${isConfirmOpen ? '' : 'hidden'} z-900 p-8 w-screen h-screen bg-[rgba(0,0,0,0.5)] fixed top-0 left-0 flex items-center justify-center`}>
-      {type == 'delete' ?
-        (
-          <div className='bg-white p-8 rounded-xl flex flex-col gap-7 items-center relative'>
-            <div className='absolute top-2 right-2' onClick={onCloseConfirm}><Close/></div>
-            <div className='p-3 bg-[var(--light-red)] text-[var(--red)] rounded-xl'><DeleteOutlined sx={{ fontSize: 50 }} /></div>
-            <p>Are you sure you want to delete this product?</p>
-            <div className='font-bold flex justify-center gap-3'>
-              <button onClick={onCloseConfirm} className='p-2 w-30 text-center bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>No, cancel</button>
-              <button onClick={submitDelete} className='p-2 w-30 text-center bg-[var(--red)] active:bg-[var(--dark-red)] rounded text-white cursor-pointer'>Yes, delete</button>
-            </div>
-
-
-          </div>) : ''
-      }
-    </div>
-  );
-};
+    <AlertDialog open={open} onOpenChange={onClose}>
+      <AlertDialogContent className="sm:max-w-md">
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        {children}
+        <AlertDialogFooter className="mt-4 flex justify-center gap-5">
+          <Button className="w-32 bg-[var(--light-grey)] hover:bg-[var(--grey)] active:bg-[var(--grey)] text-black" onClick={onClose}>
+            {cancelText}
+          </Button>
+          <Button className="w-32 bg-[var(--red)] hover:bg-[var(--dark-red)] active:bg-[var(--dark-red)]" onClick={onConfirm} disabled={loading}>
+            {loading ? 'Please wait...' : confirmText}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );};
 
 export default Confirmation;

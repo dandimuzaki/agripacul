@@ -17,7 +17,20 @@ const AdminOrderList = () => {
     },
     {
       accessorKey: 'createdAt',
-      header: 'Created At'
+      header: 'Created At',
+      cell: ({ row }) => {
+        const date = new Date(row.original.createdAt);
+        const formatted = date.toLocaleString('id-ID', {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        return (
+          <p>{formatted}</p>
+        )
+      }
     },
     {
       accessorKey: 'buyerName',
@@ -48,11 +61,24 @@ const AdminOrderList = () => {
     },
     {
       accessorKey: 'updatedAt',
-      header: 'Updated At'
+      header: 'Updated At',
+      cell: ({ row }) => {
+        const date = new Date(row.original.updatedAt);
+        const formatted = date.toLocaleString('id-ID', {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        return (
+          <p>{formatted}</p>
+        )
+      }
     },
     {
       accessorKey: 'trackingNumber',
-      header: 'Tracking Number'
+      header: 'Tracking Number',
     },
     {
       header: 'Action',

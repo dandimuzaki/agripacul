@@ -13,6 +13,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  /* Display cart grouped by item */
   const groupedCart = Object.values(
     cart.reduce((acc, curr) => {
       const key = curr.id;

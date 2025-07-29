@@ -18,11 +18,13 @@ import AdminLayout from './layouts/AdminLayout';
 import AdminProduct from './pages/admin/ProductAdmin/AdminProduct';
 import AdminOrderList from './pages/admin/AdminOrderList';
 import AdminOrderSummary from './pages/admin/AdminOrderSummary';
+import { Toaster } from 'sonner';
 
 function App() {
 
   return (
     <>
+      <Toaster/>
       <ProductsProvider>
         <CartProvider>
           <CheckoutProvider>

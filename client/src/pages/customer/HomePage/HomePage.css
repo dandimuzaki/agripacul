@@ -18,6 +18,6 @@
   background-image: linear-gradient(to right, rgba(207, 231, 224, 0),rgb(207, 231, 224),rgb(207, 231, 224));
 }
 
-h2{
+.section-title{
   @apply text-2xl md:text-4xl font-[800] mb-5;
 }

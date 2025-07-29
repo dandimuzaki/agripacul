@@ -10,11 +10,27 @@ import shovel from '../assets/shovel.png';
 import salad_japanese from '../assets/salad_japanese.png';
 import salad_western from '../assets/salad_western.png';
 import corn from '../assets/corn.jpg';
+import { toast } from 'sonner';
 import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../services/productService.js';
+import { uploadImage } from '@/services/imageService.js';
 
 
 export const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setIsVisible(true);
+    } else {
+      const timeout = setTimeout(() => {
+        setIsVisible(false);
+      }, 200); // match animation duration
+      return () => clearTimeout(timeout);
+    }
+  }, [isModalOpen]);
 
   const img = [lettuce, tomato, bokchoy, cherry_tomato, corn, salad_western, salad_japanese, shovel, product_chamomile, product_sunflower];
 
@@ -167,88 +183,103 @@ export const ProductsProvider = ({ children }) => {
     'status': ''
   });
 
-  const [productDetails, setProductDetails] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  const handleAdd = () => {
-    setProductDetails(null);
-    setIsModalOpen((prev) => !prev);
+  const openModal = (product = null) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
   };
 
-  const handleEdit = (product) => {
-    setProductDetails(product);
-    setIsModalOpen((prev) => !prev);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (productDetails) {
-      try {
-        await updateProduct(productDetails._id, formProduct);
-        setProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product._id === productDetails._id ? { ...product, ...formProduct } : product
-          )
-        );
-      } catch (err) {
-        console.error('Update failed', err);
-      }
-    } else {
-      try {
-        const newProduct = await createProduct(formProduct);
-        setProducts((prev) => [...prev, newProduct]);
-      } catch (err) {
-        console.error('Add product failed', err);
-      }
-    }
-    onCloseModal();
-  };
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
-  const onCloseModal = () => {
-    setProductDetails(null);
-    setFormProduct({
-      'title': '',
-      'description': '',
-      'price': 0,
-      'weight': '',
-      'category': '',
-      'rating': 0,
-      'stock': 0,
-      'image': '',
-      'sold': 0,
-      'status': ''
-    });
-    setIsModalOpen((prev) => !prev);
-  };
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const handleDelete = (product) => {
-    setIsConfirmOpen((prev) => !prev);
-    setProductDetails(product);
-  };
+    setUploading(true);
+    const formData = new FormData()
+    formData.append("image", file)
 
-  const onCloseConfirm = () => {
-    setIsConfirmOpen((prev) => !prev);
-  };
-
-  const submitDelete = async () => {
     try {
-      await deleteProduct(productDetails._id);
-      setProducts((prev) => prev.filter((product) => product._id != productDetails._id));
+      const data = await uploadImage(formData);
+      const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+      setImagePreview(optimizedUrl);
+      setValue("image", optimizedUrl);
+    } catch (err) {
+      console.error("Image upload failed", err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSave = async (data) => {
+    console.log(data)
+    try {
+      if (selectedProduct) {
+        const updatedProduct = await updateProduct(selectedProduct._id, data);
+        setProducts((prev) =>
+          prev.map((product) => (product._id === updatedProduct._id ? updatedProduct : product))
+        );
+        console.log(updateProduct);
+      } else {
+        const newProduct = await createProduct(data);
+        setProducts((prev) => [...prev, newProduct]);
+        console.log(newProduct);
+      }
+      console.log(data);
+      closeModal();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const triggerConfirm = (product) => {
+    setSelectedProduct(product);
+    setIsConfirmOpen(true);
+  };
+
+  const closeConfirm = () => {
+    setIsConfirmOpen(false);
+  };
+
+  const date = new Date();
+  const formatted = date.toLocaleString('id-ID', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(selectedProduct._id);
+      setProducts((prev) => prev.filter((product) => product._id != selectedProduct._id));
+      closeConfirm();
+      toast(`${selectedProduct.title} has been deleted at`, {
+        description: `${formatted}`,
+      });
     } catch (err) {
       console.error('Delete product failed', err);
     }
-    console.log(productDetails._id);
   };
 
   return (
     <ProductsContext.Provider value={{
       products, setProducts,
-      productDetails, setProductDetails,
+      selectedProduct, setSelectedProduct,
       isModalOpen, setIsModalOpen,
+      isVisible, setIsVisible,
       isConfirmOpen, setIsConfirmOpen,
-      handleAdd, handleEdit, handleSubmit, onCloseModal, handleDelete, onCloseConfirm, submitDelete,
-      formProduct, setFormProduct }}>
+      triggerConfirm, closeConfirm,
+      openModal, closeModal, handleSave, handleDelete,
+      formProduct, setFormProduct,
+      handleImageChange, imagePreview }}>
       {children}
     </ProductsContext.Provider>
   );

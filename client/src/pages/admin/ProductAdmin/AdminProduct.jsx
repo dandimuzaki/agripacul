@@ -2,13 +2,13 @@ import React, { useMemo, useState } from 'react';
 import AdminHeader from '../../../components/admin/AdminHeader';
 import { useProducts } from '../../../context/ProductsContext';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
-import { Add, ArrowDownward, ArrowUpward, Delete, Edit, Search, Sort } from '@mui/icons-material';
+import { Add, ArrowDownward, ArrowUpward, Delete, DeleteOutlined, Edit, Search, Sort } from '@mui/icons-material';
 import ProductModal from '../../../components/admin/ProductModal';
 import lettuce from '../../../assets/lettuce.jpg';
 import Confirmation from '../../../components/admin/Confirmation';
 
 const AdminProduct = () => {
-  const { products, productDetails, handleAdd, handleEdit, handleDelete } = useProducts();
+  const { products, openModal, isConfirmOpen, triggerConfirm, closeConfirm, handleDelete } = useProducts();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -78,11 +78,11 @@ const AdminProduct = () => {
       header: 'Action',
       cell: ({ row }) => (
         <div className='flex gap-2 justify-center'>
-          <button onClick={() => handleEdit(row.original)} className='p-1 text-white bg-blue-500 active:bg-blue-700 rounded cursor-pointer'>
+          <button onClick={() => openModal(row.original)} className='p-1 text-white bg-blue-500 active:bg-blue-700 rounded cursor-pointer'>
             <Edit fontSize='small' />
           </button>
           <button className='p-1 text-white bg-red-500 active:bg-red-700 rounded cursor-pointer'>
-            <Delete fontSize='small' onClick={() => handleDelete(row.original)} />
+            <Delete fontSize='small' onClick={() => triggerConfirm(row.original)} />
           </button>
         </div>
       )
@@ -110,12 +110,12 @@ const AdminProduct = () => {
 
   return (
     <div className='ml-50 px-8 flex flex-col bg-white pb-8'>
-      <div className='h-8 bg-white z-100 sticky top-0'></div>
+      <div className='h-8 bg-white z-10 sticky top-0'></div>
       <div className='flex flex-col gap-3 bg-white pb-3'>
         <p className='text-2xl font-bold'>Product</p>
         <AdminHeader/>
         <div className='h-8 bg-white flex items-center justify-between'>
-          <button className='flex gap-2 font-bold cursor-pointer active:text-[var(--teal)]' onClick={handleAdd}><Add/>Add Product</button>
+          <button className='flex gap-2 font-bold cursor-pointer active:text-[var(--teal)]' onClick={() => openModal()}><Add/>Add Product</button>
           <div className='flex'>
             <input value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}  className='bg-white flex-1 rounded-l-md h-8 px-2 border-y border-l border-[var(--light-grey)]' type='text' placeholder="Search Product" />
             <button className='bg-white rounded-r-md h-8 px-2 hover:bg-[var(--light-grey)] border-y border-r border-[var(--light-grey)]'><Search /></button>
@@ -168,8 +168,20 @@ const AdminProduct = () => {
           ))}
         </tbody>
       </table>
-      <ProductModal product={productDetails} />
-      <Confirmation type="delete"/>
+      <ProductModal />
+      <Confirmation
+        open={isConfirmOpen}
+        onClose={closeConfirm}
+        onConfirm={handleDelete}
+        title="Delete Product Permanently"
+        confirmText="Yes, delete"
+        cancelText="No, cancel"
+      >
+        <div className='flex justify-center items-center flex-col gap-5'>
+          <div className='p-5 bg-[var(--light-red)] w-fit text-[var(--red)] rounded-lg'><DeleteOutlined fontSize='large'/></div>
+          <p className='text-center'>Are you sure you want to delete the product permanently?</p>
+        </div>
+      </Confirmation>
     </div>
   );
 };

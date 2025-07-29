@@ -1,111 +1,170 @@
 import React, { useEffect } from 'react';
 import cherry_tomato from '../../assets/cherry_tomato.png';
-import { Check, Close, CloseOutlined } from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import { useProducts } from '../../context/ProductsContext';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-const ProductModal = ({ product }) => {
-  const { formProduct, setFormProduct, onCloseModal, handleSubmit, isModalOpen } = useProducts();
+const ProductModal = () => {
+  const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct, handleImageChange, imagePreview } = useProducts();
+
+  const schema = z.object({
+    title: z.string().min(1, 'Title is required'),
+    description: z.string().optional(),
+    price: z
+      .number({ invalid_type_error: 'Price must be a number' })
+      .positive('Price must be a number greater than 0'),
+    weight: z.string().optional(),
+    category: z.string().min(1, 'Category is required'),
+    rating: z.number().optional(),
+    stock: z
+      .number({ invalid_type_error: 'Stock must be a number' })
+      .positive('Stock must be a number greater than 0'),
+
+    image: z.string().optional(),
+    sold: z.number().optional(),
+    status: z.string().min(1, 'Status is required'),
+    amount: z.string().optional(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: selectedProduct || {
+      'title': '',
+      'description': '',
+      'price': 0,
+      'weight': '',
+      'category': '',
+      'rating': 0,
+      'stock': 0,
+      'image': '',
+      'sold': 0,
+      'status': ''
+    }
+  });
 
   useEffect(() => {
-    if (product) {
-      setFormProduct(product);
+    if (isModalOpen && selectedProduct) {
+      reset(selectedProduct);
+    } else {
+      reset({
+        title: '',
+        description: '',
+        price: 0,
+        weight: '',
+        category: '',
+        rating: 0,
+        stock: 0,
+        image: '',
+        sold: 0,
+        status: '',
+        amount: ''
+      });
     }
-  }, [product, setFormProduct]);
+  }, [isModalOpen, selectedProduct, reset, setValue]);
 
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    const parsedValue = type === 'number' ? Number(value) : value;
-    setFormProduct((prev) => ({
-      ...prev,
-      [name]: parsedValue,
-    }));
-  };
+  if (!isVisible) return null;
 
   return (
-    <div className={`${isModalOpen ? '' : 'hidden'} z-900 p-12 w-screen h-screen bg-[rgba(0,0,0,0.5)] fixed top-0 left-0 flex items-center justify-center`}>
-      <form
-        onSubmit={handleSubmit}
-        className='bg-white rounded-xl p-8 grid grid-cols-3 gap-5 text-sm relative'>
-        <button className='absolute top-2 right-2 cursor-pointer' onClick={onCloseModal}><CloseOutlined/></button>
-        <img src={cherry_tomato} className='rounded-lg h-full aspect-square row-span-4'/>
-        <div className='flex flex-col gap-2'>
-          <label className='font-bold'>Title</label>
-          <input required
-            name='title'
-            type='text'
-            value={formProduct.title}
-            onChange={handleChange}
-            className='px-2 py-1 border border-[var(--grey)] rounded' placeholder='Add title' />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label className='font-bold'>Category</label>
-          <select
-            name='category'
-            value={formProduct.category}
-            onChange={handleChange} required className='px-2 py-1 border border-[var(--grey)] rounded'>
-            <option value="vegetables">Vegetables</option>
-            <option value="foods">Foods</option>
-            <option value="flowers">Flowers</option>
-            <option value="tools">Tools</option>
-          </select>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label className='font-bold'>Status</label>
-          <select
-            name='status'
-            value={formProduct.status}
-            onChange={handleChange}
-            required className='px-2 py-1 border border-[var(--grey)] rounded'>
-            <option value="available">Available</option>
-            <option value="out of stock">Out of Stock</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label className='font-bold'>Stock</label>
-          <input
-            name='stock'
-            required type='number'
-            value={formProduct.stock}
-            onChange={handleChange}
-            className='px-2 py-1 border border-[var(--grey)] rounded' />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label className='font-bold'>Price</label>
-          <input
-            name='price'
-            required type='number'
-            value={formProduct.price}
-            onChange={handleChange}
-            className='px-2 py-1 border border-[var(--grey)] rounded' />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label className='font-bold'>Amount</label>
-          <input
-            name='amount'
-            type='text'
-            value={formProduct.amount}
-            onChange={handleChange}
-            className='px-2 py-1 border border-[var(--grey)] rounded' />
-        </div>
-        <div className='flex flex-col gap-2 col-span-2'>
-          <label className='font-bold'>Description</label>
-          <textarea
-            name='description'
-            value={formProduct.description}
-            onChange={handleChange}
-            className='border border-[var(--grey)] w-full h-20' />
-        </div>
-        <div className='flex justify-center gap-5 col-span-3'>
-          <button
-            type="button"
-            onClick={onCloseModal}
-            className='p-2 bg-[var(--light-grey)] active:bg-[var(--grey)] text-black font-bold rounded cursor-pointer w-30 text-center'>Cancel</button>
-          <button
-            type="submit"
-            className='p-2 bg-[var(--teal)] active:bg-[var(--dark-teal)] text-white font-bold rounded cursor-pointer w-30 text-center'>Add Product</button>
-        </div>
-      </form>
+    <div className={`z-500 p-10 fixed inset-0 bg-black/50 flex justify-center items-center transition-opacity duration-200 ${
+      isModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+    }`}>
+      <div className={`bg-white rounded-xl p-5 transform transition-all duration-200 relative ${
+        isModalOpen ? 'animate-in fade-in-0 zoom-in-95' : 'animate-out fade-out-0 zoom-out-95'
+      }`}>
+        <button
+          onClick={closeModal}
+          className="absolute top-2 right-2 cursor-pointer">
+          <Close/>
+        </button>
+        <p className="font-bold text-xl text-center mb-5">{selectedProduct ? 'Edit Product' : 'Add New Product'}</p>
+        <form
+          onSubmit={handleSubmit(handleSave)}
+          className="grid grid-cols-3 gap-5 text-sm"
+        >
+          <input type='file' accept="image/*" onChange={handleImageChange} className='bg-[var(--light-grey)] rounded-lg h-full aspect-square row-span-4' />
+          <div className='flex flex-col gap-2'>
+            <label className='font-bold'>Title</label>
+            <input
+              {...register('title')}
+              className='px-2 py-1 border border-[var(--grey)] rounded' placeholder='Add title' />
+            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label className='font-bold'>Category</label>
+            <select
+              {...register('category')}
+              className='px-2 py-1 border border-[var(--grey)] rounded'>
+              <option value="">--Select Category--</option>
+              <option value="vegetables">Vegetables</option>
+              <option value="foods">Foods</option>
+              <option value="flowers">Flowers</option>
+              <option value="tools">Tools</option>
+            </select>
+            {errors.category && (
+              <p className="text-red-500">{errors.category.message}</p>
+            )}
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label className='font-bold'>Status</label>
+            <select
+              {...register('status')}
+              className='px-2 py-1 border border-[var(--grey)] rounded'>
+              <option value="available">Available</option>
+              <option value="out of stock">Out of Stock</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label className='font-bold'>Stock</label>
+            <input
+              type="number"
+              {...register('stock', { valueAsNumber: true })}
+            />
+            {errors.stock && <p className="text-red-500">Stock must be a non-negative number</p>}
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label className='font-bold'>Price</label>
+            <input
+              type="number"
+              step="any"
+              {...register('price', { valueAsNumber: true })}  // this converts string to number
+              className='px-2 py-1 border border-[var(--grey)] rounded' />
+
+            {errors.price && <p className="text-red-500">Price must be a number</p>}
+          </div>
+          <div className='flex flex-col gap-2'>
+            <label className='font-bold'>Amount</label>
+            <input
+              {...register('amount')}
+              className='px-2 py-1 border border-[var(--grey)] rounded' />
+          </div>
+          <div className='flex flex-col gap-2 col-span-2'>
+            <label className='font-bold'>Description</label>
+            <textarea
+              {...register('description')}
+              className='border border-[var(--grey)] w-full h-20' />
+          </div>
+          <div className='bg-green-500 h-10 w-10' onClick={() => console.log(imagePreview)}></div>
+          <div className='col-span-3 flex justify-center gap-5'>
+            <button
+              type="button"
+              onClick={closeModal}
+              className='p-2 bg-[var(--light-grey)] active:bg-[var(--grey)] text-black font-bold rounded cursor-pointer w-32 text-center'>Cancel</button>
+            <button
+              type="submit"
+              className='p-2 bg-[var(--teal)] active:bg-[var(--dark-teal)] text-white font-bold rounded cursor-pointer w-32 text-center'>{selectedProduct ? 'Update Changes' : 'Add Product'}</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
