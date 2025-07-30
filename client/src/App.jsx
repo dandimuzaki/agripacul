@@ -19,12 +19,14 @@ import AdminProduct from './pages/admin/ProductAdmin/AdminProduct';
 import AdminOrderList from './pages/admin/AdminOrderList';
 import AdminOrderSummary from './pages/admin/AdminOrderSummary';
 import { Toaster } from 'sonner';
+import { ImageProvider } from './context/ImageProvider';
 
 function App() {
 
   return (
     <>
       <Toaster/>
+      <ImageProvider>
       <ProductsProvider>
         <CartProvider>
           <CheckoutProvider>
@@ -56,6 +58,7 @@ function App() {
           </CheckoutProvider>
         </CartProvider>
       </ProductsProvider>
+      </ImageProvider>
     </>
   );
 }

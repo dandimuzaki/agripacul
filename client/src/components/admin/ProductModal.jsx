@@ -5,9 +5,15 @@ import { useProducts } from '../../context/ProductsContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useImage } from '@/context/ImageContext';
 
 const ProductModal = () => {
-  const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct, handleImageChange, imagePreview } = useProducts();
+  const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct } = useProducts();
+  const { preview, setPreview, selectedImage, setSelectedImage, handleChangeImage } = useImage();
+
+  const handleClick = () => {
+    console.log(preview)
+  }
 
   const schema = z.object({
     title: z.string().min(1, 'Title is required'),
@@ -31,7 +37,6 @@ const ProductModal = () => {
   const {
     register,
     handleSubmit,
-    control,
     setValue,
     reset,
     formState: { errors },
@@ -90,7 +95,10 @@ const ProductModal = () => {
           onSubmit={handleSubmit(handleSave)}
           className="grid grid-cols-3 gap-5 text-sm"
         >
-          <input type='file' accept="image/*" onChange={handleImageChange} className='bg-[var(--light-grey)] rounded-lg h-full aspect-square row-span-4' />
+          <div className='flex row-span-4 gap-5 flex-col items-center'>
+            <img src={preview} className=' flex-1 rounded-lg border' />
+            <input type='file' accept="image/*" onChange={handleChangeImage} className='w-fit bg-[var(--light-grey)] text-center rounded active:bg-[var(--light-grey)] px-2 py-1' placeholder='Change Image' />
+          </div>
           <div className='flex flex-col gap-2'>
             <label className='font-bold'>Title</label>
             <input
@@ -153,7 +161,7 @@ const ProductModal = () => {
               {...register('description')}
               className='border border-[var(--grey)] w-full h-20' />
           </div>
-          <div className='bg-green-500 h-10 w-10' onClick={() => console.log(imagePreview)}></div>
+          <div className='bg-green-500 h-10 w-10' onClick={handleClick}></div>
           <div className='col-span-3 flex justify-center gap-5'>
             <button
               type="button"

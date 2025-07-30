@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api/product', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/order', orderRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/api/', uploadRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -12,10 +12,11 @@ import salad_western from '../assets/salad_western.png';
 import corn from '../assets/corn.jpg';
 import { toast } from 'sonner';
 import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../services/productService.js';
-import { uploadImage } from '@/services/imageService.js';
+import { useImage } from './ImageContext.jsx';
 
 
 export const ProductsProvider = ({ children }) => {
+  const { handleUploadImage, setSelectedImage, setPreview } = useImage();
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -191,47 +192,29 @@ export const ProductsProvider = ({ children }) => {
   };
 
   const closeModal = () => {
+    setSelectedImage(null)
+    setPreview(null)
     setIsModalOpen(false);
-  };
-
-  const [imagePreview, setImagePreview] = useState(null);
-  const [uploading, setUploading] = useState(false);
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setUploading(true);
-    const formData = new FormData()
-    formData.append("image", file)
-
-    try {
-      const data = await uploadImage(formData);
-      const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-      setImagePreview(optimizedUrl);
-      setValue("image", optimizedUrl);
-    } catch (err) {
-      console.error("Image upload failed", err);
-    } finally {
-      setUploading(false);
-    }
-  };
+  };  
 
   const handleSave = async (data) => {
-    console.log(data)
+    const uploadedImageUrl = handleUploadImage()
     try {
       if (selectedProduct) {
+        setSelectedProduct({...selectedProduct, image: uploadedImageUrl})
         const updatedProduct = await updateProduct(selectedProduct._id, data);
         setProducts((prev) =>
           prev.map((product) => (product._id === updatedProduct._id ? updatedProduct : product))
         );
-        console.log(updateProduct);
+        console.log(updatedProduct);
       } else {
-        const newProduct = await createProduct(data);
+        const newData = {...data, image: uploadedImageUrl}
+        const newProduct = await createProduct(newData);
         setProducts((prev) => [...prev, newProduct]);
         console.log(newProduct);
       }
-      console.log(data);
+      setSelectedImage(null)
+      setPreview(null)
       closeModal();
     } catch (err) {
       console.error(err);
@@ -279,7 +262,7 @@ export const ProductsProvider = ({ children }) => {
       triggerConfirm, closeConfirm,
       openModal, closeModal, handleSave, handleDelete,
       formProduct, setFormProduct,
-      handleImageChange, imagePreview }}>
+    }}>
       {children}
     </ProductsContext.Provider>
   );
