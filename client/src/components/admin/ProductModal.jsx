@@ -9,7 +9,7 @@ import { useImage } from '@/context/ImageContext';
 
 const ProductModal = () => {
   const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct } = useProducts();
-  const { preview, setPreview, selectedImage, setSelectedImage, handleChangeImage } = useImage();
+  const { preview, handleChangeImage } = useImage();
 
   const handleClick = () => {
     console.log(preview)

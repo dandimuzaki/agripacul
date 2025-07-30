@@ -18,7 +18,6 @@ export const ImageProvider = ({ children }) => {
     if (selectedImage) {
     const formData = new FormData()
     formData.append("image", selectedImage)
-    formData.append('upload_preset', 'ml_default')
     try {
       const data = await uploadImage(formData);
       const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
