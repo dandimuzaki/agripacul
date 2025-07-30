@@ -33,8 +33,13 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     const result = await streamUpload();
     return res.json({ secure_url: result.secure_url });
   } catch (error) {
-    return res.status(500).json({ error: 'Upload failed', details: error.message });
+    console.error('Upload error:', error); // Add this
+    return res.status(500).json({
+      error: 'Upload failed',
+      details: error.message || error,
+    });
   }
+  
 });
 
 export default router

@@ -198,18 +198,20 @@ export const ProductsProvider = ({ children }) => {
   };  
 
   const handleSave = async (data) => {
-    const uploadedImageUrl = handleUploadImage()
+    const uploadedImageUrl = await handleUploadImage()
+
     try {
       if (selectedProduct) {
-        setSelectedProduct({...selectedProduct, image: uploadedImageUrl})
-        const updatedProduct = await updateProduct(selectedProduct._id, data);
+        const updatedProduct = await updateProduct(selectedProduct._id, {
+          ...data,
+          image: uploadedImageUrl,
+        });
         setProducts((prev) =>
           prev.map((product) => (product._id === updatedProduct._id ? updatedProduct : product))
         );
         console.log(updatedProduct);
       } else {
-        const newData = {...data, image: uploadedImageUrl}
-        const newProduct = await createProduct(newData);
+        const newProduct = await createProduct({...data, image: uploadedImageUrl});
         setProducts((prev) => [...prev, newProduct]);
         console.log(newProduct);
       }

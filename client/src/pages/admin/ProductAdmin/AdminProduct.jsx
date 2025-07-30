@@ -24,10 +24,10 @@ const AdminProduct = () => {
     {
       header: 'Image',
       accessorKey: 'image',
-      cell: () => (
+      cell: ({row}) => (
         <div className='h-full w-full flex justify-center'>
           <img
-            src={lettuce}
+            src={row.original.image}
             alt="product"
             className="h-10 aspect-square object-cover rounded-md"
           />
