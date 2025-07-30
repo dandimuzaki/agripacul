@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { ImageContext } from './ImageContext.jsx';
 import { uploadImage } from '@/services/imageService.js';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 export const ImageProvider = ({ children }) => {
   const [preview, setPreview] = useState(null)
@@ -18,6 +21,7 @@ export const ImageProvider = ({ children }) => {
     if (selectedImage) {
     const formData = new FormData()
     formData.append("image", selectedImage)
+    formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET)
     try {
       const data = await uploadImage(formData);
       const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
