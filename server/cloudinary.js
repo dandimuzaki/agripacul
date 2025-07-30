@@ -10,8 +10,4 @@ cloudinary.config({
   secure: true
 })
 
-cloudinary.uploader.upload_stream({
-  upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
-}, callback);
-
 export { cloudinary };
