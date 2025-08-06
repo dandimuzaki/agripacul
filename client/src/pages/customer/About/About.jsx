@@ -48,7 +48,7 @@ const About = () => {
         </div>
         <div className='vision-2'>
           <p className='font-bold text-3xl mb-5'>Our Mission</p>
-          <p>At Agripacul, we are passionate about growing fresh, chemical-free produce. Nestled in the heart of nature, our farm uses sustainable farming practices to protect the environment and deliver the healthiest food to your table. Every seed we plant is a step toward a greener, healthier future.</p>
+          <p>At Agripacul, we're on a mission to grow food that’s good for you and kind to the Earth. From sustainable farming to honest harvesting, we’re building a future where every bite supports a better world.</p>
         </div>
         <div className='vision-1'>
           <p className='font-bold text-3xl mb-5'>Our Vision</p>
@@ -95,7 +95,7 @@ const About = () => {
             Jl. Cisintok Kadumulya, Cihanjuang, Kec. Parongpong, Kabupaten Bandung Barat
           </p>
         </div>
-        <button className='farm-btn px-4 py-2 bg-[var(--teal)] rounded-full text-white active:bg-[var(--dark-teal)] w-fit cursor-pointer font-bold'>Schedule a Tour</button>
+        <button className='farm-btn px-4 py-2 bg-[var(--primary)] rounded-full text-white active:bg-[var(--dark-primary)] w-fit cursor-pointer font-bold'>Schedule a Tour</button>
       </section>
       <section className='bg-[var(--light-turquoise)] member p-15 gap-y-5 gap-x-2'>
         <div className='col-span-6 flex justify-center'><p className='px-2 py-1 border border-2 border-[var(--red)] text-[var(--red)] text-sm w-fit rounded-full'>Our Team</p></div>

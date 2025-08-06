@@ -7,9 +7,9 @@
 }
 
 .scrolled{
-  background-color: var(--teal);
+  background-color: var(--primary);
 }
 
 .not-home{
-  background-color: var(--teal);
+  background-color: var(--primary);
 }

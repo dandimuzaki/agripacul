@@ -52,7 +52,7 @@ const OrderModal = () => {
         </div>
         <div className='flex justify-center gap-2 col-span-2'>
           <button className='px-2 py-1 bg-[var(--red)] active:bg-[var(--dark-red)] text-white font-bold rounded flex gap-2 items-center cursor-pointer h-fit'>Cancel Order</button>
-          <button className='px-2 py-1 bg-[var(--teal)] active:bg-[var(--dark-teal)] text-white font-bold rounded flex gap-2 items-center cursor-pointer h-fit'>Update Status</button>
+          <button className='px-2 py-1 bg-[var(--primary)] active:bg-[var(--dark-primary)] text-white font-bold rounded flex gap-2 items-center cursor-pointer h-fit'>Update Status</button>
         </div>
       </div>
     </div>

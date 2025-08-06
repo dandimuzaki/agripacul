@@ -24,7 +24,7 @@ const AdminProduct = () => {
     {
       header: 'Image',
       accessorKey: 'image',
-      cell: ({row}) => (
+      cell: ({ row }) => (
         <div className='h-full w-full flex justify-center'>
           <img
             src={row.original.image}
@@ -115,7 +115,7 @@ const AdminProduct = () => {
         <p className='text-2xl font-bold'>Product</p>
         <AdminHeader/>
         <div className='h-8 bg-white flex items-center justify-between'>
-          <button className='flex gap-2 font-bold cursor-pointer active:text-[var(--teal)]' onClick={() => openModal()}><Add/>Add Product</button>
+          <button className='flex gap-2 font-bold cursor-pointer active:text-[var(--primary)]' onClick={() => openModal()}><Add/>Add Product</button>
           <div className='flex'>
             <input value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}  className='bg-white flex-1 rounded-l-md h-8 px-2 border-y border-l border-[var(--light-grey)]' type='text' placeholder="Search Product" />
             <button className='bg-white rounded-r-md h-8 px-2 hover:bg-[var(--light-grey)] border-y border-r border-[var(--light-grey)]'><Search /></button>

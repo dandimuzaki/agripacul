@@ -9,26 +9,16 @@ import tools from '../../../assets/tools.png';
 
 const Banner = () => {
   return (
-    <div className='grid-container gap-2 w-full h-full text-[var(--black)]'>
-      <div className='product bg-[var(--teal)] items-start'>
-        <img src={vegetables} className='grid-img w-full h-full' />
-      </div>
-      <div className='food bg-[var(--orange)] grid-item flex items-center'>
-        <img src={salad} className='grid-img h-full left-[-20px]' />
-        <div className='right-0 absolute p-5'><p className='font-bold text-xl'>Healthy Food<br/>to Brighten<br/>Your Mood</p></div>
-      </div>
-      <div className='flower bg-[var(--light-green)] grid-item flex justify-center'>
-        <img src={chamomile} className='grid-img h-3/4 top-20 left-15' />
-        <div className='absolute p-5'><p className='font-bold text-xl text-center'>Flowers to<br />Surprise Your Lover</p></div>
-      </div>
-      <div className='tool bg-[var(--light-blue)] grid-item flex items-center'>
-        <div className='left-0 absolute p-5'><p className='font-bold text-xl'>Gardening Tools to<br />Make Growing Joyful</p></div>
-        <img src={tools} className='grid-img h-full right-0' />
-      </div>
-      <div className='vegetable bg-[var(--light-turquoise)] grid-item flex items-center'>
-        <img src={vegetable_bag} className='grid-img h-4/5 top-5' />
-        <div className='right-0 absolute p-5'><p className='font-bold text-xl'>Fresh<br />Vegetables<br />to Make You<br />Comfortable</p></div>
-      </div>
+    <div className='grid grid-cols-6 grid-rows-[minmax(150px,1fr)]'>
+      <div className='bg-[var(--primary)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--accent)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--primary-dark)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--primary-light)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--neutral-900)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--neutral-700)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--neutral-100)] h-full w-full'>Apa ya</div>
+      <div className='bg-[var(--success)] h-full w-full'>Success</div>
+      <div className='bg-[var(--error)] h-full w-full'>Error</div>
     </div>
   );
 };

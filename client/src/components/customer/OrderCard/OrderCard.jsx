@@ -32,10 +32,10 @@ const OrderCard = () => {
           <p className='font-bold'>Rp 30.000</p>
         </div>
         <div className='order-btn flex gap-3 justify-end items-end'>
-          <button className='hidden md:block font-bold py-1 px-3 border-2 border-[var(--teal)] text-[var(--teal)] rounded-full'>
+          <button className='hidden md:block font-bold py-1 px-3 border-2 border-[var(--primary)] text-[var(--primary)] rounded-full'>
             See Detail
           </button>
-          <button className='font-bold py-1 px-3 bg-[var(--teal)] border-2 border-[var(--teal)] text-white rounded-full'>
+          <button className='font-bold py-1 px-3 bg-[var(--primary)] border-2 border-[var(--primary)] text-white rounded-full'>
             Buy Again
           </button>
         </div>

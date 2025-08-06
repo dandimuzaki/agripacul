@@ -30,6 +30,6 @@
 }
 
 .btn-footer{
-  @apply cursor-pointer rounded-md text-sm h-9 w-9 flex items-center justify-center text-white bg-[var(--teal)]
-  active:bg-[var(--dark-teal)];
+  @apply cursor-pointer rounded-md text-sm h-9 w-9 flex items-center justify-center text-white bg-[var(--primary)]
+  active:bg-[var(--dark-primary)];
 }

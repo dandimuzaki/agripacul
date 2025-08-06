@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import formatCurrency from '../../../utils/format';
 import { useCart } from '../../../context/CartContext';
 import { useState } from 'react';
+import { Star } from '@mui/icons-material';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
-  const { id, title, price } = product;
+  const { id, title, price, amount, image } = product;
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleAddToCart = (id) => {
@@ -18,29 +19,34 @@ const ProductCard = ({ product }) => {
     setTimeout(() => setIsProcessing(false), 500);
   };
 
+  const stars = Array(5).fill(null);
+
   return (
-    <div className='p-2 rounded-lg bg-white'>
-      <div className='h-full flex flex-col gap-1 justify-between'>
-        <div className='flex flex-col gap-1'>
-          <div className='img-container aspect-square w-full relative rounded-md'>
-            <Link to="/product/1">
-              <img className='w-full aspect-square rounded-md object-cover' src={product.image} alt='lettuce' />
-            </Link>
-            {/*<div className="promo rounded-sm p-1 text-red-500 bg-red-200 absolute top-2 left-2">10% OFF</div>*/}
+    <div className='p-3 rounded-lg grid grid-cols-[2fr_3fr] gap-x-3 bg-white'>
+      <Link to="/product/1" className='w-full h-full overflow-hidden'>
+        <img className='w-full h-full rounded object-cover' src={image} alt={title} />
+      </Link>
+      <div className='flex flex-col justify-between'>
+        <div>
+          <div className='text-yellow-500'>
+            {stars.map((_, i) =>
+              <Star key={i} fontSize='extra-small'/>)
+            }
           </div>
-          <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${product.weight ? ` / ${product.weight}` : ''}`}</span></h5>
-          <h4 className='text-[var(--black)] text-lg/6 font-bold'>{title}</h4>
+          <h4 className='text-[var(--black)] text-base/6 md:text-lg/6 font-bold'>{title}</h4>
+          <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${amount ? ` /${amount}` : ''}`}</span></h5>
         </div>
-        <button onClick={() => handleAddToCart(id)} className='
-        mt-3
-        cursor-pointer w-fit
-        rounded-full py-2 px-4
-        text-sm font-bold
-        bg-[var(--teal)] text-white
-        active:bg-[var(--dark-teal)] active:text-white
-        active:outline active:outline-[var(--dark-teal)]
-        self-end
-        '>Add to cart</button>
+        <div className='flex justify-end'>
+          <button onClick={() => handleAddToCart(id)} className='
+              cursor-pointer w-fit
+              rounded-full py-2 px-4
+              text-sm font-bold
+              bg-[var(--primary)] text-white
+              active:bg-[var(--dark-primary)] active:text-white
+              active:outline active:outline-[var(--dark-primary)]
+              self-end
+              '>Add to cart</button>
+        </div>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@
 }
 
 .value{
-  @apply h-full w-full rounded-lg overflow-hidden bg-[var(--light-turquoise)];
+  @apply h-full w-full rounded-lg overflow-hidden bg-[var(--primary-light)];
 }
 
 .image1{

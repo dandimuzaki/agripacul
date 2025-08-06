@@ -41,7 +41,7 @@ const CartPage = () => {
               {formatCurrency(totalPrice)}
             </p>
             <Link to="/checkout">
-              <button className='py-2 px-4 rounded-md bg-[var(--teal)] font-bold text-white cursor-pointer active:bg-[var(--dark-teal)]'>Beli <span>{groupedCheckout.length}</span></button>
+              <button className='py-2 px-4 rounded-md bg-[var(--primary)] font-bold text-white cursor-pointer active:bg-[var(--dark-primary)]'>Beli <span>{groupedCheckout.length}</span></button>
             </Link>
           </div>
         </div>

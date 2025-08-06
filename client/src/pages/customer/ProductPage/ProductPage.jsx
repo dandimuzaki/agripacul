@@ -39,8 +39,8 @@ const ProductPage = () => {
           </p>
         </div>
         <div className='product-button flex gap-3'>
-          <button className='py-2 px-4 bg-[var(--teal)] text-white font-bold rounded-full active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] border-[var(--teal)] border-2 cursor-pointer'>Add to Cart</button>
-          <button className='py-2 px-4 border-2 border-[var(--teal)] text-[var(--teal)] font-bold rounded-full active:bg-[var(--dark-teal)] active:border-[var(--dark-teal)] active:text-white cursor-pointer'>See Recipe</button>
+          <button className='py-2 px-4 bg-[var(--primary)] text-white font-bold rounded-full active:bg-[var(--dark-primary)] active:border-[var(--dark-primary)] border-[var(--primary)] border-2 cursor-pointer'>Add to Cart</button>
+          <button className='py-2 px-4 border-2 border-[var(--primary)] text-[var(--primary)] font-bold rounded-full active:bg-[var(--dark-primary)] active:border-[var(--dark-primary)] active:text-white cursor-pointer'>See Recipe</button>
         </div>
       </div>
       <div className='gap-3 product-recommendation px-15 py-5'>

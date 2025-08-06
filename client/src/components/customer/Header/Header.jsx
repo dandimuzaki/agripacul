@@ -10,7 +10,7 @@ const Header = ({ cart }) => {
   const location = useLocation();
   const isCategoryPage = ['/', '/vegetables', '/flowers', '/tools', '/salad'].includes(location.pathname);
   const isCheckout = location.pathname === '/checkout';
-  const isAdmin = ['/admin'].includes(location.pathname);
+  const isAdmin = ['/admin', '/signup', '/login'].includes(location.pathname);
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -32,11 +32,11 @@ const Header = ({ cart }) => {
         </div>
       </Link>
       <nav className={`${isCheckout ? 'hidden' : 'lg:flex'} hidden items-center justify-center gap-2 h-9`}>
-        <button className={`font-bold cursor-pointer rounded-full text-white h-full px-4 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>Ideas</button>
+        <button className={`font-bold cursor-pointer rounded-full text-white h-full px-4 text-[var(--primary)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--primary)] hover:bg-white hover:text-[var(--primary)] active:border-[var(--light-grey)] active:text-[var(--primary)]':'active:border-[var(--dark-primary)] border-white active:bg-[var(--dark-primary)] active:text-white'}`}>Ideas</button>
         <Link to='/about'>
-          <button className={`font-bold cursor-pointer rounded-full text-white h-full px-4 py-2 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>About Us</button>
+          <button className={`font-bold cursor-pointer rounded-full text-white h-full px-4 py-2 text-[var(--primary)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--primary)] hover:bg-white hover:text-[var(--primary)] active:border-[var(--light-grey)] active:text-[var(--primary)]':'active:border-[var(--dark-primary)] border-white active:bg-[var(--dark-primary)] active:text-white'}`}>About Us</button>
         </Link>
-        <button className={`flex gap-2 items-center justify-center font-bold cursor-pointer rounded-full text-white h-full pl-4 pr-2 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>Explore<ArrowDropDown/></button>
+        <button className={`flex gap-2 items-center justify-center font-bold cursor-pointer rounded-full text-white h-full pl-4 pr-2 text-[var(--primary)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--primary)] hover:bg-white hover:text-[var(--primary)] active:border-[var(--light-grey)] active:text-[var(--primary)]':'active:border-[var(--dark-primary)] border-white active:bg-[var(--dark-primary)] active:text-white'}`}>Explore<ArrowDropDown/></button>
       </nav>
       <div className={isCheckout?'hidden':'gap-2 md:flex-row md:flex flex-1'}>
         <div className="flex gap-3 flex-1">
@@ -49,8 +49,12 @@ const Header = ({ cart }) => {
           <button className='btn-icon'><NotificationsOutlined /></button>
         </div>
         <div className="hidden md:flex items-center justify-center h-9 gap-2">
-          <button className={`shrink-0 font-bold cursor-pointer rounded-full h-full px-4 bg-[var(--teal)] ${scrolled ? 'bg-white text-[var(--teal) active:bg-[var(--light-grey)] text-[var(--teal)]':'text-white active:bg-[var(--dark-teal)]'}`}>Sign Up</button>
-          <button className={`shrink-0 font-bold cursor-pointer border-2 rounded-full text-white h-full px-4 text-[var(--teal)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--teal)] hover:bg-white hover:text-[var(--teal)] active:border-[var(--light-grey)] active:text-[var(--teal)]':'active:border-[var(--dark-teal)] border-white active:bg-[var(--dark-teal)] active:text-white'}`}>Log In</button>
+          <Link to='/signup'>
+            <button className={`shrink-0 font-bold cursor-pointer rounded-full h-full px-4 bg-[var(--primary)] ${scrolled ? 'bg-white text-[var(--primary) active:bg-[var(--light-grey)] text-[var(--primary)]':'text-white active:bg-[var(--dark-primary)]'}`}>Sign Up</button>
+          </Link>
+          <Link to='/login'>
+            <button className={`shrink-0 font-bold cursor-pointer border-2 rounded-full text-white h-full px-4 text-[var(--primary)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--primary)] hover:bg-white hover:text-[var(--primary)] active:border-[var(--light-grey)] active:text-[var(--primary)]':'active:border-[var(--dark-primary)] border-white active:bg-[var(--dark-primary)] active:text-white'}`}>Log In</button>
+          </Link>
         </div>
       </div>
     </div>

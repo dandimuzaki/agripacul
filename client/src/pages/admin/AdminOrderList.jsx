@@ -29,7 +29,7 @@ const AdminOrderList = () => {
         });
         return (
           <p>{formatted}</p>
-        )
+        );
       }
     },
     {
@@ -73,7 +73,7 @@ const AdminOrderList = () => {
         });
         return (
           <p>{formatted}</p>
-        )
+        );
       }
     },
     {

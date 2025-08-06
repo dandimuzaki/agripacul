@@ -4,7 +4,7 @@ import { cloudinary } from '../cloudinary.js';
 import streamifier from 'streamifier';
 import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -39,7 +39,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
       details: error.message || error,
     });
   }
-  
+
 });
 
-export default router
+export default router;

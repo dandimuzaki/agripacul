@@ -18,7 +18,7 @@ const CheckoutPage = () => {
           <div className='shipping-address bg-white flex gap-2 p-3 rounded-lg border border-gray-500'>
 
             <div className='flex-1 flex flex-col gap-1 text-sm text-black'>
-              <p className='text-[var(--teal)]'><LocationOn />Your Shipping Address</p>
+              <p className='text-[var(--primary)]'><LocationOn />Your Shipping Address</p>
               <div className='flex gap-1 items-center'>
 
                 <p className='font-bold'>Rumah &#9679; <span>Dandi Muhamad Zaki</span></p>
@@ -52,13 +52,13 @@ const CheckoutPage = () => {
           <p className='font-bold'>Payment Method</p>
 
           <fieldset className='flex flex-col gap-1'>
-            <label className='has-checked:bg-[var(--teal)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>Gopay
+            <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>Gopay
               <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="Gopay" />
             </label>
-            <label className='has-checked:bg-[var(--teal)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>OVO
+            <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>OVO
               <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="OVO" />
             </label>
-            <label className='has-checked:bg-[var(--teal)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>BRI
+            <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>BRI
               <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="BRI" />
             </label>
           </fieldset>
@@ -81,7 +81,7 @@ const CheckoutPage = () => {
               </div>
             </div>
           </div>
-          <button className='active:bg-[var(--dark-teal)] rounded-lg bg-[var(--teal)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay</button>
+          <button className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay</button>
 
         </div>
       </div>

@@ -21,6 +21,7 @@ export const ProductsProvider = ({ children }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -192,13 +193,14 @@ export const ProductsProvider = ({ children }) => {
   };
 
   const closeModal = () => {
-    setSelectedImage(null)
-    setPreview(null)
+    setSelectedImage(null);
+    setPreview(null);
     setIsModalOpen(false);
-  };  
+  };
 
   const handleSave = async (data) => {
-    const uploadedImageUrl = await handleUploadImage()
+    setIsLoading(true);
+    const uploadedImageUrl = await handleUploadImage();
 
     try {
       if (selectedProduct) {
@@ -209,14 +211,19 @@ export const ProductsProvider = ({ children }) => {
         setProducts((prev) =>
           prev.map((product) => (product._id === updatedProduct._id ? updatedProduct : product))
         );
-        console.log(updatedProduct);
+        toast(`${updatedProduct.title} has been updated at`, {
+          description: `${formatted}`,
+        });
       } else {
-        const newProduct = await createProduct({...data, image: uploadedImageUrl});
+        const newProduct = await createProduct({ ...data, image: uploadedImageUrl });
         setProducts((prev) => [...prev, newProduct]);
-        console.log(newProduct);
+        toast(`${newProduct.title} has been created at`, {
+          description: `${formatted}`,
+        });
       }
-      setSelectedImage(null)
-      setPreview(null)
+      setIsLoading(false);
+      setSelectedImage(null);
+      setPreview(null);
       closeModal();
     } catch (err) {
       console.error(err);
@@ -239,9 +246,10 @@ export const ProductsProvider = ({ children }) => {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit'
-  })
+  });
 
   const handleDelete = async () => {
+    setIsLoading(true);
     try {
       await deleteProduct(selectedProduct._id);
       setProducts((prev) => prev.filter((product) => product._id != selectedProduct._id));
@@ -252,6 +260,7 @@ export const ProductsProvider = ({ children }) => {
     } catch (err) {
       console.error('Delete product failed', err);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -264,6 +273,7 @@ export const ProductsProvider = ({ children }) => {
       triggerConfirm, closeConfirm,
       openModal, closeModal, handleSave, handleDelete,
       formProduct, setFormProduct,
+      isLoading, setIsLoading
     }}>
       {children}
     </ProductsContext.Provider>

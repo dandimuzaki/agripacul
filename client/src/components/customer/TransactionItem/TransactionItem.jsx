@@ -11,7 +11,7 @@ const TransactionItem = () => {
         <p className='text-lg font-bold'>Tomato</p>
         <p>3 item x <span>Rp10.000</span></p>
       </div>
-      <button className='rounded-full py-1 px-3 text-sm bg-[var(--teal)] text-white font-bold'>Beli Lagi</button>
+      <button className='rounded-full py-1 px-3 text-sm bg-[var(--primary)] text-white font-bold'>Beli Lagi</button>
     </div>
   );
 };

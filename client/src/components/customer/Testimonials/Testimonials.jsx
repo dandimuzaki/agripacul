@@ -46,16 +46,16 @@ const Testimonials = () => {
   return (
     <>
       <div className='overflow-auto'>
-        <div className='absolute bottom-12 flex gap-2'>
+        <div className='absolute bottom-8 flex gap-2'>
           <button
             onClick={() => scroll('left')}
-            className='h-8 w-8 border-2 border-[var(--red)] rounded-md text-[var(--red)] cursor-pointer active:bg-[var(--red)]'
+            className='h-8 w-8 border-2 border-[var(--primary)] rounded-md text-[var(--primary)] cursor-pointer active:border-[var(--primary-dark)] acrive:text-[var(--primary-dark)]'
           >
             <KeyboardArrowLeftOutlined/>
           </button>
           <button
             onClick={() => scroll('right')}
-            className='h-8 w-8 border-2 border-[var(--red)] rounded-md text-[var(--red)] cursor-pointer active:bg-[var(--red)]'
+            className='h-8 w-8 border-2 border-[var(--primary)] rounded-md text-[var(--primary)] cursor-pointer active:border-[var(--primary-dark)] acrive:text-[var(--primary-dark)]'
           >
             <KeyboardArrowRightOutlined/>
           </button>
