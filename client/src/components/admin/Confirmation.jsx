@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
-import { useProduct } from '@/context/ProductsContext';
+import { useProduct } from '@/context/ProductContext';
 import { Spinner } from '@heroui/spinner';
 import { ClipLoader } from 'react-spinners';
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useProduct } from './ProductsContext.jsx';
+import { useProduct } from './ProductContext.jsx';
 import { CartContext } from './CartContext';
 
 export const CartProvider = ({ children }) => {

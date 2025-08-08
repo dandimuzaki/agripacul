@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import cherry_tomato from '../../assets/cherry_tomato.png';
 import { Close } from '@mui/icons-material';
-import { useProduct } from '../../context/ProductsContext';
+import { useProduct } from '../../context/ProductContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import './HomePage.css';
 import { ArrowDownwardTwoTone, ArrowOutwardTwoTone } from '@mui/icons-material';
-import { useProduct } from '../../../context/ProductsContext';
+import { useProduct } from '../../../context/ProductContext';
 import Banner from '../../../components/customer/Banner/Banner';
 import Category from '../../../components/customer/Category/Category';
 import Value from '../../../components/customer/Value/Value';

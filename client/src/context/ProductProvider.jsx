@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ProductsContext } from './ProductsContext.jsx';
+import { ProductContext } from './ProductContext.jsx';
 import lettuce from '../assets/lettuce.jpg';
 import tomato from '../assets/tomato.jpg';
 import cherry_tomato from '../assets/cherry_tomato.png';
@@ -264,7 +264,7 @@ export const ProductProvider = ({ children }) => {
   };
 
   return (
-    <ProductsContext.Provider value={{
+    <ProductContext.Provider value={{
       products, setProducts,
       selectedProduct, setSelectedProduct,
       isModalOpen, setIsModalOpen,
@@ -276,6 +276,6 @@ export const ProductProvider = ({ children }) => {
       isLoading, setIsLoading
     }}>
       {children}
-    </ProductsContext.Provider>
+    </ProductContext.Provider>
   );
 };

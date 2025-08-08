@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import orders from '../../orders';
 import { RemoveRedEyeOutlined, Search } from '@mui/icons-material';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import AdminHeader from '../../components/admin/AdminHeader';
 import OrderModal from '../../components/admin/OrderModal';
 
 const AdminOrderList = () => {
+  const orders = []
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');

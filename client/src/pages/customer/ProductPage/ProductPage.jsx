@@ -2,7 +2,7 @@ import { Star } from '@mui/icons-material';
 import React from 'react';
 import lettuce from '../../../assets/lettuce.jpg';
 import './ProductPage.css';
-import { useProduct } from '../../../context/ProductsContext';
+import { useProduct } from '../../../context/ProductContext';
 import CartButton from '../../../components/common/CartButton/CartButton';
 import BackButton from '../../../components/common/BackButton/BackButton';
 import ProductCard from '../../../components/customer/ProductCard/ProductCard';
