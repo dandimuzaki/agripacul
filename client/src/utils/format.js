@@ -7,5 +7,3 @@ const formatCurrency = (price) => {
 };
 
 export default formatCurrency;
-
-console.log(formatCurrency(10000));

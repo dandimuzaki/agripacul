@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const createAccount = async (data) => {
   const res = await axios.post(
-    'https://agripacul-production.up.railway.app/api/register',
+    'https://agripacul-production.up.railway.app/api/auth/register',
     data,
     {
       headers: {
@@ -15,7 +15,7 @@ export const createAccount = async (data) => {
 
 export const searchEmail = async (email) => {
   try {
-    const res = await axios.get(`https://agripacul-production.up.railway.app/api/register/${email}`);
+    const res = await axios.get(`https://agripacul-production.up.railway.app/api/auth/register/${email}`);
     return res.status;
   } catch (err) {
     return err.response?.status || 500;

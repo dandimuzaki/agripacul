@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import signup from '../../../assets/signup.jpg';
 import google from '../../../assets/google.png';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { searchEmail } from '@/services/authService';

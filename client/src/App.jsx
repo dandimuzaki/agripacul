@@ -22,11 +22,13 @@ import { Toaster } from 'sonner';
 import { ImageProvider } from './context/ImageProvider';
 import SignUpPage from './pages/customer/SignUpPage/SignUpPage';
 import LogInPage from './pages/customer/LogInPage/LogInPage';
+import { AuthProvider } from './context/AuthProvider';
 
 function App() {
 
   return (
     <>
+    <AuthProvider>
       <Toaster/>
       <ImageProvider>
         <ProductProvider>
@@ -63,6 +65,7 @@ function App() {
           </CartProvider>
         </ProductProvider>
       </ImageProvider>
+      </AuthProvider>
     </>
   );
 }

@@ -5,7 +5,7 @@ import AdminHeader from '../../components/admin/AdminHeader';
 import OrderModal from '../../components/admin/OrderModal';
 
 const AdminOrderList = () => {
-  const orders = []
+  const orders = [];
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');

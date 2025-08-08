@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  
   const handleRegister = async (data) => {
     setIsLoading(true);
     try {
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
       toast.error(err?.response?.data?.message || 'Failed to register');
     } finally {
       setIsLoading(false);
+      console.log(data)
     }
   };
 
@@ -24,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', err);
     } finally {
       setIsLoading(false);
+      console.log(data)
     }
   };
 
