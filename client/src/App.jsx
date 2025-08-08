@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 import { CartProvider } from './context/CartProvider';
-import { ProductsProvider } from './context/ProductsProvider';
+import { ProductProvider } from './context/ProductProvider';
 import { CheckoutProvider } from './context/CheckoutProvider';
 import HomePage from './pages/customer/HomePage/HomePage';
 import OrderPage from './pages/customer/OrderPage/OrderPage';
@@ -29,7 +29,7 @@ function App() {
     <>
       <Toaster/>
       <ImageProvider>
-        <ProductsProvider>
+        <ProductProvider>
           <CartProvider>
             <CheckoutProvider>
               <Routes>
@@ -61,7 +61,7 @@ function App() {
               </Routes>
             </CheckoutProvider>
           </CartProvider>
-        </ProductsProvider>
+        </ProductProvider>
       </ImageProvider>
     </>
   );

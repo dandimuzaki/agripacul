@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import cherry_tomato from '../../assets/cherry_tomato.png';
 import { Close } from '@mui/icons-material';
-import { useProducts } from '../../context/ProductsContext';
+import { useProduct } from '../../context/ProductsContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,7 +10,7 @@ import { Spinner } from '@heroui/spinner';
 import { ClipLoader } from 'react-spinners';
 
 const ProductModal = () => {
-  const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct, isLoading } = useProducts();
+  const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct, isLoading } = useProduct();
   const { preview, handleChangeImage } = useImage();
 
   const schema = z.object({

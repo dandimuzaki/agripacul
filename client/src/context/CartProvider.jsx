@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useProducts } from './ProductsContext.jsx';
+import { useProduct } from './ProductsContext.jsx';
 import { CartContext } from './CartContext';
 
 export const CartProvider = ({ children }) => {
-  const { products } = useProducts();
+  const { products } = useProduct();
   const [cart, setCart] = useState([]);
 
   const addToCart = (id) => {

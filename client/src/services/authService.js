@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const createAccount = async (data) => {
   const res = await axios.post(
@@ -9,9 +9,9 @@ export const createAccount = async (data) => {
         'Content-Type': 'application/json'
       }
     }
-  )
-    return res.data
-}
+  );
+  return res.data;
+};
 
 export const searchEmail = async (email) => {
   try {
@@ -20,13 +20,13 @@ export const searchEmail = async (email) => {
   } catch (err) {
     return err.response?.status || 500;
   }
-}
+};
 
 export const login = async (data) => {
   try {
-    const res = await axios.post('https://agripacul-production.up.railway.app/api/login', data)
-    return res.data
+    const res = await axios.post('https://agripacul-production.up.railway.app/api/login', data);
+    return res.data;
   } catch (err) {
-    return err
+    return err;
   }
-}
+};

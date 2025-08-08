@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import AdminHeader from '../../../components/admin/AdminHeader';
-import { useProducts } from '../../../context/ProductsContext';
+import { useProduct } from '../../../context/ProductsContext';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { Add, ArrowDownward, ArrowUpward, Delete, DeleteOutlined, Edit, Search, Sort } from '@mui/icons-material';
 import ProductModal from '../../../components/admin/ProductModal';
@@ -8,7 +8,7 @@ import lettuce from '../../../assets/lettuce.jpg';
 import Confirmation from '../../../components/admin/Confirmation';
 
 const AdminProduct = () => {
-  const { products, openModal, isConfirmOpen, triggerConfirm, closeConfirm, handleDelete } = useProducts();
+  const { products, openModal, isConfirmOpen, triggerConfirm, closeConfirm, handleDelete } = useProduct();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');

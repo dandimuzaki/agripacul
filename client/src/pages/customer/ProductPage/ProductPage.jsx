@@ -2,13 +2,13 @@ import { Star } from '@mui/icons-material';
 import React from 'react';
 import lettuce from '../../../assets/lettuce.jpg';
 import './ProductPage.css';
-import { useProducts } from '../../../context/ProductsContext';
+import { useProduct } from '../../../context/ProductsContext';
 import CartButton from '../../../components/common/CartButton/CartButton';
 import BackButton from '../../../components/common/BackButton/BackButton';
 import ProductCard from '../../../components/customer/ProductCard/ProductCard';
 
 const ProductPage = () => {
-  const { products } = useProducts();
+  const { products } = useProduct();
   const filteredProducts = products.filter((product) => product.category === 'vegetables');
 
   return (

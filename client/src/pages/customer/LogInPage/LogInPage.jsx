@@ -8,8 +8,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const LogInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [debounceEmail, setDebounceEmail] = useState('')
-  const { handleLogin } = useAuth()
+  const [debounceEmail, setDebounceEmail] = useState('');
+  const { handleLogin } = useAuth();
 
   const {
     register,
@@ -24,37 +24,37 @@ const LogInPage = () => {
       'password': '',
       'confirmPassword': '',
     }
-  })
+  });
 
-  const email = watch('email')
-  const password = watch('password')
+  const email = watch('email');
+  const password = watch('password');
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebounceEmail(email)
-    }, 500)
-    
+      setDebounceEmail(email);
+    }, 500);
+
     return () => {
-      clearTimeout(handler)
-    }
-  }, [email])
+      clearTimeout(handler);
+    };
+  }, [email]);
 
   useEffect(() => {
     const onCheckEmail = async () => {
       try {
-      const status = await searchEmail(debounceEmail)
-      if (status === 400) {
-        setError('email', { type: 'manual', message: 'Email is not registered. Try create account' })
-      } else {
-        clearErrors('email')
+        const status = await searchEmail(debounceEmail);
+        if (status === 400) {
+          setError('email', { type: 'manual', message: 'Email is not registered. Try create account' });
+        } else {
+          clearErrors('email');
+        }
+      } catch (err) {
+        console.error('Checking email failed', err);
       }
-    } catch (err) {
-      console.error('Checking email failed', err);
-    }
-  }
+    };
 
-    if (debounceEmail) onCheckEmail()
-  }, [debounceEmail, setError, clearErrors])
+    if (debounceEmail) onCheckEmail();
+  }, [debounceEmail, setError, clearErrors]);
 
   const handlePassword = (e) => {
     e.preventDefault();
@@ -113,7 +113,7 @@ const LogInPage = () => {
               className='rounded border empty:border-gray-500 w-full px-2 py-1 valid:border-[var(--primary-dark)] invalid:border-red-500'
             />
           </div>
-          
+
           <button className='p-2 bg-[var(--primary)] text-white rounded mt-5 font-bold'>Log In</button>
         </form>
       </div>

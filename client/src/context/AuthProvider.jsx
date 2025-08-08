@@ -3,29 +3,29 @@ import { AuthContext } from './AuthContext';
 import { toast } from 'sonner';
 import { useState } from 'react';
 export const AuthProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const handleRegister = async (data) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await createAccount(data)
+      await createAccount(data);
     } catch (err) {
-      console.error('Register error:', err)
-    toast.error(err?.response?.data?.message || 'Failed to register')
+      console.error('Register error:', err);
+      toast.error(err?.response?.data?.message || 'Failed to register');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleLogin = async (data) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await login(data)
+      await login(data);
     } catch (err) {
-      console.error('Login error:', err)
+      console.error('Login error:', err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <AuthContext.Provider value={{

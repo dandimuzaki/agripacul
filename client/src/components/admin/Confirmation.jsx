@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
-import { useProducts } from '@/context/ProductsContext';
+import { useProduct } from '@/context/ProductsContext';
 import { Spinner } from '@heroui/spinner';
 import { ClipLoader } from 'react-spinners';
 
@@ -14,7 +14,7 @@ const Confirmation = ({
   confirmText,
   cancelText,
 }) => {
-  const { isLoading } = useProducts();
+  const { isLoading } = useProduct();
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent className="sm:max-w-md">

@@ -9,8 +9,8 @@ import { useAuth } from '@/context/AuthContext';
 const SignUpPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
-  const [debounceEmail, setDebounceEmail] = useState('')
-  const { handleRegister } = useAuth()
+  const [debounceEmail, setDebounceEmail] = useState('');
+  const { handleRegister } = useAuth();
 
   const {
     register,
@@ -26,37 +26,37 @@ const SignUpPage = () => {
       'password': '',
       'confirmPassword': '',
     }
-  })
+  });
 
-  const email = watch('email')
-  const password = watch('password')
+  const email = watch('email');
+  const password = watch('password');
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebounceEmail(email)
-    }, 500)
-    
+      setDebounceEmail(email);
+    }, 500);
+
     return () => {
-      clearTimeout(handler)
-    }
-  }, [email])
+      clearTimeout(handler);
+    };
+  }, [email]);
 
   useEffect(() => {
     const onCheckEmail = async () => {
       try {
-      const status = await searchEmail(debounceEmail)
-      if (status === 200) {
-        setError('email', { type: 'manual', message: 'Email is already used' })
-      } else {
-        clearErrors('email')
+        const status = await searchEmail(debounceEmail);
+        if (status === 200) {
+          setError('email', { type: 'manual', message: 'Email is already used' });
+        } else {
+          clearErrors('email');
+        }
+      } catch (err) {
+        console.error('Checking email failed', err);
       }
-    } catch (err) {
-      console.error('Checking email failed', err);
-    }
-  }
+    };
 
-    if (debounceEmail) onCheckEmail()
-  }, [debounceEmail, setError, clearErrors])
+    if (debounceEmail) onCheckEmail();
+  }, [debounceEmail, setError, clearErrors]);
 
   const handlePassword = (e) => {
     e.preventDefault();
@@ -89,7 +89,7 @@ const SignUpPage = () => {
         >
           <div className='w-full flex flex-col gap-1'>
             <label className='font-bold'>Name</label>
-            <input 
+            <input
               {...register('name', {
                 required: 'Please enter your name',
               })}

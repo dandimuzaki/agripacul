@@ -15,7 +15,7 @@ import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../
 import { useImage } from './ImageContext.jsx';
 
 
-export const ProductsProvider = ({ children }) => {
+export const ProductProvider = ({ children }) => {
   const { handleUploadImage, setSelectedImage, setPreview } = useImage();
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);

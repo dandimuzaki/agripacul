@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import './HomePage.css';
 import { ArrowDownwardTwoTone, ArrowOutwardTwoTone } from '@mui/icons-material';
-import { useProducts } from '../../../context/ProductsContext';
+import { useProduct } from '../../../context/ProductsContext';
 import Banner from '../../../components/customer/Banner/Banner';
 import Category from '../../../components/customer/Category/Category';
 import Value from '../../../components/customer/Value/Value';
@@ -18,7 +18,7 @@ import ProductCardVertical from '@/components/customer/ProductCardVertical/Produ
 
 
 const HomePage = () => {
-  const { products } = useProducts();
+  const { products } = useProduct();
   const { category } = useParams();
   /*const filteredProducts = useMemo(() => {
     return category
