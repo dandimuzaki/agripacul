@@ -4,12 +4,14 @@ import { useAuth } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { searchEmail } from '@/services/authService';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 
 const LogInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [debounceEmail, setDebounceEmail] = useState('');
   const { handleLogin } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -27,7 +29,6 @@ const LogInPage = () => {
   });
 
   const email = watch('email');
-  const password = watch('password');
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -81,7 +82,10 @@ const LogInPage = () => {
         </div>
 
         <form
-          onSubmit={handleSubmit(handleLogin)}
+          onSubmit={handleSubmit(async (formData) => {
+            await handleLogin(formData);
+            navigate('/');
+          })}
           className='flex flex-col gap-3'
         >
           <div className='w-full flex flex-col gap-1'>

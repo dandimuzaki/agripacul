@@ -28,7 +28,8 @@ export const searchEmail = async (email) => {
 
 export const login = async (data) => {
   try {
-    const res = await axios.post('https://agripacul-production.up.railway.app/api/login',
+    const res = await axios.post(
+      'https://agripacul-production.up.railway.app/api/auth/login',
       data,
       {
         headers: {

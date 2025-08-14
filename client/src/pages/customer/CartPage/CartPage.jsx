@@ -6,10 +6,17 @@ import { CheckBox } from '@mui/icons-material';
 import formatCurrency from '../../../utils/format';
 import CartCard from '../../../components/customer/CartCard/CartCard';
 import PageNav from '../../../components/customer/PageNav/PageNav';
+import { useAuth } from '@/context/AuthContext';
 
 const CartPage = () => {
   const { groupedCart } = useCart();
   const { checkAll, isAllChecked, totalPrice, groupedCheckout, testCheckout } = useCheckout();
+  const { user, token } = useAuth()
+
+  const handleClick = () => {
+    console.log(user)
+    console.log(token)
+  }
 
   return (
     <div className='md:mt-15'>
@@ -45,6 +52,7 @@ const CartPage = () => {
             </Link>
           </div>
         </div>
+        <div className='w-20 h-20 bg-green-500' onClick={handleClick}></div>
       </div>
     </div>
   );
