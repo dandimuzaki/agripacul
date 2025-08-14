@@ -1,45 +1,29 @@
 import Cart from '../models/Cart.js';
 
 export const addToCart = async (req, res) => {
-  try {
-    const { productId, quantity } = req.body;
+  const { productId, quantity } = req.body
 
-    try {
-      let cart = await Cart.findOne({ user: req.user })
-      
-      if (!cart) {
-        cart = new Cart({ user: req.user._id, items:[] })
-      }
+  try {
+    let cart = await Cart.findOne({ userId: req.user._id });
+
+    if (!cart) {
+      cart = new Cart({ userId: req.user._id, items: [] })
     }
 
-    // Find the user's cart
-    let cart = await Cart.findOne({ user: userId });
+    const existingItem = cart.items.find(
+      (item) => item.productId.toString() === productId
+    );
 
-    // If no cart exists, create one
-    if (!cart) {
-      cart = new Cart({
-        user: userId,
-        items: [{ product: productId, quantity: 1 }],
-      });
+    if (existingItem) {
+      existingItem.quantity += quantity;
     } else {
-      // Check if product already exists in cart
-      const itemIndex = cart.items.findIndex(
-        (item) => item.product.toString() === productId
-      );
-
-      if (itemIndex === -1) {
-        // Add new item
-        cart.items.push({ product: productId, quantity: 1 });
-      } else {
-        // Increase quantity
-        cart.items[itemIndex].quantity += 1;
-      }
+      cart.items.push({ productId, quantity })
     }
 
     await cart.save();
-    res.status(200).json(cart);
+    res.status(200).json({ message: 'Product added to cart', cart })
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ message: 'Internal server error', err })
   }
 };
 
