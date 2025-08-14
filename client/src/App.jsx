@@ -28,43 +28,43 @@ function App() {
 
   return (
     <>
-    <AuthProvider>
-      <Toaster/>
-      <ImageProvider>
-        <ProductProvider>
-          <CartProvider>
-            <CheckoutProvider>
-              <Routes>
-                <Route path='/' element={<MainLayout/>}>
-                  <Route element={<NavbarLayout />}>
-                    <Route index element={<HomePage />} />
-                    <Route path='/ideas' element={<OrderPage />} />
-                    <Route path='/orders' element={<OrderPage/>} />
-                    <Route path='/profile' />
-                    <Route path='/:category' element={<HomePage />} />
-                    <Route path='/orders/1' element={<TransactionDetail/>}/>
-                  </Route>
+      <AuthProvider>
+        <Toaster/>
+        <ImageProvider>
+          <ProductProvider>
+            <CartProvider>
+              <CheckoutProvider>
+                <Routes>
+                  <Route path='/' element={<MainLayout/>}>
+                    <Route element={<NavbarLayout />}>
+                      <Route index element={<HomePage />} />
+                      <Route path='/ideas' element={<OrderPage />} />
+                      <Route path='/orders' element={<OrderPage/>} />
+                      <Route path='/profile' />
+                      <Route path='/:category' element={<HomePage />} />
+                      <Route path='/orders/1' element={<TransactionDetail/>}/>
+                    </Route>
 
-                  <Route element={<PlainLayout />}>
-                    <Route path='/product/1' element={<ProductPage />} />
-                    <Route path='/cart' element={<CartPage />} />
-                    <Route path='/checkout' element={<CheckoutPage />} />
-                    <Route path='/about' element={<About/>}/>
-                    <Route path='/signup' element={<SignUpPage/>}/>
-                    <Route path='/login' element={<LogInPage/>}/>
+                    <Route element={<PlainLayout />}>
+                      <Route path='/product/1' element={<ProductPage />} />
+                      <Route path='/cart' element={<CartPage />} />
+                      <Route path='/checkout' element={<CheckoutPage />} />
+                      <Route path='/about' element={<About/>}/>
+                      <Route path='/signup' element={<SignUpPage/>}/>
+                      <Route path='/login' element={<LogInPage/>}/>
+                    </Route>
                   </Route>
-                </Route>
-                <Route path='/admin' element={<AdminLayout/>}>
-                  <Route path='products' element={<AdminProduct/>} />
-                  <Route path='orders' element={<AdminOrderList/>} />
-                  <Route path='summary' element={<AdminOrderSummary/>} />
+                  <Route path='/admin' element={<AdminLayout/>}>
+                    <Route path='products' element={<AdminProduct/>} />
+                    <Route path='orders' element={<AdminOrderList/>} />
+                    <Route path='summary' element={<AdminOrderSummary/>} />
 
-                </Route>
-              </Routes>
-            </CheckoutProvider>
-          </CartProvider>
-        </ProductProvider>
-      </ImageProvider>
+                  </Route>
+                </Routes>
+              </CheckoutProvider>
+            </CartProvider>
+          </ProductProvider>
+        </ImageProvider>
       </AuthProvider>
     </>
   );

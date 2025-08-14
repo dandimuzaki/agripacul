@@ -1,16 +1,20 @@
 import axios from 'axios';
 
 export const createAccount = async (data) => {
-  const res = await axios.post(
-    'https://agripacul-production.up.railway.app/api/auth/register',
-    data,
-    {
-      headers: {
-        'Content-Type': 'application/json'
+  try {
+    const res = await axios.post(
+      'https://agripacul-production.up.railway.app/api/auth/register',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
-    }
-  );
-  return res.data;
+    );
+    return { user: res.data.user, token: res.data.token };
+  } catch (err) {
+    return err;
+  }
 };
 
 export const searchEmail = async (email) => {
@@ -24,8 +28,15 @@ export const searchEmail = async (email) => {
 
 export const login = async (data) => {
   try {
-    const res = await axios.post('https://agripacul-production.up.railway.app/api/login', data);
-    return res.data;
+    const res = await axios.post('https://agripacul-production.up.railway.app/api/login',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return { user: res.data.user, token: res.data.token };
   } catch (err) {
     return err;
   }

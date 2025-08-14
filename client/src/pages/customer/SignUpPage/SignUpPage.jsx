@@ -4,12 +4,14 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { searchEmail } from '@/services/authService';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   const [debounceEmail, setDebounceEmail] = useState('');
   const { handleRegister } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -83,7 +85,10 @@ const SignUpPage = () => {
         </div>
 
         <form
-          onSubmit={handleSubmit(handleRegister)}
+          onSubmit={handleSubmit(async (formData) => {
+            await handleRegister(formData);
+            navigate('/');
+          })}
           className='flex flex-col gap-3'
         >
           <div className='w-full flex flex-col gap-1'>

@@ -20,7 +20,7 @@ export const register = async (req, res) => {
     const token = generateToken(newUser);
     await newUser.save();
 
-    res.status(201).json({ newUser: { name: newUser.name, role: newUser.role }, message: 'User registered successfully', token });
+    res.status(201).json({ newUser: { name: newUser.name, email: newUser.email, role: newUser.role }, message: 'User registered successfully', token });
   } catch (err) {
     res.status(500).json({ message: 'Internal server error', err });
   }
@@ -50,7 +50,7 @@ export const login = async (req, res) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
     const token = generateToken(user);
-    res.status(200).json({ user: { name: user.name, role: user.role }, token });
+    res.status(200).json({ user: { name: user.name, email: user.email, role: user.role }, token });
   } catch (err) {
     res.status(500).json({ message: 'Internal server error', err });
   }
