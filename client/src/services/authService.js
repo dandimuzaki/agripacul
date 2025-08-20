@@ -29,7 +29,7 @@ export const searchEmail = async (email) => {
 export const login = async (data) => {
   try {
     const res = await axios.post(
-      'https://agripacul-production.up.railway.app/api/auth/login',
+      /*'https://agripacul-production.up.railway.app/api/auth/login'*/'http://localhost:3000/api/auth/login',
       data,
       {
         headers: {

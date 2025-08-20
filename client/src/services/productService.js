@@ -5,8 +5,8 @@ export const getAllProducts = async () => {
   return res.data;
 };
 
-export const fetchselectedProduct = async (id) => {
-  const res = await axios.get(`https://agripacul-production.up.railway.app/api/product/${id}`);
+export const fetchSelectedProduct = async (id) => {
+  const res = await axios.get(`http://localhost:3000/api/product/${id}`);
   return res.data;
 };
 

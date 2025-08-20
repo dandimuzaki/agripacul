@@ -1,54 +1,78 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useProduct } from './ProductContext.jsx';
 import { CartContext } from './CartContext';
+import { addToCartService, fetchCartService, removeCartService, updateCartService } from '@/services/cartService.js';
 
 export const CartProvider = ({ children }) => {
   const { products } = useProduct();
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true)
 
-  const addToCart = (id) => {
-    const product = products.find((item) => item.id === id);
-    if (product) {
-      setCart((prev) => [...prev, product]);
+  // Load cart
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const cartData = await fetchCartService();
+        const items = cartData.data.items
+        setCart(items)
+      } catch (err) {
+        console.error("Error fetching cart", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadCart()
+  }, [])
+
+  const addToCart = async (productId) => {
+    try {
+      const updatedCart = await addToCartService(productId)
+      const items = updatedCart.data.items
+      setCart(items)
+    } catch (err) {
+      console.error("Error adding to cart", err)
     }
   };
 
   /* Display cart grouped by item */
-  const groupedCart = Object.values(
-    cart.reduce((acc, curr) => {
-      const key = curr.id;
+  const groupedCart = () => {
 
-      if (!acc[key]) {
-        acc[key] = { ...curr, amount: 1, total: curr.price };
-      } else {
-        acc[key].amount += 1;
-        acc[key].total += acc[key].price;
-      }
-
-      return acc;
-    }, {})
-  );
-
-  const decreaseQuantity = (id) => {
-    const targetProductIndex = cart.findIndex((item) => item.id === id);
-    const updatedCart = [...cart];
-    if (targetProductIndex !== 1) {
-      updatedCart.splice(targetProductIndex, 1);
-    }
-    setCart(updatedCart);
   };
 
-  const increaseQuantity = (id) => {
-    const targetProduct = products.find((item) => item.id === id);
-    if (targetProduct) {
-      setCart((prev) => [...prev, targetProduct]);
+  const decreaseQuantity = async (productId) => {
+    try {
+      const updatedCart = await updateCartService({productId, change: -1})
+      const items = updatedCart.data.items;
+      setCart(items)
+    } catch (err) {
+      console.error('Error decreasing item quantity', err)
     }
   };
+
+  const increaseQuantity = async (productId) => {
+    try {
+      const updatedCart = await updateCartService({productId, change: 1})
+      const items = updatedCart.data.items;
+      setCart(items);
+    } catch (err) {
+      console.error('Error increasing item quantity', err)
+    }
+  };
+
+  const deleteItem = async (productId) => {
+    try {
+      const updatedCart = await removeCartService(productId)
+      const items = updatedCart.data.items;
+      setCart(items);
+    } catch (err) {
+      console.error('Error deleting item', err)
+    }
+  }
 
   const clearCart = () => setCart([]);
 
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart, groupedCart, decreaseQuantity, increaseQuantity, clearCart }}>
+    <CartContext.Provider value={{ cart, setCart, addToCart, groupedCart, decreaseQuantity, increaseQuantity, clearCart, deleteItem }}>
       {children}
     </CartContext.Provider>
   );

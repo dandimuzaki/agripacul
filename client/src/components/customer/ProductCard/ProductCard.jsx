@@ -6,14 +6,14 @@ import { Star } from '@mui/icons-material';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
-  const { id, title, price, amount, image } = product;
+  const { _id, title, price, amount, image } = product;
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleAddToCart = (id) => {
+  const handleAddToCart = (_id) => {
     if (isProcessing) return;
 
     setIsProcessing(true);
-    addToCart(id);
+    addToCart(_id);
 
 
     setTimeout(() => setIsProcessing(false), 500);
@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
           <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${amount ? ` /${amount}` : ''}`}</span></h5>
         </div>
         <div className='flex justify-end'>
-          <button onClick={() => handleAddToCart(id)} className='
+          <button onClick={() => handleAddToCart(_id)} className='
               cursor-pointer w-fit
               rounded-full py-2 px-4
               text-sm font-bold

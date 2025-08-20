@@ -24,7 +24,6 @@ const LogInPage = () => {
     defaultValues: {
       'email': '',
       'password': '',
-      'confirmPassword': '',
     }
   });
 

@@ -1,57 +1,77 @@
-import React from 'react';
-import { ChevronRight, LocationOn } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { ChevronRight, LocationOn, LocationPin } from '@mui/icons-material';
 import { useCheckout } from '../../../context/CheckoutContext';
 import formatCurrency from '../../../utils/format';
 import PageNav from '../../../components/customer/PageNav/PageNav';
 import CheckoutItem from '../../../components/customer/CheckoutItem/CheckoutItem';
+import { useCart } from '@/context/CartContext';
+import AddressForm from '@/components/customer/AddressForm';
+import AddressList from '@/components/customer/AddressList';
+import { useAddress } from '@/context/AddressContext';
 
 const CheckoutPage = () => {
-  const { groupedCheckout, totalPrice } = useCheckout();
+  const { checkedItems, totalPrice } = useCheckout();
   const shippingCost = 14000;
   const totalBill = totalPrice + shippingCost;
+  const {
+    addressList,
+    selectedAddress,
+    openAddressList,
+    setOpenAddressList, 
+    openAddressForm, 
+    setOpenAddressForm,
+    provinceList
+  } = useAddress();
 
   return (
-    <div className='md:mt-15'>
+    <div className='p-5 pt-15'>
       <PageNav path="/cart" text="Checkout" />
-      <div className='p-3 md:p-5 flex gap-3 md:gap-5 md:flex-row flex-col'>
-        <div className='flex flex-col gap-3 md:flex-2'>
-          <div className='shipping-address bg-white flex gap-2 p-3 rounded-lg border border-gray-500'>
-
-            <div className='flex-1 flex flex-col gap-1 text-sm text-black'>
-              <p className='text-[var(--primary)]'><LocationOn />Your Shipping Address</p>
-              <div className='flex gap-1 items-center'>
-
-                <p className='font-bold'>Rumah &#9679; <span>Dandi Muhamad Zaki</span></p>
-              </div>
-              <p className='w-72 truncate text-black'>
-            Jl. Cidamar Gg. H. Abdullah II No. 51 Jl. Cidamar Gg. H. Abdullah II No. 51 Jl. Cidamar Gg. H. Abdullah II No. 51 Jl. Cidamar Gg. H. Abdullah II No. 51
-              </p>
+      <div className='grid md:grid-cols-[1fr_350px] items-start gap-3 md:gap-5'>
+        <div className='grid gap-4'>
+          <div className='bg-white flex p-5 gap-5 rounded-lg'>
+            <div className='flex-1 grid gap-2'>
+              <p className='uppercase font-bold text-gray-500'>Delivery Address</p>
+              {selectedAddress ?
+                <>
+                <p className='font-bold ml-[-4px] flex items-center'><LocationPin className='text-[var(--primary)]'/>{selectedAddress.label} • {selectedAddress.recipientName}</p>
+                <p className='text-sm'>{selectedAddress.fullAddress}, {selectedAddress.subDistrict}, {selectedAddress.city}, {selectedAddress.province}, {selectedAddress.phoneNumber}</p>
+                </>
+                :
+                <p>Please set your address</p>
+              }
             </div>
-            <button className='self-stretch flex justify-center items-center w-8'>
-              <ChevronRight />
-            </button>
+            <div className='flex justify-center items-center'>
+              <button
+              type='button'
+              onClick={() => setOpenAddressList(true)}
+              className='text-sm font-bold rounded py-1 px-2 bg-[var(--primary)] text-white active:bg-[var(--primary-dark)] cursor-pointer'>
+                {(addressList.length != 0) ? 'Change' : 'Add'}
+              </button>
+            </div>
           </div>
-          {groupedCheckout.map((product) =>
+          <div className='grid gap-3 bg-white rounded-lg p-5'>
+          {checkedItems.map((item, i) =>
             <CheckoutItem
-              key={product.id}
-              product={product}
+              key={i}
+              item={item}
             />
           )}
-          <div className='flex gap-2'><p className='font-bold'>Select Shipping</p></div>
-          <div className='shipping-option bg-white flex gap-2 p-3 rounded-lg border border-gray-500'>
-            <div className='flex-1 flex flex-col gap-1 text-sm text-black'>
+          </div>
+          <div className='bg-white flex items-center p-5 rounded-lg'>
+            <div className='flex-1 grid gap-2'>
+            <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
               <p className='font-bold'>Express <span>Rp{shippingCost}</span></p>
-              <p className='text-gray-500'>Estimated delivery <span>12 Jul 2025</span></p>
+              <p className='text-gray-500 text-sm'>Estimated delivery <span>12 Jul 2025</span></p>
             </div>
             <button className='self-stretch flex justify-center items-center w-8'>
               <ChevronRight />
             </button>
           </div>
         </div>
-        <div className='text-black flex flex-col gap-3 md:flex-1'>
-          <p className='font-bold'>Payment Method</p>
+        <div className='sticky top-26 grid gap-5 bg-white p-5 rounded-lg'>
+        <fieldset className='flex flex-col gap-2'>
+        <p className='uppercase font-bold text-gray-500'>Payment Method</p>
 
-          <fieldset className='flex flex-col gap-1'>
             <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>Gopay
               <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="Gopay" />
             </label>
@@ -63,8 +83,8 @@ const CheckoutPage = () => {
             </label>
           </fieldset>
           <div className='flex flex-col gap-2 text-black'>
-            <p className='font-bold text-base'>Check your order summary</p>
-            <div className='flex flex-col gap-1 text-sm'>
+          <p className='uppercase font-bold text-gray-500'>Shopping Summary</p>
+          <div className='flex flex-col gap-1 text-sm'>
               <div className='flex justify-between'>
                 <p>Total Price</p>
                 <p>
@@ -81,10 +101,23 @@ const CheckoutPage = () => {
               </div>
             </div>
           </div>
-          <button className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay</button>
+          <button 
+          onClick={() => {
+            setOpenAddressForm(true)
+          }}
+          type='click' className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay Now</button>
 
         </div>
+        <AddressForm/>
+        <AddressList/>
+        <div className='w-8 h-8 bg-green-500' onClick={() => console.log(addressList, (addressList.filter((address) => address.mainAddress == true)))}></div>
       </div>
+      {provinceList.map(({id, name}) => 
+      <div key={id}>
+        <p>{id}</p>
+      <p>{name}</p>
+      </div>
+      )}
     </div>
   );
 };

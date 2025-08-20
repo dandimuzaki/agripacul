@@ -1,12 +1,14 @@
 import React from 'react';
 import lettuce from '../../../assets/lettuce.jpg';
+import formatCurrency from '@/utils/format';
 
-const CheckoutItem = ({ product }) => {
-  const { title, price, amount, total } = product;
+const CheckoutItem = ({ item }) => {
+  const { product, quantity } = item;
+  const { title, price, image } = product;
   return (
     <div className='flex gap-2 h-20 relative'>
       <div className='aspect-square h-full'>
-        <img className='h-full w-full object-cover rounded-md' src={lettuce} />
+        <img className='h-full w-full object-cover rounded-md' src={image} />
       </div>
       <div className='flex flex-col justify-between flex-1'>
         <div>
@@ -15,7 +17,7 @@ const CheckoutItem = ({ product }) => {
           </p>
           <p className='text-gray-500 text-sm'>Spesifikasi</p>
         </div>
-        <div className='flex gap-2 items-center font-bold text-black'>{price}<p className='text-sm text-gray-500'>x<span>{amount}</span> = {total}</p>
+        <div className='flex gap-2 items-center font-bold text-black'>{formatCurrency(price)}<p className='text-sm text-gray-500'>x<span>{quantity}</span></p>
         </div>
       </div>
     </div>

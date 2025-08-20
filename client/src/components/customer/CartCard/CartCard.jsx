@@ -1,18 +1,19 @@
-import { Add, CheckBox, Remove } from '@mui/icons-material';
+import { Add, CheckBox, Delete, Remove } from '@mui/icons-material';
 import formatCurrency from '../../../utils/format';
 import { useCart } from '../../../context/CartContext';
 import { useCheckout } from '../../../context/CheckoutContext';
 
-const CartCard = ({ product }) => {
-  const { decreaseQuantity, increaseQuantity } = useCart();
+const CartCard = ({ item }) => {
+  const { decreaseQuantity, increaseQuantity, deleteItem } = useCart();
   const { checkedItems, handleCheckout } = useCheckout();
-  const { id, title, price, amount } = product;
+  const { product, quantity } = item;
+  const { _id, title, price } = product;
 
-  const isChecked = checkedItems.includes(id);
+  const isChecked = checkedItems.includes(item);
 
   return (
     <div className={'relative flex gap-3 p-2 rounded-lg h-30 shadow-[0_0_8px_rgba(0,0,0,0.2)]'}>
-      <div role="checkbox" onClick={() => handleCheckout(id)} type='checkbox' className={`${isChecked?'border-0':'border'} border border-gray-500 h-7 w-7 rounded-md relative self-center cursor-pointer`} >
+      <div role="checkbox" onClick={() => handleCheckout(item)} type='checkbox' className={`${isChecked?'border-0':'border'} border border-gray-500 h-7 w-7 rounded-md relative self-center cursor-pointer`} >
         <CheckBox fontSize='large' className={`${isChecked?'':'sr-only'} text-[var(--orange)] absolute top-[-4px] left-[-4px]`} />
       </div>
       <div className='aspect-square'>
@@ -25,9 +26,12 @@ const CartCard = ({ product }) => {
           <p className='text-sm text-gray-300 line-through'>15.000</p>
         </div>
         <div className='flex justify-end items-center'>
-          <button id={id} onClick={() => decreaseQuantity(id)} className='w-6 h-6 border border-[var(--orange)] text-[var(--orange)] rounded-md cursor-pointer'><Remove fontSize='small' /></button>
-          <div className='w-8 h-6 flex items-center justify-center'>{amount}</div>
-          <button id={id} onClick={() => increaseQuantity(id)} className='w-6 h-6 border border-[var(--orange)] text-[var(--orange)] rounded-md cursor-pointer'><Add fontSize='small' /></button>
+          <div className='w-8 h-6 text-[var(--orange)]' onClick={() => deleteItem(_id)}>
+            <Delete/>
+          </div>
+          <button onClick={() => decreaseQuantity(_id)} className='w-6 h-6 border border-[var(--orange)] text-[var(--orange)] rounded-md cursor-pointer'><Remove fontSize='small' /></button>
+          <div className='w-8 h-6 flex items-center justify-center'>{quantity}</div>
+          <button onClick={() => increaseQuantity(_id)} className='w-6 h-6 border border-[var(--orange)] text-[var(--orange)] rounded-md cursor-pointer'><Add fontSize='small' /></button>
         </div>
       </div>
     </div>

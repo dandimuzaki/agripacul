@@ -23,11 +23,13 @@ import { ImageProvider } from './context/ImageProvider';
 import SignUpPage from './pages/customer/SignUpPage/SignUpPage';
 import LogInPage from './pages/customer/LogInPage/LogInPage';
 import { AuthProvider } from './context/AuthProvider';
+import { AddressProvider } from './context/AddressProvider';
 
 function App() {
 
   return (
     <>
+    <AddressProvider>
       <AuthProvider>
         <Toaster/>
         <ImageProvider>
@@ -66,6 +68,7 @@ function App() {
           </ProductProvider>
         </ImageProvider>
       </AuthProvider>
+      </AddressProvider>
     </>
   );
 }

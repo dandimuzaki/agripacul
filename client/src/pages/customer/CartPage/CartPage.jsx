@@ -7,15 +7,15 @@ import formatCurrency from '../../../utils/format';
 import CartCard from '../../../components/customer/CartCard/CartCard';
 import PageNav from '../../../components/customer/PageNav/PageNav';
 import { useAuth } from '@/context/AuthContext';
+import { useAddress } from '@/context/AddressContext';
 
 const CartPage = () => {
-  const { groupedCart } = useCart();
-  const { checkAll, isAllChecked, totalPrice, groupedCheckout, testCheckout } = useCheckout();
-  const { user, token } = useAuth()
+  const { cart } = useCart();
+  const { checkedItems, checkAll, isAllChecked, totalPrice, testCheckout } = useCheckout();
+  const {addressList} = useAddress()
 
   const handleClick = () => {
-    console.log(user)
-    console.log(token)
+    console.log(addressList);
   }
 
   return (
@@ -28,12 +28,7 @@ const CartPage = () => {
           </div>
           <span>Semua</span>
         </div>
-        {groupedCart.map((product) =>
-          <CartCard
-            key={product.id}
-            product={product}
-          />
-        )}
+        {cart.map((item, i) => <CartCard key={i} item={item} />)}
       </div>
       <div className='bg-white fixed bottom-0 md:top-15 md:right-0 md:bottom-auto md:w-1/3 w-full md:py-5 md:pr-5'>
         <div className='bg-white w-full flex justify-between items-center md:items-start p-3 md:rounded-lg shadow-[0_0_8px_rgba(0,0,0,0.2)]'>
@@ -48,7 +43,7 @@ const CartPage = () => {
               {formatCurrency(totalPrice)}
             </p>
             <Link to="/checkout">
-              <button className='py-2 px-4 rounded-md bg-[var(--primary)] font-bold text-white cursor-pointer active:bg-[var(--dark-primary)]'>Beli <span>{groupedCheckout.length}</span></button>
+              <button className='py-2 px-4 rounded-md bg-[var(--primary)] font-bold text-white cursor-pointer active:bg-[var(--dark-primary)]'>Beli <span>{checkedItems.length}</span></button>
             </Link>
           </div>
         </div>
