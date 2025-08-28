@@ -7,10 +7,7 @@ export const CheckoutProvider = ({ children }) => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState(false);
 
-  // Derive checkout directly from checkedItems
-  const checkout = checkedItems;
-
-  const totalPrice = checkout.reduce((acc, item) => acc + item.product.price, 0);
+  const totalPrice = checkedItems.reduce((acc, item) => acc + item.product.price, 0);
 
   const handleCheckout = (item) => {
     const isAlreadyChecked = checkedItems.some(
@@ -49,27 +46,14 @@ export const CheckoutProvider = ({ children }) => {
     setIsAllChecked(compareAllChecked);
   }, [cart, checkedItems]);
 
-  const groupedCheckout = Object.values(
-    checkout.reduce((acc, curr) => {
-      const key = curr.id;
-      if (!acc[key]) {
-        acc[key] = { ...curr, amount: 1, total: curr.price };
-      } else {
-        acc[key].amount += 1;
-        acc[key].total += acc[key].price;
-      }
-      return acc;
-    }, {})
-  );
+  
 
   return (
     <CheckoutContext.Provider
       value={{
         checkedItems,
-        checkout,
         handleCheckout,
         checkAll,
-        groupedCheckout,
         isAllChecked,
         totalPrice,
       }}

@@ -11,12 +11,9 @@ const CheckoutItem = ({ item }) => {
         <img className='h-full w-full object-cover rounded-md' src={image} />
       </div>
       <div className='flex flex-col justify-between flex-1'>
-        <div>
           <p className='text-bold text-black'>
             {title}
           </p>
-          <p className='text-gray-500 text-sm'>Spesifikasi</p>
-        </div>
         <div className='flex gap-2 items-center font-bold text-black'>{formatCurrency(price)}<p className='text-sm text-gray-500'>x<span>{quantity}</span></p>
         </div>
       </div>

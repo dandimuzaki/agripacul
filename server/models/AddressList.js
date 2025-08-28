@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const addressSchema = new mongoose.Schema({
   recipientName: {
@@ -14,18 +14,49 @@ const addressSchema = new mongoose.Schema({
     required: true
   },
   province: {
-    type: String,
-    required: true
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Location',
+      required: true,
+    },
+    name: {
+      type: String,
+    }
   },
   city: {
-    type: String,
-    required: true
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Location',
+      required: true,
+    },
+    name: {
+      type: String,
+    }
   },
-  subDistrict: {
-    type: String,
-    required: true
+  district: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Location',
+      required: true,
+    },
+    name: {
+      type: String,
+    }
   },
-  fullAddress: {
+  subdistrict: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Location',
+      required: true,
+    },
+    name: {
+      type: String,
+    }
+  },
+  rajaOngkirId: {
+    type: String,
+  },
+  detail: {
     type: String,
     required: true
   },
@@ -38,7 +69,7 @@ const addressSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-}, { timestamps: true })
+}, { timestamps: true });
 
 const addressListSchema = new mongoose.Schema({
   user: {
@@ -48,13 +79,13 @@ const addressListSchema = new mongoose.Schema({
     unique: true
   },
   addressList: [addressSchema]
-}, { timestamps: true })
+}, { timestamps: true });
 
 addressListSchema.index(
-  { user: 1, "addressList.mainAddress": 1 },
-  { unique: true, partialFilterExpression: { "addressList.mainAddress": true } }
+  { user: 1, 'addressList.mainAddress': 1 },
+  { unique: true, partialFilterExpression: { 'addressList.mainAddress': true } }
 );
 
-const AddressList = mongoose.model('AddressList', addressListSchema)
+const AddressList = mongoose.model('AddressList', addressListSchema);
 
 export default AddressList;

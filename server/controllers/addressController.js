@@ -1,111 +1,80 @@
-import AddressList from '../models/AddressList.js'
-import shippingServices from '../services/shippingServices.js'
+import AddressList from '../models/AddressList.js';
+import Location from '../models/Location.js';
 
 export const getAddressList = async (req, res) => {
   try {
-    const result = await AddressList.findOne({ user: req.user._id })
+    const result = await AddressList.findOne({ user: req.user._id });
     if (!result) {
-      return res.status(404).json({ message: 'Please add your address' })
+      return res.status(404).json({ message: 'Please add your address' });
     }
     return res.status(200).json({
       success: true,
       message: 'Address list fetched successfully',
       data: result.addressList
-    })
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message });
   }
-}
-
-export const getProvinces = async (req, res) => {
-  try {
-    const provinces = await shippingServices.getProvinces();
-    return res.status(200).json({
-      success: true,
-      message: 'Provinces fetched successfully',
-      data: provinces
-    })
-  } catch (err) {
-    res.status(500).json({ message: err.message })
-  }
-}
-
-export const getCities = async (req, res) => {
-  const { provinceId } = req.params;
-  try {
-    const cities = await shippingServices.getCities(provinceId);
-    return res.status(200).json({
-      success: true,
-      message: 'Cities fetched successfully',
-      data: cities
-    })
-  } catch (err) {[
-    res.status(500).json({ message: err.message })
-  ]}
-}
-
-export const getDistricts = async (req, res) => {
-  const { cityId } = req.params;
-  try {
-    const districts = await shippingServices.getDistricts(cityId);
-    return res.status(200).json({
-      success: true,
-      message: 'Districts fetched successfully',
-      data: districts
-    })
-  } catch (err) {[
-    res.status(500).json({ message: err.message })
-  ]}
-}
-
-export const getSubdistricts = async (req, res) => {
-  const { districtId } = req.params;
-  try {
-    const subdistricts = await shippingServices.getSubdistricts(districtId);
-    return res.status(200).json({
-      success: true,
-      message: 'Sub-districts fetched successfully',
-      data: subdistricts
-    })
-  } catch (err) {[
-    res.status(500).json({ message: err.message })
-  ]}
-}
+};
 
 export const addAddress = async (req, res) => {
   try {
-    let result = await AddressList.findOne({ user: req.user._id })
-    
+    const { province, city, district, subdistrict, ...rest } = req.body;
+
+    const [provinceData, cityData, districtData, subdistrictData] = await Promise.all([
+      Location.findById(province),
+      Location.findById(city),
+      Location.findById(district),
+      Location.findById(subdistrict)
+    ]);
+
+    if (!provinceData || !cityData || !districtData || !subdistrictData) {
+      return res.status(400).json({ error: 'Invalid location selection' });
+    }
+
+    const newAddress = {
+      ...rest,
+      province: { id: provinceData._id, name: provinceData.name },
+      city: { id: cityData._id, name: cityData.name },
+      district: { id: districtData._id, name: districtData.name },
+      subdistrict: { id: subdistrictData._id, name: subdistrictData.name },
+      rajaOngkirId: subdistrictData.rajaOngkirId
+    };
+
+    console.log(newAddress)
+
+    let result = await AddressList.findOne({ user: req.user._id });
+
     if (!result) {
       result = new AddressList({
         user: req.user._id,
-        addressList: [{ ...req.body, mainAddress: true }]
-      })
-    } else {
-      if (result.addressList.length == 0) {
-        result.addressList.push({ ...req.body, mainAddress: true })
+        addressList: [{ ...newAddress, mainAddress: true }]
+      });
+    } else if (result.addressList.length === 0) {
+        result.addressList.push({ ...newAddress, mainAddress: true });
       } else if (req.body.mainAddress) {
-        result.addressList.forEach(addr => addr.mainAddress = false)
-        result.addressList.push(req.body)
+        result.addressList.forEach((addr) => addr.mainAddress = false);
+        result.addressList.push(newAddress);
+      } else if (!req.body.mainAddress) {
+        result.addressList.push(newAddress);
       }
-    }
-    await result.save()
+    await result.save();
 
     res.status(201).json({
       success: true,
       message: 'Address added successfully',
       data: result.addressList,
-    })
+    });
 
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 export const editAddress = async (req, res) => {
   const userId = req.user._id;
   const addressId = req.params.addressId;
-  const updates = req.body;
+  const { province, city, district, subdistrict, ...rest } = req.body;
 
   try {
     const addressDoc = await AddressList.findOne({ user: userId });
@@ -114,8 +83,8 @@ export const editAddress = async (req, res) => {
     }
 
     // Reset mainAddress if needed
-    if (updates.mainAddress) {
-      addressDoc.addressList.forEach(addr => {
+    if (req.body.mainAddress) {
+      addressDoc.addressList.forEach((addr) => {
         addr.mainAddress = false;
       });
     }
@@ -126,8 +95,28 @@ export const editAddress = async (req, res) => {
       return res.status(404).json({ message: 'Address not found' });
     }
 
-    // Apply updates safely
-    Object.assign(address, updates);
+    // 🔄 If any location ID is passed, fetch its document
+    let provinceData, cityData, districtData, subdistrictData;
+
+    if (province) provinceData = await Location.findById(province);
+    if (city) cityData = await Location.findById(city);
+    if (district) districtData = await Location.findById(district);
+    if (subdistrict) subdistrictData = await Location.findById(subdistrict);
+
+    // 🔄 Update fields
+    if (rest.recipientName !== undefined) address.recipientName = rest.recipientName;
+    if (rest.phoneNumber !== undefined) address.phoneNumber = rest.phoneNumber;
+    if (rest.label !== undefined) address.label = rest.label;
+    if (rest.detail !== undefined) address.detail = rest.detail;
+    if (rest.mainAddress !== undefined) address.mainAddress = rest.mainAddress;
+
+    if (provinceData) address.province = { id: provinceData._id, name: provinceData.name };
+    if (cityData) address.city = { id: cityData._id, name: cityData.name };
+    if (districtData) address.district = { id: districtData._id, name: districtData.name };
+    if (subdistrictData) {
+      address.subdistrict = { id: subdistrictData._id, name: subdistrictData.name };
+      address.rajaOngkirId = subdistrictData.rajaOngkirId
+    }
 
     await addressDoc.save();
 
@@ -146,25 +135,25 @@ export const deleteAddress = async (req, res) => {
   const { addressId } = req.params;
 
   try {
-    const result = await AddressList.findOne({ user: req.user._id })
+    const result = await AddressList.findOne({ user: req.user._id });
     if (!result) {
-      return res.status(404).json({ message: 'Address is empty' })
+      return res.status(404).json({ message: 'Address is empty' });
     }
 
     const initialLength = result.addressList.length;
-    result.addressList = result.addressList.filter((address) => address._id.toString() !== addressId)
+    result.addressList = result.addressList.filter((address) => address._id.toString() !== addressId);
 
     if (result.addressList.length === initialLength) {
-      return res.status(404).json({ message: 'Address not found' })
+      return res.status(404).json({ message: 'Address not found' });
     }
 
-    await result.save()
+    await result.save();
     res.status(200).json({
       success: true,
       message: 'Address deleted successfully',
       data: result.addressList
-    })
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message });
   }
-}
+};

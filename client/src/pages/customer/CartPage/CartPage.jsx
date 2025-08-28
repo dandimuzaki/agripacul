@@ -12,11 +12,11 @@ import { useAddress } from '@/context/AddressContext';
 const CartPage = () => {
   const { cart } = useCart();
   const { checkedItems, checkAll, isAllChecked, totalPrice, testCheckout } = useCheckout();
-  const {addressList} = useAddress()
+  const { addressList } = useAddress();
 
   const handleClick = () => {
     console.log(addressList);
-  }
+  };
 
   return (
     <div className='md:mt-15'>

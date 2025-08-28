@@ -20,8 +20,8 @@ export const addToCart = async (req, res) => {
     }
 
     await cart.save();
-    await cart.populate("items.product");
-    res.status(200).json({ 
+    await cart.populate('items.product');
+    res.status(200).json({
       success: true,
       message: 'Product added to cart',
       data: cart
@@ -38,7 +38,7 @@ export const getCart = async (req, res) => {
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
       message: 'Cart fetched successfully',
       data: cart
@@ -62,12 +62,12 @@ export const updateCart = async (req, res) => {
     item.quantity += change;
 
     if (item.quantity <= 0) {
-      cart.items = cart.items.filter((i) => i.product.toString() != productId)
+      cart.items = cart.items.filter((i) => i.product.toString() != productId);
     }
 
     await cart.save();
-    await cart.populate("items.product");
-    res.status(200).json({ 
+    await cart.populate('items.product');
+    res.status(200).json({
       success: true,
       message: 'Cart updated successfully',
       data: cart
@@ -94,8 +94,8 @@ export const deleteItem = async (req, res) => {
     }
 
     await cart.save();
-    await cart.populate("items.product");
-    res.status(200).json({ 
+    await cart.populate('items.product');
+    res.status(200).json({
       success: true,
       message: 'Item deleted successfully',
       data: cart

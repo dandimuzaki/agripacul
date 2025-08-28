@@ -8,20 +8,35 @@ import { useCart } from '@/context/CartContext';
 import AddressForm from '@/components/customer/AddressForm';
 import AddressList from '@/components/customer/AddressList';
 import { useAddress } from '@/context/AddressContext';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useShipping } from '@/context/ShippingContext';
+import ShippingDropdown from '@/components/customer/ShippingDropdown';
+import PaymentMethod from '@/components/customer/PaymentMethod';
+import { usePayment } from '@/context/PaymentContext';
 
 const CheckoutPage = () => {
   const { checkedItems, totalPrice } = useCheckout();
-  const shippingCost = 14000;
-  const totalBill = totalPrice + shippingCost;
   const {
     addressList,
     selectedAddress,
     openAddressList,
-    setOpenAddressList, 
-    openAddressForm, 
+    setOpenAddressList,
+    openAddressForm,
     setOpenAddressForm,
     provinceList
   } = useAddress();
+  const { selectedShipping } = useShipping();
+  const { selectedPayment } = usePayment()
+  const totalBill = totalPrice + selectedShipping?.cost;
+
+
+  const handleDebug = () => {
+    if (selectedAddress) {
+    console.log(selectedAddress)
+    console.log(selectedShipping)
+    console.log(selectedPayment)
+    }
+  }
 
   return (
     <div className='p-5 pt-15'>
@@ -33,8 +48,8 @@ const CheckoutPage = () => {
               <p className='uppercase font-bold text-gray-500'>Delivery Address</p>
               {selectedAddress ?
                 <>
-                <p className='font-bold ml-[-4px] flex items-center'><LocationPin className='text-[var(--primary)]'/>{selectedAddress.label} • {selectedAddress.recipientName}</p>
-                <p className='text-sm'>{selectedAddress.fullAddress}, {selectedAddress.subDistrict}, {selectedAddress.city}, {selectedAddress.province}, {selectedAddress.phoneNumber}</p>
+                  <p className='font-bold ml-[-4px] flex items-center'><LocationPin className='text-[var(--primary)]'/>{selectedAddress.label} • {selectedAddress.recipientName}</p>
+                  <p className='text-sm'>{selectedAddress.detail}, {selectedAddress.subdistrict.name}, {selectedAddress.city.name}, {selectedAddress.province.name}, {selectedAddress.phoneNumber}</p>
                 </>
                 :
                 <p>Please set your address</p>
@@ -42,49 +57,36 @@ const CheckoutPage = () => {
             </div>
             <div className='flex justify-center items-center'>
               <button
-              type='button'
-              onClick={() => setOpenAddressList(true)}
-              className='text-sm font-bold rounded py-1 px-2 bg-[var(--primary)] text-white active:bg-[var(--primary-dark)] cursor-pointer'>
+                type='button'
+                onClick={() => setOpenAddressList(true)}
+                className='text-sm font-bold rounded py-1 px-2 bg-[var(--primary)] text-white active:bg-[var(--primary-dark)] cursor-pointer'>
                 {(addressList.length != 0) ? 'Change' : 'Add'}
               </button>
             </div>
           </div>
           <div className='grid gap-3 bg-white rounded-lg p-5'>
-          {checkedItems.map((item, i) =>
-            <CheckoutItem
-              key={i}
-              item={item}
-            />
-          )}
+            {checkedItems.map((item, i) =>
+              <CheckoutItem
+                key={i}
+                item={item}
+              />
+            )}
           </div>
-          <div className='bg-white flex items-center p-5 rounded-lg'>
-            <div className='flex-1 grid gap-2'>
-            <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
-              <p className='font-bold'>Express <span>Rp{shippingCost}</span></p>
-              <p className='text-gray-500 text-sm'>Estimated delivery <span>12 Jul 2025</span></p>
-            </div>
-            <button className='self-stretch flex justify-center items-center w-8'>
-              <ChevronRight />
-            </button>
+          <div className='bg-white grid gap-2 p-5 rounded-lg'>
+              <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
+              <ShippingDropdown/>
           </div>
+          
         </div>
         <div className='sticky top-26 grid gap-5 bg-white p-5 rounded-lg'>
-        <fieldset className='flex flex-col gap-2'>
-        <p className='uppercase font-bold text-gray-500'>Payment Method</p>
+          <div className='grid gap-2'>
+          <p className='uppercase font-bold text-gray-500'>Payment Method</p>
 
-            <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>Gopay
-              <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="Gopay" />
-            </label>
-            <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>OVO
-              <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="OVO" />
-            </label>
-            <label className='has-checked:bg-[var(--primary)] has-checked:border-none rounded-md p-2 border border-gray-500 flex justify-between text-sm'>BRI
-              <input className='checked:border-[var(--orange)]' name="payment" type='radio' value="BRI" />
-            </label>
-          </fieldset>
+          <PaymentMethod/>
+          </div>
           <div className='flex flex-col gap-2 text-black'>
-          <p className='uppercase font-bold text-gray-500'>Shopping Summary</p>
-          <div className='flex flex-col gap-1 text-sm'>
+            <p className='uppercase font-bold text-gray-500'>Shopping Summary</p>
+            <div className='flex flex-col gap-1 text-sm'>
               <div className='flex justify-between'>
                 <p>Total Price</p>
                 <p>
@@ -93,7 +95,7 @@ const CheckoutPage = () => {
               </div>
               <div className='flex justify-between'>
                 <p>Total Shipping Cost</p>
-                <p>{formatCurrency(shippingCost)}</p>
+                <p>{formatCurrency(selectedShipping?.cost)}</p>
               </div>
               <div className='flex justify-between font-bold'>
                 <p>Total Bill</p>
@@ -101,23 +103,17 @@ const CheckoutPage = () => {
               </div>
             </div>
           </div>
-          <button 
-          onClick={() => {
-            setOpenAddressForm(true)
-          }}
-          type='click' className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay Now</button>
+          <button
+            onClick={() => {
+              setOpenAddressForm(true);
+            }}
+            type='click' className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay Now</button>
 
         </div>
         <AddressForm/>
         <AddressList/>
-        <div className='w-8 h-8 bg-green-500' onClick={() => console.log(addressList, (addressList.filter((address) => address.mainAddress == true)))}></div>
+        <div className='w-8 h-8 bg-green-500' onClick={handleDebug}></div>
       </div>
-      {provinceList.map(({id, name}) => 
-      <div key={id}>
-        <p>{id}</p>
-      <p>{name}</p>
-      </div>
-      )}
     </div>
   );
 };

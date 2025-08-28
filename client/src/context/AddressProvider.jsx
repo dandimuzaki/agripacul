@@ -1,63 +1,89 @@
-import { useEffect, useState } from "react";
-import { AddressContext } from "./AddressContext"
-import { addressDummy } from "@/utils/addressDummy";
-import { addNewAddress, getAddressList, getProvinceList, removeAddress, updateAddress } from "@/services/addressApi";
+import { useEffect, useState } from 'react';
+import { AddressContext } from './AddressContext';
+import { addressDummy } from '@/utils/addressDummy';
+import { addNewAddress, getAddressList, removeAddress, updateAddress } from '@/services/addressApi';
+import { getCities, getDistricts, getProvinces, getSubdistricts } from '@/services/locationService';
 
 export const AddressProvider = ({ children }) => {
   const [openAddressList, setOpenAddressList] = useState(false);
   const [openAddressForm, setOpenAddressForm] = useState(false);
-  const [addressList, setAddressList] = useState([])
-  const [selectedAddress, setSelectedAddress] = useState(null)
+  const [addressList, setAddressList] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [currentEditAddress, setCurrentEditAddress] = useState(null);
-  const [provinceList, setProvinceList] = useState([])
-  const [cityList, setCityList] = useState([])
-  const [districtList, setDistrictList] = useState([])
-  const [subdistrictList, setSubdistrictList] = useState([])
+  const [provinceList, setProvinceList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+  const [districtList, setDistrictList] = useState([]);
+  const [subdistrictList, setSubdistrictList] = useState([]);
 
   useEffect(() => {
     const getUserAddressList = async () => {
       try {
-        const addressData = await getAddressList()
-        setAddressList(addressData.data)
-        const mainAddress = addressData.data.find((address) => address.mainAddress)
+        const addressData = await getAddressList();
+        setAddressList(addressData.data);
+        const mainAddress = addressData.data.find((address) => address.mainAddress);
         if (mainAddress) {
-          setSelectedAddress(mainAddress)
+          setSelectedAddress(mainAddress);
         }
       } catch (err) {
-        console.error('Error retrieving address list', err)
+        console.error('Error retrieving address list', err);
       }
-    }
-    getUserAddressList()
-  }, [])
+    };
+    getUserAddressList();
+  }, []);
 
-  useEffect(() => {
-    const getProvinces = async () => {
-      try {
-      const result = await getProvinceList()
-      setProvinceList(result)
-      } catch (err) {
-        console.error('Failed fetching provinces', err)
-      }
+  const fetchProvinces = async () => {
+    try {
+      const provinces = await getProvinces();
+      setProvinceList(provinces.data);
+    } catch (err) {
+      console.error('Error fetching provinces', err);
     }
-    getProvinces();
-  })
+  };
+
+  const fetchCities = async (provinceId) => {
+    try {
+      const cities = await getCities(provinceId);
+      setCityList(cities.data);
+    } catch (err) {
+      console.error('Error fetching cities', err);
+    }
+  };
+
+  const fetchDistricts = async (cityId) => {
+    try {
+      const districts = await getDistricts(cityId);
+      setDistrictList(districts.data);
+    } catch (err) {
+      console.err('Error fetching districts', err);
+    }
+  };
+
+  const fetchSubdistricts = async (districtId) => {
+    try {
+      const subdistricts = await getSubdistricts(districtId);
+      setSubdistrictList(subdistricts.data);
+    } catch (err) {
+      console.error('Error fetching subdistricts', err);
+    }
+  };
 
   const selectAddress = (address) => {
-    setSelectedAddress(address)
+    setSelectedAddress(address);
     setOpenAddressList(false);
-  }
+  };
 
   const saveAddress = async (formData) => {
+    console.log(formData);
     if (currentEditAddress) {
-      const updatedAddressList = await updateAddress({addressId: currentEditAddress._id, formData})
-      setAddressList(updatedAddressList.data)
+      const updatedAddressList = await updateAddress({ addressId: currentEditAddress._id, formData });
+      setAddressList(updatedAddressList.data);
     } else {
-      const updatedAddressList = await addNewAddress(formData)
-      setAddressList(updatedAddressList.data)
+      const updatedAddressList = await addNewAddress(formData);
+      setAddressList(updatedAddressList.data);
     }
-    setOpenAddressForm(false)
-    setCurrentEditAddress(null)
-  }
+    setOpenAddressForm(false);
+    setCurrentEditAddress(null);
+  };
 
   const handleMainAddress = async (address) => {
     const updatedAddressList = await updateAddress(
@@ -65,25 +91,25 @@ export const AddressProvider = ({ children }) => {
         addressId: address._id,
         formData: { ...address, mainAddress: true }
       }
-    )
-    setAddressList(updatedAddressList.data)
-  }
+    );
+    setAddressList(updatedAddressList.data);
+  };
 
   const editAddress = (address) => {
-    setCurrentEditAddress(address)
-    setOpenAddressForm(true)
-  }
+    setCurrentEditAddress(address);
+    setOpenAddressForm(true);
+  };
 
   const cancelAddress = () => {
-    setCurrentEditAddress(null)
-    setOpenAddressForm(false)
-  }
+    setCurrentEditAddress(null);
+    setOpenAddressForm(false);
+  };
 
   const deleteAddress = async (addressId) => {
-    console.log(addressId)
-    const updatedAddressList = await removeAddress(addressId)
-    setAddressList(updatedAddressList.data)
-  }
+    console.log(addressId);
+    const updatedAddressList = await removeAddress(addressId);
+    setAddressList(updatedAddressList.data);
+  };
 
   return (
     <AddressContext.Provider value={{
@@ -96,9 +122,12 @@ export const AddressProvider = ({ children }) => {
       currentEditAddress, setCurrentEditAddress,
       handleMainAddress,
       saveAddress, deleteAddress,
-      provinceList
+      fetchProvinces, provinceList,
+      fetchCities, cityList, setCityList,
+      fetchDistricts, districtList, setDistrictList,
+      fetchSubdistricts, subdistrictList, setSubdistrictList
     }}>
       {children}
     </AddressContext.Provider>
-  )
-}
+  );
+};

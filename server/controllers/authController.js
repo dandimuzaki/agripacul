@@ -11,9 +11,9 @@ const generateToken = (user) => {
 };
 
 export const register = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
-    console.log(req.body)
+    console.log(req.body);
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already exists' });
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
 
 export const getEmail = async (req, res) => {
   const { email } = req.params;
-  console.log(req.params)
+  console.log(req.params);
   try {
     const registeredEmail = await User.findOne({ email });
     if (registeredEmail) {
@@ -45,9 +45,9 @@ export const getEmail = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
-    console.log(req.body)
+    console.log(req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
