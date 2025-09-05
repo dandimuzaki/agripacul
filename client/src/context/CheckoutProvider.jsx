@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { CheckoutContext } from './CheckoutContext.jsx';
 import { useCart } from './CartContext.jsx';
+import { useShipping } from './ShippingContext.jsx';
 
 export const CheckoutProvider = ({ children }) => {
   const { cart } = useCart();
   const [checkedItems, setCheckedItems] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState(false);
+  const { selectedShipping } = useShipping()
 
-  const totalPrice = checkedItems.reduce((acc, item) => acc + item.product.price, 0);
+  const totalPrice = checkedItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const totalBill = totalPrice + selectedShipping?.cost
 
   const handleCheckout = (item) => {
     const isAlreadyChecked = checkedItems.some(
@@ -56,6 +59,7 @@ export const CheckoutProvider = ({ children }) => {
         checkAll,
         isAllChecked,
         totalPrice,
+        totalBill
       }}
     >
       {children}

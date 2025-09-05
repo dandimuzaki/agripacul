@@ -26,6 +26,7 @@ import { AuthProvider } from './context/AuthProvider';
 import { AddressProvider } from './context/AddressProvider';
 import { ShippingProvider } from './context/ShippingProvider';
 import { PaymentProvider } from './context/PaymentProvider';
+import { OrderProvider } from './context/OrderProvider';
 
 function App() {
 
@@ -40,6 +41,8 @@ function App() {
             <ProductProvider>
               <CartProvider>
                 <CheckoutProvider>
+                <OrderProvider>
+
                   <Routes>
                     <Route path='/' element={<MainLayout/>}>
                       <Route element={<NavbarLayout />}>
@@ -67,6 +70,8 @@ function App() {
 
                     </Route>
                   </Routes>
+                  </OrderProvider>
+
                 </CheckoutProvider>
               </CartProvider>
             </ProductProvider>

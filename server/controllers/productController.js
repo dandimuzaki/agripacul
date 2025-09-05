@@ -35,12 +35,14 @@ export const getProductById = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
+  console.log(req.body)
   const product = new Product(req.body);
   const saved = await product.save();
   res.status(201).json(saved);
 };
 
 export const updateProduct = async (req, res) => {
+  console.log(req.body)
   try {
     const { productId } = req.params;
     const updatedProduct = req.body;

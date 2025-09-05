@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cherry_tomato from '../../assets/cherry_tomato.png';
 import { Close } from '@mui/icons-material';
 import { useProduct } from '../../context/ProductContext';
@@ -8,9 +8,10 @@ import * as z from 'zod';
 import { useImage } from '@/context/ImageContext';
 import { Spinner } from '@heroui/spinner';
 import { ClipLoader } from 'react-spinners';
+import { getProductById } from '@/services/productService';
 
 const ProductModal = () => {
-  const { isModalOpen, closeModal, isVisible, handleSave, selectedProduct, isLoading } = useProduct();
+  const { product, isModalOpen, closeModal, handleSave, selectedProduct, isLoading } = useProduct();
   const { preview, handleChangeImage } = useImage();
 
   const schema = z.object({
@@ -40,7 +41,7 @@ const ProductModal = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: selectedProduct || {
+    defaultValues: product || {
       'title': '',
       'description': '',
       'price': 0,
@@ -55,8 +56,8 @@ const ProductModal = () => {
   });
 
   useEffect(() => {
-    if (isModalOpen && selectedProduct) {
-      reset(selectedProduct);
+    if (isModalOpen && product) {
+      reset(product);
     } else {
       reset({
         title: '',
@@ -72,9 +73,9 @@ const ProductModal = () => {
         amount: ''
       });
     }
-  }, [isModalOpen, selectedProduct, reset, setValue]);
+  }, [isModalOpen, product, reset, setValue]);
 
-  if (!isVisible) return null;
+  if (!product) return <p>Loading...</p>
 
   return (
     <div
@@ -86,7 +87,7 @@ const ProductModal = () => {
         className={`p-5 bg-white md:rounded-xl w-full max-w-4xl mx-auto relative transition-all duration-200 ${
           isModalOpen ? 'animate-in fade-in-0 zoom-in-95' : 'animate-out fade-out-0 zoom-out-95'
         }`}
-        style={{ maxHeight: '90vh', overflowY: 'auto' }} // ✅ Enable vertical scroll
+        style={{ maxHeight: '90vh', overflowY: 'auto' }}
       >
         <button
           onClick={closeModal}
@@ -96,7 +97,7 @@ const ProductModal = () => {
         </button>
 
         <p className="font-bold text-lg md:text-xl text-center mb-6">
-          {selectedProduct ? 'Edit Product' : 'Add New Product'}
+          {product ? 'Edit Product' : 'Add New Product'}
         </p>
 
         <form
@@ -110,9 +111,9 @@ const ProductModal = () => {
                 preview ? 'border-none' : 'border border-gray-300'
               } overflow-hidden rounded-lg w-full max-w-[280px] h-40 sm:h-48 md:h-full`}
             >
-              {(preview || selectedProduct?.image) && (
+              {(preview || product?.image) && (
                 <img
-                  src={preview || selectedProduct?.image}
+                  src={preview || product?.image}
                   alt="Preview"
                   className="w-full h-full object-cover"
                 />)
@@ -123,7 +124,7 @@ const ProductModal = () => {
               htmlFor="file-upload"
               className="cursor-pointer bg-gray-200 text-center rounded px-3 py-1 text-sm hover:bg-gray-300"
             >
-              {selectedProduct ? 'Change Image' : 'Add Image'}
+              {product ? 'Change Image' : 'Add Image'}
             </label>
             <input
               id="file-upload"
@@ -228,21 +229,21 @@ const ProductModal = () => {
             <button
               type="button"
               onClick={closeModal}
-              className="px-4 py-2 bg-gray-200 active:bg-gray-300 text-black font-semibold rounded w-32 text-center"
+              className="px-4 py-2 bg-gray-200 active:bg-gray-300 text-black font-semibold rounded w-40 text-center"
             >
           Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-4 py-2 bg-[var(--primary)] active:bg-[var(--primary-dark)] text-white font-semibold rounded w-32 text-center disabled:opacity-60 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-[var(--primary)] active:bg-[var(--primary-dark)] text-white font-semibold rounded w-40 text-center disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <ClipLoader color='#ffffff' size={16} />
                   <span>Saving</span>
                 </div>
-              ) : selectedProduct ? (
+              ) : product ? (
                 'Update Changes'
               ) : (
                 'Add Product'

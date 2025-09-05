@@ -4,7 +4,8 @@ import Product from '../models/Product.js';
 export const addToOrders = async (req, res) => {
   try {
     // 1. Create the order
-    const newOrder = await Order.create(req.body);
+    const userId = req.user
+    const newOrder = await Order.create({...req.body, user: userId});
 
     // 2. Extract product IDs from order items
     const productIds = newOrder.items.map((item) => item._id);
@@ -25,7 +26,11 @@ export const addToOrders = async (req, res) => {
     }
 
     // 5. Return the created order
-    res.status(201).json(newOrder);
+    res.status(201).json({
+      success: true,
+      message: 'Order created succesfully',
+      data: newOrder
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -33,29 +38,36 @@ export const addToOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { user } = req.user;
     const { status } = req.query;
 
     // Combine filters
     const filters = {};
-    if (userId) {filters.user = userId;} else {};
+    if (user) {filters.user = user;} else {};
     if (status) {filters.status = status;} else {};
 
-    const orders = await Order.find(filters);
+    const orders = await Order.find(filters)
+      .populate('items.product')
 
     if (!orders || orders.length === 0) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    res.json(orders);
+    res.status(200).json({
+      success: true,
+      message: 'Orders fetched successfully',
+      data: orders
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 export const getOrderById = async (req, res) => {
+  const { user } = req.user
+  const {orderId} = req.params
   try {
-    const order = await Order.findById(req.params.id).populate('user').populate('items.product');
+    const order = await Order.findById(orderId)
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -69,6 +81,9 @@ export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
+    const confirmedAt = req.body?.confirmedAt
+    const shippedAt = req.body?.shippedAt
+    const deliveredAt = req.body?.deliveredAt
 
     const order = await Order.findById(orderId);
     if (!order) {
@@ -80,8 +95,24 @@ export const updateOrderStatus = async (req, res) => {
     }
     order.status = status;
 
+    if (confirmedAt) {
+      order.confirmedAt = confirmedAt;
+    }
+
+    if (shippedAt) {
+      order.shippedAt = shippedAt;
+    }
+
+    if (deliveredAt) {
+      order.deliveredAt = deliveredAt;
+    }
+
     const saved = await order.save();
-    res.status(200).json(saved);
+    res.status(200).json({
+      success: true,
+      message: 'Order updated successfully',
+      data: saved
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

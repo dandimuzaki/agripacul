@@ -54,7 +54,7 @@ export const AddressProvider = ({ children }) => {
       const districts = await getDistricts(cityId);
       setDistrictList(districts.data);
     } catch (err) {
-      console.err('Error fetching districts', err);
+      console.error('Error fetching districts', err);
     }
   };
 

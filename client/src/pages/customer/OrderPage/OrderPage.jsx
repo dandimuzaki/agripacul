@@ -5,10 +5,16 @@ import PageNav from '../../../components/customer/PageNav/PageNav';
 import SearchBar from '../../../components/common/SearchBar/SearchBar';
 import CartButton from '../../../components/common/CartButton/CartButton';
 import OrderCard from '../../../components/customer/OrderCard/OrderCard';
+import { useOrder } from '@/context/OrderContext';
 
 
 const OrderPage = () => {
   const { cart } = useCart();
+  const { orders } = useOrder();
+
+  const handleClick = () => {
+    console.log(orders)
+  }
 
   return (
     <div className='md:relative md:mt-15 md:ml-75 '>
@@ -19,7 +25,7 @@ const OrderPage = () => {
           <CartButton cart={cart} />
         </div>
       </div>
-      <section className='md:fixed hidden md:flex flex-col gap-3 top-20 left-5 rounded-lg p-3 shadow-[0_0_8px_rgba(0,0,0,0.2)]'>
+      <section className='bg-white md:fixed hidden md:flex flex-col gap-3 top-20 left-5 rounded-lg p-3'>
         <SearchBar placeholder="Find your transaction" />
         <p className='font-bold text-lg'>Status</p>
         <div className='flex flex-col gap-2'>
@@ -47,12 +53,11 @@ const OrderPage = () => {
         <p className='font-bold'>Choose transaction date</p>
       </section>
       <section className='md:p-5 md:gap-5 p-3 flex flex-col gap-3 pb-22'>
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
+        {orders && orders.map((order) => (
+          <OrderCard key={order._id} order={order}></OrderCard>
+        ))}
+        <div className='h-10 w-10 bg-orange-500' onClick={handleClick}></div>
+
       </section>
     </div>
   );

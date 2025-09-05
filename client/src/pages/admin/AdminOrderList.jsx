@@ -1,55 +1,57 @@
 import React, { useMemo, useState } from 'react';
-import { RemoveRedEyeOutlined, Search } from '@mui/icons-material';
+import { CheckBoxOutlineBlankOutlined, CheckBoxOutlined, RemoveRedEyeOutlined, Search } from '@mui/icons-material';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import AdminHeader from '../../components/admin/AdminHeader';
-import OrderModal from '../../components/admin/OrderModal';
+import { useOrder } from '@/context/OrderContext';
+import { formatCurrency, formatDate } from '@/utils/format';
+import OrderModal from '@/components/admin/OrderModal';
 
 const AdminOrderList = () => {
-  const orders = [];
+  const {orders, seeOrderDetail, confirmOrder} = useOrder();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
   const columns = useMemo(() => [
     {
-      accessorKey: 'id',
-      header: 'Order ID'
+      accessorKey: '_id',
+      header: 'Order ID',
+      cell: ({ row }) => (
+        <div className='wrap-anywhere w-10'>
+          <p>{row.original._id}</p>
+        </div>
+      )
     },
     {
       accessorKey: 'createdAt',
       header: 'Created At',
-      cell: ({ row }) => {
-        const date = new Date(row.original.createdAt);
-        const formatted = date.toLocaleString('id-ID', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        return (
-          <p>{formatted}</p>
-        );
-      }
+      cell: ({ row }) => (
+          <p>{formatDate(row.original.createdAt)}</p>
+        )
     },
     {
       accessorKey: 'buyerName',
-      header: 'Buyer Name'
+      header: 'Buyer Name',
+      cell: ({ row }) => (row.original.address.recipientName)
     },
     {
       accessorKey: 'items',
       header: 'Items',
       cell: (info) => (
         <div>
-          {info.getValue().map((item) => (
-            <p>{item.name} : {item.quantity}</p>
+          {info.getValue().map((item, index) => (
+            <p key={index}>{item.product.title} : {item.quantity}</p>
           ))}
         </div>
       )
     },
     {
-      accessorKey: 'total',
-      header: 'Total'
+      accessorKey: 'totalPrice',
+      header: 'Total Price',
+    },
+    {
+      accessorKey: 'totalBill',
+      header: 'Total Bill',
     },
     {
       accessorKey: 'paymentStatus',
@@ -62,30 +64,32 @@ const AdminOrderList = () => {
     {
       accessorKey: 'updatedAt',
       header: 'Updated At',
-      cell: ({ row }) => {
-        const date = new Date(row.original.updatedAt);
-        const formatted = date.toLocaleString('id-ID', {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        return (
-          <p>{formatted}</p>
-        );
-      }
-    },
-    {
-      accessorKey: 'trackingNumber',
-      header: 'Tracking Number',
+      cell: ({ row }) => (
+        <p>{formatDate(row.original.updatedAt)}</p>
+      )
     },
     {
       header: 'Action',
-      cell: () => (
-        <div className='w-full flex items-center justify-center'>
-          <button className='p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+      cell: ({row}) => (
+        <div className='w-full grid gap-2'>
+          { row.original.status === 'pending' ?
+          (<button 
+          onClick={() => confirmOrder(row.original._id)}
+          className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+            <CheckBoxOutlineBlankOutlined fontSize='small'/>
+            Confirm
+          </button>)
+          :
+          (<button className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+            <CheckBoxOutlined fontSize='small'/>
+            Confirmed
+          </button>)
+          }
+          <button
+          onClick={() => seeOrderDetail(row.original)}
+          className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
             <RemoveRedEyeOutlined fontSize='small'/>
+            Detail
           </button>
         </div>
       )

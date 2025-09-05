@@ -18,5 +18,8 @@
   "homepage": "https://github.com/dandimuzaki/agripacul#readme",
   "devDependencies": {
     "concurrently": "^9.2.0"
+  },
+  "dependencies": {
+    "node-cron": "^4.2.1"
   }
 }

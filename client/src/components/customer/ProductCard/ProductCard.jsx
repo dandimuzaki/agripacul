@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import formatCurrency from '../../../utils/format';
+import {formatCurrency} from '../../../utils/format.js';
 import { useCart } from '../../../context/CartContext';
 import { useState } from 'react';
 import { Star } from '@mui/icons-material';

@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useShipping } from "@/context/ShippingContext";
-import formatCurrency from "@/utils/format";
+import {formatCurrency} from "@/utils/format.js";
 
 const ShippingDropdown = () => {
   const { shippingOptions, selectedShipping, setSelectedShipping } = useShipping();

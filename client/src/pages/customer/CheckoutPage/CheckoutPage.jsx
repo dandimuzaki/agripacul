@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, LocationOn, LocationPin } from '@mui/icons-material';
-import { useCheckout } from '../../../context/CheckoutContext';
-import formatCurrency from '../../../utils/format';
+import {capitalize, formatCurrency} from '@/utils/format.js';
 import PageNav from '../../../components/customer/PageNav/PageNav';
 import CheckoutItem from '../../../components/customer/CheckoutItem/CheckoutItem';
 import { useCart } from '@/context/CartContext';
@@ -13,9 +12,11 @@ import { useShipping } from '@/context/ShippingContext';
 import ShippingDropdown from '@/components/customer/ShippingDropdown';
 import PaymentMethod from '@/components/customer/PaymentMethod';
 import { usePayment } from '@/context/PaymentContext';
+import { useOrder } from '@/context/OrderContext';
+import { useCheckout } from '@/context/CheckoutContext';
 
 const CheckoutPage = () => {
-  const { checkedItems, totalPrice } = useCheckout();
+  const { checkedItems, totalPrice, totalBill } = useCheckout();
   const {
     addressList,
     selectedAddress,
@@ -27,7 +28,7 @@ const CheckoutPage = () => {
   } = useAddress();
   const { selectedShipping } = useShipping();
   const { selectedPayment } = usePayment()
-  const totalBill = totalPrice + selectedShipping?.cost;
+  const { createNewOrder } = useOrder()
 
 
   const handleDebug = () => {
@@ -35,6 +36,7 @@ const CheckoutPage = () => {
     console.log(selectedAddress)
     console.log(selectedShipping)
     console.log(selectedPayment)
+    console.log(checkedItems)
     }
   }
 
@@ -49,7 +51,7 @@ const CheckoutPage = () => {
               {selectedAddress ?
                 <>
                   <p className='font-bold ml-[-4px] flex items-center'><LocationPin className='text-[var(--primary)]'/>{selectedAddress.label} • {selectedAddress.recipientName}</p>
-                  <p className='text-sm'>{selectedAddress.detail}, {selectedAddress.subdistrict.name}, {selectedAddress.city.name}, {selectedAddress.province.name}, {selectedAddress.phoneNumber}</p>
+                  <p className='text-sm'>{selectedAddress.detail}, {capitalize(selectedAddress.subdistrict.name)}, {capitalize(selectedAddress.subdistrict.name)}, {capitalize(selectedAddress.city.name)}, {capitalize(selectedAddress.province.name)}, {selectedAddress.phoneNumber}</p>
                 </>
                 :
                 <p>Please set your address</p>
@@ -104,9 +106,7 @@ const CheckoutPage = () => {
             </div>
           </div>
           <button
-            onClick={() => {
-              setOpenAddressForm(true);
-            }}
+            onClick={createNewOrder}
             type='click' className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay Now</button>
 
         </div>

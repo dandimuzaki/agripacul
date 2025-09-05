@@ -36,7 +36,16 @@ const AddressForm = () => {
     watch,
     formState: { errors }
   } = useForm({
-    defaultValues: currentEditAddress || {
+    defaultValues: {
+      'recipientName': currentEditAddress?.recipientName,
+      'phoneNumber': currentEditAddress?.phoneNumber,
+      'label': currentEditAddress?.label,
+      'province': currentEditAddress?.province.id,
+      'city': currentEditAddress?.city.id,
+      'district': currentEditAddress?.district.id,
+      'subdistrict': currentEditAddress?.subdistrict.id,
+      'detail': currentEditAddress?.detail
+    } || {
       'recipientName': '',
       'phoneNumber': '',
       'label': '',
@@ -50,7 +59,16 @@ const AddressForm = () => {
   useEffect(() => {
     if (openAddressForm) {
       fetchProvinces();
-      reset(currentEditAddress || {
+      reset({
+        'recipientName': currentEditAddress?.recipientName,
+      'phoneNumber': currentEditAddress?.phoneNumber,
+      'label': currentEditAddress?.label,
+      'province': currentEditAddress?.province.id,
+      'city': currentEditAddress?.city.id,
+      'district': currentEditAddress?.district.id,
+      'subdistrict': currentEditAddress?.subdistrict.id,
+      'detail': currentEditAddress?.detail
+      } || {
         recipientName: '',
         phoneNumber: '',
         label: '',
@@ -91,7 +109,9 @@ const AddressForm = () => {
     <Dialog open={openAddressForm} onOpenChange={() => setOpenAddressForm(false)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle onClick={() => console.log(currentEditAddress)}>Add Address</DialogTitle>
+          <DialogTitle
+          onClick={() => console.log(currentEditAddress)}
+          >{currentEditAddress ? 'Edit' : 'Add'} Address</DialogTitle>
         </DialogHeader>
         <form
           onSubmit={handleSubmit(saveAddress)}
@@ -163,7 +183,12 @@ const AddressForm = () => {
             control={control}
             render={({ field }) => (
               <div className="grid gap-3">
-                <Label htmlFor="district">District</Label>
+                <Label htmlFor="district"
+                onClick={() => {
+                  console.log(field.value)
+                  console.log(currentEditAddress?.district.id)
+                }}
+                >District</Label>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className='w-full'>
                     <SelectValue placeholder="Set the district" />

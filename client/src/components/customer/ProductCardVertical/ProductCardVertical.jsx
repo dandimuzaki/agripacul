@@ -1,7 +1,7 @@
 import { useCart } from '@/context/CartContext';
 import { Star } from '@mui/icons-material';
 import React, { useState } from 'react';
-import formatCurrency from '../../../utils/format';
+import {formatCurrency} from '../../../utils/format.js';
 
 
 const ProductCardVertical = ({ product }) => {

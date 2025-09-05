@@ -1,5 +1,5 @@
 import { Add, CheckBox, Delete, Remove } from '@mui/icons-material';
-import formatCurrency from '../../../utils/format';
+import {formatCurrency} from '../../../utils/format.js';
 import { useCart } from '../../../context/CartContext';
 import { useCheckout } from '../../../context/CheckoutContext';
 

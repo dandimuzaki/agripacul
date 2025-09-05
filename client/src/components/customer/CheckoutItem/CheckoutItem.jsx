@@ -1,6 +1,6 @@
 import React from 'react';
 import lettuce from '../../../assets/lettuce.jpg';
-import formatCurrency from '@/utils/format';
+import {formatCurrency} from '@/utils/format.js';
 
 const CheckoutItem = ({ item }) => {
   const { product, quantity } = item;
@@ -10,7 +10,7 @@ const CheckoutItem = ({ item }) => {
       <div className='aspect-square h-full'>
         <img className='h-full w-full object-cover rounded-md' src={image} />
       </div>
-      <div className='flex flex-col justify-between flex-1'>
+      <div className='flex flex-col gap-2 flex-1'>
           <p className='text-bold text-black'>
             {title}
           </p>

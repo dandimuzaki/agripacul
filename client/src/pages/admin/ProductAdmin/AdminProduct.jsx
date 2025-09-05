@@ -6,6 +6,7 @@ import { Add, ArrowDownward, ArrowUpward, Delete, DeleteOutlined, Edit, Search, 
 import ProductModal from '../../../components/admin/ProductModal';
 import lettuce from '../../../assets/lettuce.jpg';
 import Confirmation from '../../../components/admin/Confirmation';
+import ProductForm from '@/components/admin/ProductForm';
 
 const AdminProduct = () => {
   const { products, openModal, isConfirmOpen, triggerConfirm, closeConfirm, handleDelete } = useProduct();
@@ -168,7 +169,7 @@ const AdminProduct = () => {
           ))}
         </tbody>
       </table>
-      <ProductModal />
+      <ProductForm/>
       <Confirmation
         open={isConfirmOpen}
         onClose={closeConfirm}

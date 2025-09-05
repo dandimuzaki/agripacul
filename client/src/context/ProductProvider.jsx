@@ -1,17 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ProductContext } from './ProductContext.jsx';
-import lettuce from '../assets/lettuce.jpg';
-import tomato from '../assets/tomato.jpg';
-import cherry_tomato from '../assets/cherry_tomato.png';
-import bokchoy from '../assets/bokchoy.jpg';
-import product_chamomile from '../assets/product_chamomile.jpg';
-import product_sunflower from '../assets/product_sunflower.jpg';
-import shovel from '../assets/shovel.png';
-import salad_japanese from '../assets/salad_japanese.png';
-import salad_western from '../assets/salad_western.png';
-import corn from '../assets/corn.jpg';
 import { toast } from 'sonner';
-import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../services/productService.js';
+import { createProduct, deleteProduct, getAllProducts, getProductById, updateProduct } from '../services/productService.js';
 import { useImage } from './ImageContext.jsx';
 
 
@@ -22,6 +12,7 @@ export const ProductProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [product, setProduct] = useState(null)
 
   useEffect(() => {
     if (isModalOpen) {
@@ -34,131 +25,6 @@ export const ProductProvider = ({ children }) => {
     }
   }, [isModalOpen]);
 
-  const img = [lettuce, tomato, bokchoy, cherry_tomato, corn, salad_western, salad_japanese, shovel, product_chamomile, product_sunflower];
-
-  const product = [
-    {
-      'id': 1,
-      'title': 'Lettuce',
-      'description': '',
-      'price': 9000,
-      'weight': '300g',
-      'category': 'vegetables',
-      'rating': 4,
-      'stock': 25,
-      'image': img[0],
-      'sold': 200,
-    },
-    {
-      'id': 2,
-      'title': 'Tomato',
-      'description': '',
-      'price': 15000,
-      'weight': '500g',
-      'category': 'vegetables',
-      'rating': 4,
-      'stock': 25,
-      'image': img[1],
-      'sold': 200,
-    },
-    {
-      'id': 3,
-      'title': 'Bokchoy',
-      'description': '',
-      'price': 10000,
-      'weight': '300g',
-      'category': 'vegetables',
-      'rating': 4,
-      'stock': 25,
-      'image': img[2],
-      'sold': 200,
-    },
-    {
-      'id': 4,
-      'title': 'Cherry Tomato',
-      'description': '',
-      'price': 18000,
-      'weight': '500g',
-      'category': 'vegetables',
-      'rating': 5,
-      'stock': 25,
-      'image': img[3],
-      'sold': 200,
-    },
-    {
-      'id': 5,
-      'title': 'Sweet Corn',
-      'description': '',
-      'price': 17000,
-      'weight': '1kg',
-      'category': 'vegetables',
-      'rating': 5,
-      'stock': 25,
-      'image': img[4],
-      'sold': 200,
-    },
-    {
-      'id': 7,
-      'title': 'Veggie Salad Japanese Style',
-      'description': '',
-      'price': 10000,
-      'weight': 'cup',
-      'category': 'salad',
-      'rating': 5,
-      'stock': 25,
-      'image': img[6],
-      'sold': 200,
-    },
-    {
-      'id': 6,
-      'title': 'Veggie Salad Western Style',
-      'description': '',
-      'price': 10000,
-      'weight': 'cup',
-      'category': 'salad',
-      'rating': 4,
-      'stock': 25,
-      'image': img[5],
-      'sold': 200,
-    },
-    {
-      'id': 8,
-      'title': 'Hand Shovel',
-      'description': '',
-      'price': 30000,
-      'weight': '',
-      'category': 'tools',
-      'rating': 3,
-      'stock': 25,
-      'image': img[7],
-      'sold': 200,
-    },
-    {
-      'id': 9,
-      'title': 'Chamomile',
-      'description': '',
-      'price': 8000,
-      'weight': 'pcs',
-      'category': 'flowers',
-      'rating': 5,
-      'stock': 25,
-      'image': img[8],
-      'sold': 200,
-    },
-    {
-      'id': 10,
-      'title': 'Sunflower',
-      'description': '',
-      'price': 12000,
-      'weight': 'pcs',
-      'category': 'flowers',
-      'rating': 4,
-      'stock': 25,
-      'image': img[9],
-      'sold': 200,
-    }
-  ];
-
   const fetchProducts = async () => {
     try {
       const data = await getAllProducts();
@@ -168,9 +34,24 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const fetchSingleProduct = async (productId) => {
+    setIsLoading(true)
+    try {
+      const fresh = await getProductById(productId)
+      setProduct(fresh)
+    } catch (err) {
+      console.error('Failed to fetch product', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetchProducts();
-  }, []);
+    if (selectedProduct?._id) {
+      fetchSingleProduct(selectedProduct?._id)
+    }
+  }, [selectedProduct?._id]);
 
   const [formProduct, setFormProduct] = useState({
     'title': '',
@@ -187,15 +68,19 @@ export const ProductProvider = ({ children }) => {
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  const openModal = (product = null) => {
-    setSelectedProduct(product);
+  const openModal = (productData = null) => {
+    setSelectedProduct(productData);
     setIsModalOpen(true);
+    console.log(product)
   };
 
   const closeModal = () => {
+    setSelectedProduct(null);
     setSelectedImage(null);
     setPreview(null);
     setIsModalOpen(false);
+    setProduct(null)
+    console.log(product)
   };
 
   const handleSave = async (data) => {
@@ -203,13 +88,14 @@ export const ProductProvider = ({ children }) => {
     const uploadedImageUrl = await handleUploadImage();
 
     try {
-      if (selectedProduct) {
-        const updatedProduct = await updateProduct(selectedProduct._id, {
+      if (product) {
+        const updatedProduct = await updateProduct(product._id, {
           ...data,
           image: uploadedImageUrl,
         });
+        console.log(updatedProduct)
         setProducts((prev) =>
-          prev.map((product) => (product._id === updatedProduct._id ? updatedProduct : product))
+          prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
         );
         toast(`${updatedProduct.title} has been updated at`, {
           description: `${formatted}`,
@@ -267,6 +153,7 @@ export const ProductProvider = ({ children }) => {
     <ProductContext.Provider value={{
       products, setProducts,
       selectedProduct, setSelectedProduct,
+      product, setProduct,
       isModalOpen, setIsModalOpen,
       isVisible, setIsVisible,
       isConfirmOpen, setIsConfirmOpen,

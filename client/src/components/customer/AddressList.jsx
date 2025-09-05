@@ -1,6 +1,5 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
-import { addressDummy } from '@/utils/addressDummy.js';
 import AddressCard from './AddressCard';
 import { useAddress } from '@/context/AddressContext';
 

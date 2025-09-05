@@ -10,6 +10,7 @@ import authRoutes from './routes/authRoutes.js';
 import addressRoutes from './routes/addressRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
 import shippingRoutes from './routes/shippingRoutes.js'
+import './cron.js'
 
 dotenv.config();
 connectDB();
@@ -20,7 +21,7 @@ app.use(express.json());
 
 app.use('/api/product', productRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/order', orderRoutes);
+app.use('/api/', orderRoutes);
 app.use('/api/', uploadRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user/address', addressRoutes);

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 import { useCheckout } from '../../../context/CheckoutContext';
 import { CheckBox } from '@mui/icons-material';
-import formatCurrency from '../../../utils/format';
+import {formatCurrency} from '../../../utils/format.js';
 import CartCard from '../../../components/customer/CartCard/CartCard';
 import PageNav from '../../../components/customer/PageNav/PageNav';
 import { useAuth } from '@/context/AuthContext';
