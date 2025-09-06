@@ -1,6 +1,6 @@
 import React from 'react';
 import './OrderCard.css';
-import {formatCurrency, formatDate, capitalize} from '../../../utils/format';
+import { formatCurrency, formatDate, capitalize } from '../../../utils/format';
 
 const OrderCard = ({ order }) => {
   const { createdAt, status, totalBill, items } = order;

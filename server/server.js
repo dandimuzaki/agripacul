@@ -9,8 +9,8 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import addressRoutes from './routes/addressRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
-import shippingRoutes from './routes/shippingRoutes.js'
-import './cron.js'
+import shippingRoutes from './routes/shippingRoutes.js';
+import './cron.js';
 
 dotenv.config();
 connectDB();
@@ -26,7 +26,7 @@ app.use('/api/', uploadRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user/address', addressRoutes);
 app.use('/api/location', locationRoutes);
-app.use('/api/shipping', shippingRoutes)
+app.use('/api/shipping', shippingRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

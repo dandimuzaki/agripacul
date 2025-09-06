@@ -1,11 +1,12 @@
 import { useCart } from '@/context/CartContext';
 import { Star } from '@mui/icons-material';
 import React, { useState } from 'react';
-import {formatCurrency} from '../../../utils/format.js';
+import { formatCurrency } from '../../../utils/format.js';
+import { Link } from 'react-router-dom';
 
 
 const ProductCardVertical = ({ product }) => {
-  const { title, price, image, amount } = product;
+  const { title, price, image, amount, _id } = product;
   const { addToCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -23,7 +24,9 @@ const ProductCardVertical = ({ product }) => {
 
   return (
     <div className='rounded-lg bg-white p-3 flex flex-col'>
+      <Link to={`/product/${_id}`}>
       <img src={image} alt={title} className='w-full aspect-square object-cover rounded' />
+      </Link>
       <div className='flex flex-1 flex-col justify-between'>
         <div>
           <div className='text-yellow-500'>

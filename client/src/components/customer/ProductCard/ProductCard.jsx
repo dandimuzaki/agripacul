@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import {formatCurrency} from '../../../utils/format.js';
+import { formatCurrency } from '../../../utils/format.js';
 import { useCart } from '../../../context/CartContext';
 import { useState } from 'react';
 import { Star } from '@mui/icons-material';
@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className='p-3 rounded-lg grid grid-cols-[2fr_3fr] gap-x-3 bg-white'>
-      <Link to="/product/1" className='w-full h-full overflow-hidden'>
+      <Link to={`/product/${_id}`} className='w-full h-full overflow-hidden'>
         <img className='w-full h-full rounded object-cover' src={image} alt={title} />
       </Link>
       <div className='flex flex-col justify-between'>

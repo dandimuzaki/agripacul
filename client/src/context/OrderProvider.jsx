@@ -1,32 +1,46 @@
-import { createOrder, getAllOrders, getOrdersByUser, updateOrder } from "@/services/orderService"
-import { OrderContext } from "./OrderContext"
-import { useAddress } from "./AddressContext"
-import { useShipping } from "./ShippingContext"
-import { useCheckout } from "./CheckoutContext"
-import { usePayment } from "./PaymentContext"
-import { useEffect, useState } from "react"
+import { createOrder, getAllOrders, getOrderByAdmin, getOrdersByUser, updateOrder } from '@/services/orderService';
+import { OrderContext } from './OrderContext';
+import { useAddress } from './AddressContext';
+import { useShipping } from './ShippingContext';
+import { useCheckout } from './CheckoutContext';
+import { usePayment } from './PaymentContext';
+import { useEffect, useState } from 'react';
 
-export const OrderProvider = ({children}) => {
-  const { selectedAddress } = useAddress()
-  const { checkedItems, totalPrice, totalBill } = useCheckout()
-  const { selectedShipping } = useShipping()
-  const { selectedPayment } = usePayment()
-  const [orders, setOrders] = useState([])
-  const [openOrderModal, setOpenOrderModal] = useState(false)
-  const [selectedOrder, setSelectedOrder] = useState(null)
+export const OrderProvider = ({ children }) => {
+  const { selectedAddress } = useAddress();
+  const { checkedItems, totalPrice, totalBill } = useCheckout();
+  const { selectedShipping } = useShipping();
+  const { selectedPayment } = usePayment();
+  const [orders, setOrders] = useState([]);
+  const [openOrderModal, setOpenOrderModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [order, setOrder] = useState(null);
 
   useEffect(() => {
     const loadOrders = async () => {
       try {
         const orders = await getOrdersByUser();
-        setOrders(orders.data)
+        setOrders(orders.data);
       } catch (err) {
-        console.error('Error fetching orders', err)
+        console.error('Error fetching orders', err);
       }
-    }
+    };
 
-    loadOrders()
-  }, [])
+    const loadSingleOrder = async (orderId) => {
+      try {
+        const order = await getOrderByAdmin(orderId);
+        console.log(order);
+        setOrder(order);
+      } catch (err) {
+        console.error('Failed to load the order', err);
+      }
+    };
+
+    loadOrders();
+    if (selectedOrder?._id) {
+      loadSingleOrder(selectedOrder?._id);
+    }
+  }, [selectedOrder?._id]);
 
   const createNewOrder = async () => {
     const orderData = {
@@ -36,45 +50,35 @@ export const OrderProvider = ({children}) => {
       totalBill: totalBill,
       shipping: selectedShipping,
       paymentMethod: selectedPayment
-    }
-    const result = await createOrder(orderData)
-    console.log(result.data)
-  }
+    };
+    const result = await createOrder(orderData);
+    console.log(result.data);
+  };
 
-  const seeOrderDetail = (order) => {
-    setSelectedOrder(order)
-    setOpenOrderModal(true)
-  }
+  const seeOrderDetail = (orderData) => {
+    setSelectedOrder(orderData);
+    setOpenOrderModal(true);
+  };
 
-  const closeOrderModal = (order) => {
-    setSelectedOrder(null)
-    setOpenOrderModal(false)
-  }
-
-  const getNextShipmentTime = (orderDate) => {
-    const nextShipment = new Date(orderDate);
-    nextShipment.setHours(15, 0, 0, 0);
-
-    if (orderDate.getHours() > 15) {
-      nextShipment.setDate(nextShipment.getDate() + 1)
-    }
-
-    return nextShipment;
-  }
+  const closeOrderModal = (orderData) => {
+    setSelectedOrder(null);
+    setOrder(null);
+    setOpenOrderModal(false);
+  };
 
   const confirmOrder = async (orderId) => {
     try {
-    const now = new Date();
-    await updateOrder(orderId, {'status': 'processing', 'confirmedAt': now});
-    setOrders((prev) => 
-      prev.map((o) => 
-        o._id == orderId ? { ...o, status: 'processing', confirmedAt: now } : o
-      )
-    )
+      const now = new Date();
+      await updateOrder(orderId, { 'status': 'processing', 'confirmedAt': now });
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id == orderId ? { ...o, status: 'processing', confirmedAt: now } : o
+        )
+      );
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   return (
     <OrderContext.Provider value={{
@@ -85,9 +89,10 @@ export const OrderProvider = ({children}) => {
       selectedOrder,
       openOrderModal,
       setOpenOrderModal,
-      confirmOrder
+      confirmOrder,
+      order
     }}>
       {children}
     </OrderContext.Provider>
-  )
-}
+  );
+};

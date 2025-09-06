@@ -13,8 +13,8 @@ const OrderPage = () => {
   const { orders } = useOrder();
 
   const handleClick = () => {
-    console.log(orders)
-  }
+    console.log(orders);
+  };
 
   return (
     <div className='md:relative md:mt-15 md:ml-75 '>

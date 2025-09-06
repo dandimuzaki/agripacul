@@ -1,5 +1,5 @@
-import QueryString from "qs"
-import rajaOngkirServices from "../services/rajaOngkirServices.js"
+import QueryString from 'qs';
+import rajaOngkirServices from '../services/rajaOngkirServices.js';
 
 const cache = new Map();
 
@@ -16,7 +16,7 @@ export const fetchShippingOptions = async (req, res) => {
     cache.set(key, shippingOptions.data); // store in memory
     return res.status(200).json({
       success: true,
-      message: "Shipping options fetched successfully",
+      message: 'Shipping options fetched successfully',
       data: shippingOptions.data,
     });
   } catch (err) {

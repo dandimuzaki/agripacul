@@ -41,7 +41,7 @@ export const addAddress = async (req, res) => {
       rajaOngkirId: subdistrictData.rajaOngkirId
     };
 
-    console.log(newAddress)
+    console.log(newAddress);
 
     let result = await AddressList.findOne({ user: req.user._id });
 
@@ -51,13 +51,13 @@ export const addAddress = async (req, res) => {
         addressList: [{ ...newAddress, mainAddress: true }]
       });
     } else if (result.addressList.length === 0) {
-        result.addressList.push({ ...newAddress, mainAddress: true });
-      } else if (req.body.mainAddress) {
-        result.addressList.forEach((addr) => addr.mainAddress = false);
-        result.addressList.push(newAddress);
-      } else if (!req.body.mainAddress) {
-        result.addressList.push(newAddress);
-      }
+      result.addressList.push({ ...newAddress, mainAddress: true });
+    } else if (req.body.mainAddress) {
+      result.addressList.forEach((addr) => addr.mainAddress = false);
+      result.addressList.push(newAddress);
+    } else if (!req.body.mainAddress) {
+      result.addressList.push(newAddress);
+    }
     await result.save();
 
     res.status(201).json({
@@ -115,7 +115,7 @@ export const editAddress = async (req, res) => {
     if (districtData) address.district = { id: districtData._id, name: districtData.name };
     if (subdistrictData) {
       address.subdistrict = { id: subdistrictData._id, name: subdistrictData.name };
-      address.rajaOngkirId = subdistrictData.rajaOngkirId
+      address.rajaOngkirId = subdistrictData.rajaOngkirId;
     }
 
     await addressDoc.save();

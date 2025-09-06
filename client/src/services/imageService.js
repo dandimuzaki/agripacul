@@ -1,7 +1,6 @@
-import axios from 'axios';
-
+import api from '@/api/axios';
 
 export const uploadImage = async (formData) => {
-  const res = await axios.post('https://agripacul-production.up.railway.app/api/upload', formData);
+  const res = await api.post('/upload', formData);
   return res.data;
 };

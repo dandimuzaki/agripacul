@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
-export const PaymentContext = createContext()
+export const PaymentContext = createContext();
 
-export const usePayment = () => useContext(PaymentContext)
+export const usePayment = () => useContext(PaymentContext);

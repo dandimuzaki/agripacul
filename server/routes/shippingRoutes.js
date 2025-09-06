@@ -3,6 +3,6 @@ import { fetchShippingOptions } from '../controllers/shippingController.js';
 
 const router = express.Router();
 
-router.post('/', fetchShippingOptions)
+router.post('/', fetchShippingOptions);
 
 export default router;

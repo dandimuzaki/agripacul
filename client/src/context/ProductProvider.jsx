@@ -12,7 +12,7 @@ export const ProductProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [product, setProduct] = useState(null)
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -35,21 +35,21 @@ export const ProductProvider = ({ children }) => {
   };
 
   const fetchSingleProduct = async (productId) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const fresh = await getProductById(productId)
-      setProduct(fresh)
+      const fresh = await getProductById(productId);
+      setProduct(fresh);
     } catch (err) {
-      console.error('Failed to fetch product', err)
+      console.error('Failed to fetch product', err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchProducts();
     if (selectedProduct?._id) {
-      fetchSingleProduct(selectedProduct?._id)
+      fetchSingleProduct(selectedProduct?._id);
     }
   }, [selectedProduct?._id]);
 
@@ -71,7 +71,7 @@ export const ProductProvider = ({ children }) => {
   const openModal = (productData = null) => {
     setSelectedProduct(productData);
     setIsModalOpen(true);
-    console.log(product)
+    console.log(product);
   };
 
   const closeModal = () => {
@@ -79,8 +79,8 @@ export const ProductProvider = ({ children }) => {
     setSelectedImage(null);
     setPreview(null);
     setIsModalOpen(false);
-    setProduct(null)
-    console.log(product)
+    setProduct(null);
+    console.log(product);
   };
 
   const handleSave = async (data) => {
@@ -93,7 +93,7 @@ export const ProductProvider = ({ children }) => {
           ...data,
           image: uploadedImageUrl,
         });
-        console.log(updatedProduct)
+        console.log(updatedProduct);
         setProducts((prev) =>
           prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
         );

@@ -1,26 +1,26 @@
-import axios from 'axios';
+import api from '@/api/axios';
 
 export const getAllProducts = async () => {
-  const res = await axios.get('https://agripacul-production.up.railway.app/api/product');
+  const res = await api.get('/product');
   return res.data;
 };
 
 export const getProductById = async (id) => {
-  const res = await axios.get(`http://localhost:3000/api/product/${id}`);
+  const res = await api.get(`/product/${id}`);
   return res.data;
 };
 
 export const createProduct = async (data) => {
-  const res = await axios.post('https://agripacul-production.up.railway.app/api/product', data);
+  const res = await api.post('/product', data);
   return res.data;
 };
 
 export const updateProduct = async (productId, updatedProduct) => {
-  const res = await axios.put(`https://agripacul-production.up.railway.app/api/product/${productId}`, updatedProduct);
+  const res = await api.put(`/product/${productId}`, updatedProduct);
   return res.data;
 };
 
 export const deleteProduct = async (productId) => {
-  const res = await axios.delete(`https://agripacul-production.up.railway.app/api/product/${productId}`);
+  const res = await api.delete(`/product/${productId}`);
   return res.data;
 };

@@ -1,5 +1,5 @@
 import { Add, CheckBox, Delete, Remove } from '@mui/icons-material';
-import {formatCurrency} from '../../../utils/format.js';
+import { formatCurrency } from '../../../utils/format.js';
 import { useCart } from '../../../context/CartContext';
 import { useCheckout } from '../../../context/CheckoutContext';
 
@@ -12,7 +12,7 @@ const CartCard = ({ item }) => {
   const isChecked = checkedItems.includes(item);
 
   return (
-    <div className={'relative flex gap-3 p-2 rounded-lg h-30 shadow-[0_0_8px_rgba(0,0,0,0.2)]'}>
+    <div className={'relative flex gap-3 p-2 rounded-lg h-30 bg-white'}>
       <div role="checkbox" onClick={() => handleCheckout(item)} type='checkbox' className={`${isChecked?'border-0':'border'} border border-gray-500 h-7 w-7 rounded-md relative self-center cursor-pointer`} >
         <CheckBox fontSize='large' className={`${isChecked?'':'sr-only'} text-[var(--orange)] absolute top-[-4px] left-[-4px]`} />
       </div>

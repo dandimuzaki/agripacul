@@ -7,10 +7,10 @@ export const CheckoutProvider = ({ children }) => {
   const { cart } = useCart();
   const [checkedItems, setCheckedItems] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState(false);
-  const { selectedShipping } = useShipping()
+  const { selectedShipping } = useShipping();
 
   const totalPrice = checkedItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-  const totalBill = totalPrice + selectedShipping?.cost
+  const totalBill = totalPrice + selectedShipping?.cost;
 
   const handleCheckout = (item) => {
     const isAlreadyChecked = checkedItems.some(
@@ -49,8 +49,6 @@ export const CheckoutProvider = ({ children }) => {
     setIsAllChecked(compareAllChecked);
   }, [cart, checkedItems]);
 
-  
-
   return (
     <CheckoutContext.Provider
       value={{
@@ -59,7 +57,8 @@ export const CheckoutProvider = ({ children }) => {
         checkAll,
         isAllChecked,
         totalPrice,
-        totalBill
+        totalBill,
+        setCheckedItems
       }}
     >
       {children}

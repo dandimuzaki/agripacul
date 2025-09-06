@@ -1,9 +1,9 @@
-import axios from 'axios';
+import api from '@/api/axios';
 
 export const createAccount = async (data) => {
   try {
-    const res = await axios.post(
-      'https://agripacul-production.up.railway.app/api/auth/register',
+    const res = await api.post(
+      '/auth/register',
       data,
       {
         headers: {
@@ -19,7 +19,7 @@ export const createAccount = async (data) => {
 
 export const searchEmail = async (email) => {
   try {
-    const res = await axios.get(`https://agripacul-production.up.railway.app/api/auth/register/${email}`);
+    const res = await api.get(`/auth/register/${email}`);
     return res.status;
   } catch (err) {
     return err.response?.status || 500;
@@ -28,8 +28,8 @@ export const searchEmail = async (email) => {
 
 export const login = async (data) => {
   try {
-    const res = await axios.post(
-      /*'https://agripacul-production.up.railway.app/api/auth/login'*/'http://localhost:3000/api/auth/login',
+    const res = await api.post(
+      '/auth/login',
       data,
       {
         headers: {

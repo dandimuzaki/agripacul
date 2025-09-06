@@ -44,7 +44,8 @@ const AddressForm = () => {
       'city': currentEditAddress?.city.id,
       'district': currentEditAddress?.district.id,
       'subdistrict': currentEditAddress?.subdistrict.id,
-      'detail': currentEditAddress?.detail
+      'detail': currentEditAddress?.detail,
+      'mainAddress': currentEditAddress?.mainAddress,
     } || {
       'recipientName': '',
       'phoneNumber': '',
@@ -52,33 +53,41 @@ const AddressForm = () => {
       'province': '',
       'city': '',
       'subdistrict': '',
-      'detail': ''
+      'detail': '',
+      'mainAddress': false,
     }
   });
 
   useEffect(() => {
+    if (currentEditAddress) {
+      reset({
+        recipientName: currentEditAddress?.recipientName || '',
+        phoneNumber: currentEditAddress?.phoneNumber || '',
+        label: currentEditAddress?.label || '',
+        province: currentEditAddress?.province.id || '',
+        city: currentEditAddress?.city.id || '',
+        district: currentEditAddress?.district.id || '',
+        subdistrict: currentEditAddress?.subdistrict.id || '',
+        detail: currentEditAddress?.detail || '',
+        mainAddress: currentEditAddress?.mainAddress || false,
+      });} else {reset({
+      recipientName: '',
+      phoneNumber: '',
+      label: '',
+      province: '',
+      city: '',
+      subdistrict: '',
+      detail: '',
+      mainAddress: false,
+    });
+    }
+  }, [currentEditAddress, reset]);
+
+  useEffect(() => {
     if (openAddressForm) {
       fetchProvinces();
-      reset({
-        'recipientName': currentEditAddress?.recipientName,
-      'phoneNumber': currentEditAddress?.phoneNumber,
-      'label': currentEditAddress?.label,
-      'province': currentEditAddress?.province.id,
-      'city': currentEditAddress?.city.id,
-      'district': currentEditAddress?.district.id,
-      'subdistrict': currentEditAddress?.subdistrict.id,
-      'detail': currentEditAddress?.detail
-      } || {
-        recipientName: '',
-        phoneNumber: '',
-        label: '',
-        province: '',
-        city: '',
-        subdistrict: '',
-        detail: ''
-      });
     }
-  }, [openAddressForm, currentEditAddress, reset]);
+  }, [openAddressForm]);
 
   const watchProvince = watch('province');
   const watchCity = watch('city');
@@ -110,7 +119,7 @@ const AddressForm = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle
-          onClick={() => console.log(currentEditAddress)}
+            onClick={() => console.log(watchCity)}
           >{currentEditAddress ? 'Edit' : 'Add'} Address</DialogTitle>
         </DialogHeader>
         <form
@@ -135,7 +144,9 @@ const AddressForm = () => {
             control={control}
             render={({ field }) => (
               <div className="grid gap-3">
-                <Label htmlFor="province">Province</Label>
+                <Label
+                  onClick={() => {console.log(field);}}
+                  htmlFor="province">Province</Label>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className='w-full'>
                     <SelectValue placeholder="Set the province" />
@@ -184,10 +195,10 @@ const AddressForm = () => {
             render={({ field }) => (
               <div className="grid gap-3">
                 <Label htmlFor="district"
-                onClick={() => {
-                  console.log(field.value)
-                  console.log(currentEditAddress?.district.id)
-                }}
+                  onClick={() => {
+                    console.log(field.value);
+                    console.log(currentEditAddress?.district.id);
+                  }}
                 >District</Label>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className='w-full'>

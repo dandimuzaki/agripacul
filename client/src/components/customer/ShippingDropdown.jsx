@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select";
-import { useShipping } from "@/context/ShippingContext";
-import {formatCurrency} from "@/utils/format.js";
+} from '@/components/ui/select';
+import { useShipping } from '@/context/ShippingContext';
+import { formatCurrency } from '@/utils/format.js';
 
 const ShippingDropdown = () => {
   const { shippingOptions, selectedShipping, setSelectedShipping } = useShipping();
@@ -21,7 +21,7 @@ const ShippingDropdown = () => {
 
   const { control, setValue } = useForm({
     defaultValues: {
-      shipping: selectedShipping?.code || cheapestOption?.code || "",
+      shipping: selectedShipping?.code || cheapestOption?.code || '',
     },
   });
 
@@ -29,10 +29,10 @@ const ShippingDropdown = () => {
   useEffect(() => {
     if (cheapestOption && !selectedShipping) {
       setSelectedShipping(cheapestOption);
-      setValue("shipping", cheapestOption.code); // update react-hook-form
+      setValue('shipping', cheapestOption.code); // update react-hook-form
     }
   }, [cheapestOption, selectedShipping, setSelectedShipping, setValue]);
-  
+
   return (
     <Controller
       name="shipping"

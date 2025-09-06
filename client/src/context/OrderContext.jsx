@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
-export const OrderContext = createContext()
+export const OrderContext = createContext();
 
-export const useOrder = () => useContext(OrderContext)
+export const useOrder = () => useContext(OrderContext);

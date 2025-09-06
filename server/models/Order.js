@@ -1,25 +1,42 @@
 import mongoose from 'mongoose';
 
+const productOrderedSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: String,
+  price: {
+    type: Number,
+    required: true,
+  },
+  category: String,
+  rating: Number,
+  location: String,
+  stock: Number,
+  image: String,
+  sold: Number,
+  status: String,
+  unit: String,
+  weight: Number,
+}, { timestamps: false });
+
+const orderItemSchema = new mongoose.Schema({
+  product: productOrderedSchema,
+  quantity: {
+    type: Number,
+    required: true,
+  }
+}, { _id: false });
+
+
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  items: [
-    {
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        required: true,
-        default: 1,
-      }
-    }
-  ],
+  items: [orderItemSchema],
   address: {
     recipientName: {
       type: String,
@@ -87,11 +104,11 @@ const orderSchema = new mongoose.Schema({
     },
   },
   shipping: {
-    code: {type: String},
-    name: {type: String},
-    service: {type: String},
-    cost: {type: Number},
-    etd: {type: String}
+    code: { type: String },
+    name: { type: String },
+    service: { type: String },
+    cost: { type: Number },
+    etd: { type: String }
   },
   paymentMethod: {
     code: { type: String },

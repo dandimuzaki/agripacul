@@ -75,7 +75,7 @@ const ProductModal = () => {
     }
   }, [isModalOpen, product, reset, setValue]);
 
-  if (!product) return <p>Loading...</p>
+  if (!product) return <p>Loading...</p>;
 
   return (
     <div

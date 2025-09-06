@@ -4,8 +4,8 @@ import Product from '../models/Product.js';
 export const addToOrders = async (req, res) => {
   try {
     // 1. Create the order
-    const userId = req.user
-    const newOrder = await Order.create({...req.body, user: userId});
+    const userId = req.user;
+    const newOrder = await Order.create({ ...req.body, user: userId });
 
     // 2. Extract product IDs from order items
     const productIds = newOrder.items.map((item) => item._id);
@@ -46,8 +46,7 @@ export const getOrders = async (req, res) => {
     if (user) {filters.user = user;} else {};
     if (status) {filters.status = status;} else {};
 
-    const orders = await Order.find(filters)
-      .populate('items.product')
+    const orders = await Order.find(filters);
 
     if (!orders || orders.length === 0) {
       return res.status(404).json({ message: 'Order not found' });
@@ -64,10 +63,10 @@ export const getOrders = async (req, res) => {
 };
 
 export const getOrderById = async (req, res) => {
-  const { user } = req.user
-  const {orderId} = req.params
+  const { user } = req.user;
+  const { orderId } = req.params;
   try {
-    const order = await Order.findById(orderId)
+    const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -81,9 +80,9 @@ export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
-    const confirmedAt = req.body?.confirmedAt
-    const shippedAt = req.body?.shippedAt
-    const deliveredAt = req.body?.deliveredAt
+    const confirmedAt = req.body?.confirmedAt;
+    const shippedAt = req.body?.shippedAt;
+    const deliveredAt = req.body?.deliveredAt;
 
     const order = await Order.findById(orderId);
     if (!order) {

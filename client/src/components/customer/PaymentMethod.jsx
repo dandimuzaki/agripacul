@@ -1,26 +1,26 @@
-import { usePayment } from '@/context/PaymentContext'
-import React, { useEffect } from 'react'
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { usePayment } from '@/context/PaymentContext';
+import React, { useEffect } from 'react';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const PaymentMethod = () => {
   const {
     paymentOptions,
     selectedPayment,
     setSelectedPayment
-  } = usePayment()
+  } = usePayment();
 
   useEffect(() => {
     if (!selectedPayment && paymentOptions.length > 0) {
-      setSelectedPayment(paymentOptions[0])
+      setSelectedPayment(paymentOptions[0]);
     }
-  }, [paymentOptions, selectedPayment, setSelectedPayment])
+  }, [paymentOptions, selectedPayment, setSelectedPayment]);
 
   return (
     <RadioGroup
       value={selectedPayment?.code}
       onValueChange={(value) => {
-        const chosen = paymentOptions.find((p) => p.code === value)
-        setSelectedPayment(chosen)
+        const chosen = paymentOptions.find((p) => p.code === value);
+        setSelectedPayment(chosen);
       }}
     >
       {paymentOptions.map((payment) => (
@@ -32,7 +32,7 @@ const PaymentMethod = () => {
         </div>
       ))}
     </RadioGroup>
-  )
-}
+  );
+};
 
-export default PaymentMethod
+export default PaymentMethod;

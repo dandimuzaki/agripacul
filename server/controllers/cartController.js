@@ -19,8 +19,8 @@ export const addToCart = async (req, res) => {
       cart.items.push({ product: productId });
     }
 
-    await cart.save();
     await cart.populate('items.product');
+    await cart.save();
     res.status(200).json({
       success: true,
       message: 'Product added to cart',
@@ -65,8 +65,8 @@ export const updateCart = async (req, res) => {
       cart.items = cart.items.filter((i) => i.product.toString() != productId);
     }
 
-    await cart.save();
     await cart.populate('items.product');
+    await cart.save();
     res.status(200).json({
       success: true,
       message: 'Cart updated successfully',
@@ -93,8 +93,8 @@ export const deleteItem = async (req, res) => {
       return res.status(404).json({ message: 'Product not found in the cart' });
     }
 
-    await cart.save();
     await cart.populate('items.product');
+    await cart.save();
     res.status(200).json({
       success: true,
       message: 'Item deleted successfully',

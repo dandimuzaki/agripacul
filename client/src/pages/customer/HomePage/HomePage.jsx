@@ -35,11 +35,11 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      <section className="relative w-full lg:h-screen aspect-16/9 text-white">
+    <>
+      <section className="relative w-full lg:h-screen aspect-16/9 text-white md:mt-0 mt-15">
         <div className="absolute right-0 h-full w-full bg-[url('../../../assets/grow_with_us.jpg')] md:bg-contain bg-cover bg-no-repeat bg-right"></div>
         <div className="absolute left-0 w-2/3 h-full bg-[linear-gradient(90deg,rgba(31,46,42,1),rgba(31,46,42,1),rgba(31,46,42,0))]"></div>
-        <div className="absolute w-1/2 top-0 bg-cover bg-center h-full flex items-center p-8 pt-15">
+        <div className="absolute w-1/2 top-0 bg-cover bg-center h-full flex items-center p-12 pt-15">
           <div className='flex flex-col justify-center gap-4 py-12'>
             <h1 className="text-4xl md:text-6xl">Grow with <span className='font-extrabold'>Care</span>, Served with <span className='font-extrabold'>Love</span></h1>
             <p className="text-lg">Grown naturally. Delivered mindfully. Our vegetables are harvested fresh and delivered with love from our farm to your table.</p>
@@ -50,7 +50,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <section className="p-5 md:p-8 grid grid-cols-3 gap-3">
+      <section className="p-5 md:p-12 grid grid-cols-3 gap-3">
         <div className='row-span-2 bg-[var(--accent)] relative rounded-lg p-5 flex flex-col gap-3'>
           <p className='text-2xl font-bold'>Fresh Vegetables<br />to Make You Comfortable</p>
           <button className='
@@ -70,12 +70,12 @@ const HomePage = () => {
           <p>Ready to Harvest Today</p>
         </div>
         <div className='grid grid-cols-4 col-span-2 gap-3 flex-1'>
-          {products.map((product) => (
+          {products.filter((p) => p.category == 'vegetables').map((product) => (
             <ProductCardVertical key={product._id} product={product} />
           ))}
         </div>
       </section>
-      <section className="p-5 md:p-8 grid grid-cols-3 gap-3">
+      <section className="p-5 md:p-12 grid grid-cols-3 gap-3">
         <div className='grid grid-rows-3 gap-3 flex-1'>
           {products.map((product) => (
             <ProductCard key={product._id} product={product} />
@@ -103,7 +103,7 @@ const HomePage = () => {
           ))}
         </div>
       </section>
-      <section className="p-5 md:p-8 grid grid-cols-3 gap-3">
+      <section className="p-5 md:p-12 grid grid-cols-3 gap-3">
         <div className='grid grid-rows-2 gap-3 flex-1'>
           {products.map((product) => (
             <ProductCard key={product._id} product={product} />
@@ -132,11 +132,8 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      {/*<div className="sticky top-0 z-20 py-4 px-5 md:px-8 flex gap-3 overflow-x-auto">
-          <Category />
-        </div>*/}
 
-      <section className='p-5 md:p-8 grid grid-cols-6 gap-3'>
+      <section className='p-5 md:p-12 grid grid-cols-6 gap-3'>
         <div className='col-span-6 text-center'>
           <p className='text-2xl font-extrabold text-[var(--primary)]'>Best Seller</p>
           <p>Our Customers’ Favorites</p>
@@ -145,13 +142,13 @@ const HomePage = () => {
           <ProductCardVertical key={product._id} product={product} />
         ))}
       </section>
-      <section className="md:p-8 p-5 text-center">
+      <section className="md:p-12 p-5 text-center">
         <p className="text-[var(--primary)] font-semibold uppercase mb-3">Our Values</p>
         <h2 className="text-3xl font-extrabold mb-8">From Soil to Soul — Our Promise</h2>
         <Value />
       </section>
 
-      <section className='bg-[linear-gradient(rgba(212,248,237,0),rgba(212,248,237,1),rgba(212,248,237,1))] w-full md:px-8 md:pt-8 p-5 pb-20 hidden md:grid testimonials gap-10 relative'>
+      <section className='bg-[linear-gradient(rgba(212,248,237,0),rgba(212,248,237,1),rgba(212,248,237,1))] w-full md:px-8 md:pt-12 p-5 pb-20 hidden md:grid testimonials gap-10 relative'>
         <div className='flex justify-center items-start flex-col'>
           <p className="text-[var(--primary)] font-semibold uppercase mb-3">Testimonials</p>
           <h2 className='text-3xl font-extrabold mb-5'>Stories From the People<br/>We Grow For</h2>
@@ -160,7 +157,7 @@ const HomePage = () => {
         <Testimonials />
       </section>
       <Footer/>
-    </div>
+    </>
   );
 };
 

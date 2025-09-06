@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, LocationOn, LocationPin } from '@mui/icons-material';
-import {capitalize, formatCurrency} from '@/utils/format.js';
+import { capitalize, formatCurrency } from '@/utils/format.js';
 import PageNav from '../../../components/customer/PageNav/PageNav';
 import CheckoutItem from '../../../components/customer/CheckoutItem/CheckoutItem';
 import { useCart } from '@/context/CartContext';
@@ -20,25 +20,21 @@ const CheckoutPage = () => {
   const {
     addressList,
     selectedAddress,
-    openAddressList,
     setOpenAddressList,
-    openAddressForm,
-    setOpenAddressForm,
-    provinceList
   } = useAddress();
   const { selectedShipping } = useShipping();
-  const { selectedPayment } = usePayment()
-  const { createNewOrder } = useOrder()
+  const { selectedPayment } = usePayment();
+  const { createNewOrder } = useOrder();
 
 
   const handleDebug = () => {
     if (selectedAddress) {
-    console.log(selectedAddress)
-    console.log(selectedShipping)
-    console.log(selectedPayment)
-    console.log(checkedItems)
+      console.log(selectedAddress);
+      console.log(selectedShipping);
+      console.log(selectedPayment);
+      console.log(checkedItems);
     }
-  }
+  };
 
   return (
     <div className='p-5 pt-15'>
@@ -47,11 +43,13 @@ const CheckoutPage = () => {
         <div className='grid gap-4'>
           <div className='bg-white flex p-5 gap-5 rounded-lg'>
             <div className='flex-1 grid gap-2'>
-              <p className='uppercase font-bold text-gray-500'>Delivery Address</p>
+              <p
+                onClick={() => console.log(capitalize(selectedAddress?.subdistrict.name))}
+                className='uppercase font-bold text-gray-500'>Delivery Address</p>
               {selectedAddress ?
                 <>
-                  <p className='font-bold ml-[-4px] flex items-center'><LocationPin className='text-[var(--primary)]'/>{selectedAddress.label} • {selectedAddress.recipientName}</p>
-                  <p className='text-sm'>{selectedAddress.detail}, {capitalize(selectedAddress.subdistrict.name)}, {capitalize(selectedAddress.subdistrict.name)}, {capitalize(selectedAddress.city.name)}, {capitalize(selectedAddress.province.name)}, {selectedAddress.phoneNumber}</p>
+                  <p className='font-bold ml-[-4px] flex items-center'><LocationPin className='text-[var(--primary)]'/>{selectedAddress?.label} • {selectedAddress?.recipientName}</p>
+                  <p className='text-sm'>{selectedAddress?.detail}, { capitalize(selectedAddress?.subdistrict.name)}, {capitalize(selectedAddress?.district.name)}, {capitalize(selectedAddress?.city.name)}, {capitalize(selectedAddress.province.name)}, {selectedAddress?.phoneNumber}</p>
                 </>
                 :
                 <p>Please set your address</p>
@@ -75,16 +73,16 @@ const CheckoutPage = () => {
             )}
           </div>
           <div className='bg-white grid gap-2 p-5 rounded-lg'>
-              <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
-              <ShippingDropdown/>
+            <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
+            <ShippingDropdown/>
           </div>
-          
-        </div>
-        <div className='sticky top-26 grid gap-5 bg-white p-5 rounded-lg'>
-          <div className='grid gap-2'>
-          <p className='uppercase font-bold text-gray-500'>Payment Method</p>
 
-          <PaymentMethod/>
+        </div>
+        <div className='grid gap-5 bg-white p-5 rounded-lg'>
+          <div className='grid gap-2'>
+            <p className='uppercase font-bold text-gray-500'>Payment Method</p>
+
+            <PaymentMethod/>
           </div>
           <div className='flex flex-col gap-2 text-black'>
             <p className='uppercase font-bold text-gray-500'>Shopping Summary</p>

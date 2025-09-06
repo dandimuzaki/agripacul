@@ -1,6 +1,6 @@
 import { useImage } from '@/context/ImageContext';
-import { useProduct } from '@/context/ProductContext'
-import React, { useEffect } from 'react'
+import { useProduct } from '@/context/ProductContext';
+import React, { useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
@@ -20,7 +20,7 @@ const ProductForm = () => {
     reset,
     formState: { errors }
   } = useForm({
-    defaultValues: 
+    defaultValues:
       product || {
         'title': '',
         'description': '',
@@ -34,8 +34,8 @@ const ProductForm = () => {
         'status': '',
         'unit': ''
       }
-    
-  })
+
+  });
 
   useEffect(() => {
     if (isModalOpen && product) {
@@ -53,16 +53,16 @@ const ProductForm = () => {
         status: '',
         weight: 0,
         unit: ''
-      })
+      });
     }
-  }, [isModalOpen, product, reset])
+  }, [isModalOpen, product, reset]);
 
   return (
     <Dialog open={isModalOpen} onOpenChange={closeModal}>
       <DialogContent className='overflow-y-auto'>
         <DialogHeader>
           <DialogTitle
-          onClick={() => console.log(product)}
+            onClick={() => console.log(product)}
           >
             {selectedProduct ? 'Edit' : 'Create'} Product
           </DialogTitle>
@@ -70,17 +70,17 @@ const ProductForm = () => {
         <form onSubmit={handleSubmit(handleSave)} className='grid md:grid-cols-3 grid-cols-1 gap-5'>
           <div className='flex flex-col items-center gap-4 md:row-span-4'>
             <div
-                className={`${
-                  preview ? 'border-none' : 'border border-gray-300'
-                } overflow-hidden rounded-lg w-full max-w-[280px] h-40 sm:h-48 md:h-full flex`}
-              >
-                {(preview || product?.image) && (
-                  <img
-                    src={preview || product?.image}
-                    alt="Preview"
-                    className="w-full h-full object-cover flex-1"
-                  />)
-                }
+              className={`${
+                preview ? 'border-none' : 'border border-gray-300'
+              } overflow-hidden rounded-lg w-full max-w-[280px] h-40 sm:h-48 md:h-full flex`}
+            >
+              {(preview || product?.image) && (
+                <img
+                  src={preview || product?.image}
+                  alt="Preview"
+                  className="w-full h-full object-cover flex-1"
+                />)
+              }
             </div>
             <Label
               htmlFor='file-upload'
@@ -93,7 +93,7 @@ const ProductForm = () => {
               type="file"
               accept="image/*"
               onChange={handleChangeImage}
-              className="hidden" 
+              className="hidden"
             />
           </div>
 
@@ -104,32 +104,32 @@ const ProductForm = () => {
               <p className="text-red-500 text-xs">{errors.title.message}</p>
             )}
           </div>
-          
+
           <Controller
             name='category'
             control={control}
             render={({ field }) => (
-          <div className='grid gap-2'>
-            <Label htmlFor='category'>Category</Label>
-            <Select
-            onValueChange={field.onChange}
-            value={field.value}
-            id='category' name='category'>
-              <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Select Category'/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='vegetables'>Vegetables</SelectItem>
-                <SelectItem value='foods'>Foods</SelectItem>
-                <SelectItem value='flowers'>Flowers</SelectItem>
-                <SelectItem value='tools'>Tools</SelectItem>
+              <div className='grid gap-2'>
+                <Label htmlFor='category'>Category</Label>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  id='category' name='category'>
+                  <SelectTrigger className='w-full'>
+                    <SelectValue placeholder='Select Category'/>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='vegetables'>Vegetables</SelectItem>
+                    <SelectItem value='foods'>Foods</SelectItem>
+                    <SelectItem value='flowers'>Flowers</SelectItem>
+                    <SelectItem value='tools'>Tools</SelectItem>
 
-              </SelectContent>
-            </Select>
-            {errors.stock && (
-              <p className="text-red-500 text-xs">{errors.category.message}</p>
-            )}
-          </div>
+                  </SelectContent>
+                </Select>
+                {errors.stock && (
+                  <p className="text-red-500 text-xs">{errors.category.message}</p>
+                )}
+              </div>
             )}/>
 
           <div className='grid gap-2'>
@@ -193,7 +193,7 @@ const ProductForm = () => {
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default ProductForm
+export default ProductForm;

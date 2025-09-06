@@ -27,59 +27,60 @@ import { AddressProvider } from './context/AddressProvider';
 import { ShippingProvider } from './context/ShippingProvider';
 import { PaymentProvider } from './context/PaymentProvider';
 import { OrderProvider } from './context/OrderProvider';
+import ScrollToTop from './components/common/ScrollToTop';
 
 function App() {
 
   return (
     <>
-            <AuthProvider>
-      <AddressProvider>
-      <ShippingProvider>
-        <PaymentProvider>
-          <Toaster/>
-          <ImageProvider>
-            <ProductProvider>
-              <CartProvider>
-                <CheckoutProvider>
-                <OrderProvider>
+      <AuthProvider>
+        <AddressProvider>
+          <ShippingProvider>
+            <PaymentProvider>
+              <Toaster/>
+              <ImageProvider>
+                <ProductProvider>
+                  <CartProvider>
+                    <CheckoutProvider>
+                      <OrderProvider>
 
-                  <Routes>
-                    <Route path='/' element={<MainLayout/>}>
-                      <Route element={<NavbarLayout />}>
-                        <Route index element={<HomePage />} />
-                        <Route path='/ideas' element={<OrderPage />} />
-                        <Route path='/orders' element={<OrderPage/>} />
-                        <Route path='/profile' />
-                        <Route path='/:category' element={<HomePage />} />
-                        <Route path='/orders/1' element={<TransactionDetail/>}/>
-                      </Route>
+                        <Routes>
+                          <Route path='/' element={<MainLayout/>}>
+                            <Route element={<NavbarLayout />}>
+                              <Route index element={<HomePage />} />
+                              <Route path='/ideas' element={<OrderPage />} />
+                              <Route path='/orders' element={<OrderPage/>} />
+                              <Route path='/profile' />
+                              <Route path='/:category' element={<HomePage />} />
+                              <Route path='/orders/1' element={<TransactionDetail/>}/>
+                            </Route>
 
-                      <Route element={<PlainLayout />}>
-                        <Route path='/product/1' element={<ProductPage />} />
-                        <Route path='/cart' element={<CartPage />} />
-                        <Route path='/checkout' element={<CheckoutPage />} />
-                        <Route path='/about' element={<About/>}/>
-                        <Route path='/signup' element={<SignUpPage/>}/>
-                        <Route path='/login' element={<LogInPage/>}/>
-                      </Route>
-                    </Route>
-                    <Route path='/admin' element={<AdminLayout/>}>
-                      <Route path='products' element={<AdminProduct/>} />
-                      <Route path='orders' element={<AdminOrderList/>} />
-                      <Route path='summary' element={<AdminOrderSummary/>} />
+                            <Route element={<PlainLayout />}>
+                              <Route path='/product/:productId' element={<ProductPage />} />
+                              <Route path='/cart' element={<CartPage />} />
+                              <Route path='/checkout' element={<CheckoutPage />} />
+                              <Route path='/about' element={<About/>}/>
+                              <Route path='/signup' element={<SignUpPage/>}/>
+                              <Route path='/login' element={<LogInPage/>}/>
+                            </Route>
+                          </Route>
+                          <Route path='/admin' element={<AdminLayout/>}>
+                            <Route path='products' element={<AdminProduct/>} />
+                            <Route path='orders' element={<AdminOrderList/>} />
+                            <Route path='summary' element={<AdminOrderSummary/>} />
 
-                    </Route>
-                  </Routes>
-                  </OrderProvider>
+                          </Route>
+                        </Routes>
+                      </OrderProvider>
 
-                </CheckoutProvider>
-              </CartProvider>
-            </ProductProvider>
-          </ImageProvider>
-        </PaymentProvider>
-        </ShippingProvider>
+                    </CheckoutProvider>
+                  </CartProvider>
+                </ProductProvider>
+              </ImageProvider>
+            </PaymentProvider>
+          </ShippingProvider>
 
-      </AddressProvider>
+        </AddressProvider>
       </AuthProvider>
 
     </>

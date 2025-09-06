@@ -3,13 +3,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { useOrder } from '@/context/OrderContext';
 import { capitalize, formatCurrency, formatDate } from '@/utils/format';
 import CheckoutItem from '../customer/CheckoutItem/CheckoutItem';
+import OrderStatus from '../common/OrderStatus';
+import { Link } from 'react-router-dom';
+import { useCheckout } from '@/context/CheckoutContext';
 
 const OrderModal = () => {
-  const { openOrderModal, setOpenOrderModal, selectedOrder } = useOrder()
+  const { openOrderModal, setOpenOrderModal, order } = useOrder();
+  const { setCheckedItems } = useCheckout();
 
   const handleClick = () => {
-    console.log(selectedOrder)
-  }
+    console.log(order);
+  };
 
   return (
     <Dialog open={openOrderModal} onOpenChange={setOpenOrderModal}>
@@ -20,35 +24,77 @@ const OrderModal = () => {
         <div className='grid gap-5 text-sm'>
           <div className='grid p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
             <p className='font-bold text-base'>Order Status</p>
-            <p className='flex justify-between'>Order ID<span>{selectedOrder?._id}</span></p>
-            <p className='flex justify-between'>Purchasing Date<span>{formatDate(selectedOrder?.createdAt)}</span></p>
+            <p className='flex justify-between'>Order ID<span>{order?._id}</span></p>
+            <p className='flex justify-between'>Purchasing Date<span>{formatDate(order?.createdAt)}</span></p>
           </div>
           <div className='grid p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
             <p className='text-base font-bold'>Product Detail</p>
             <div className='grid gap-4'>
-            {selectedOrder?.items?.map((item) => (
-              <CheckoutItem key={item.product._id} item={item}/>
-            ))}
+              {order?.items?.map((item, index) => (
+                <CheckoutItem key={index} item={item}/>
+              ))}
             </div>
           </div>
           <div className='grid grid-cols-[1fr_3fr] p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
-          <p className='font-bold text-base col-span-2'>Shipping Information</p>
-          <p>Courier</p>
-          <p>{selectedOrder?.shipping.name}</p>
-          <p>Address</p>
-          <p>{selectedOrder && selectedOrder?.address.detail}, {selectedOrder && capitalize(selectedOrder?.address.subdistrict.name)}, {selectedOrder && capitalize(selectedOrder?.address.district.name)}, {selectedOrder && capitalize(selectedOrder?.address.city.name)}, {selectedOrder && capitalize(selectedOrder?.address.province.name)}, {selectedOrder?.address.phoneNumber}</p>
+            <p className='font-bold text-base col-span-2'>Shipping Information</p>
+            <p>Courier</p>
+            <p>{order?.shipping.name}</p>
+            <p>Address</p>
+            <p>{order?.address.detail}, {capitalize(order?.address?.subdistrict?.name)}, {capitalize(order?.address?.district.name)}, {capitalize(order?.address?.city.name)}, {capitalize(order?.address?.province.name)}, {order?.address?.phoneNumber}</p>
           </div>
           <div className='grid p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
-          <p className='font-bold text-base'>Payment Detail</p>
-          <p className='flex justify-between'>Payment Method<span>{selectedOrder?.paymentMethod.name}</span></p>
-          <p className='flex justify-between'>Total Item Price<span>{selectedOrder && formatCurrency(selectedOrder?.totalPrice)}</span></p>
-          <p className='flex justify-between'>Shipping Cost<span>{selectedOrder && formatCurrency(selectedOrder?.shipping.cost)}</span></p>
+            <p className='font-bold text-base'>Payment Detail</p>
+            <p className='flex justify-between'>Payment Method<span>{order?.paymentMethod.name}</span></p>
+            <p className='flex justify-between'>Total Item Price<span>{formatCurrency(order?.totalPrice)}</span></p>
+            <p className='flex justify-between'>Shipping Cost<span>{formatCurrency(order?.shipping.cost)}</span></p>
 
-          <p className='flex justify-between'>Total Bill<span>{selectedOrder && formatCurrency(selectedOrder?.totalBill)}</span></p>
+            <p className='flex justify-between'>Total Bill<span>{formatCurrency(order?.totalBill)}</span></p>
 
           </div>
           <div className='grid p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
+            <p className='font-bold text-base'>Order Tracking</p>
+            <div className='grid gap-0'>
+
+              {order?.createdAt ? (
+                <OrderStatus
+                  date={order?.createdAt}
+                  text='Order placed at'
+                  description='We have received your order'
+                  place='head'
+                />) : ''}
+
+              {order?.confirmedAt ? (
+                <OrderStatus
+                  date={order?.confirmedAt}
+                  text='Order confirmed at'
+                  description='We are preparing your order'
+                />) : ''}
+
+              {order?.shippedAt ? (
+                <OrderStatus
+                  date={order?.shippedAt}
+                  text='Order shipped at'
+                  description={`Your order will arrived in ${order.shipping.etd}`}
+                />) : ''}
+
+              {order?.deliveredAt ? (
+                <OrderStatus
+                  date={order?.deliveredAt}
+                  text='Order delivered at'
+                  description={'Thank you for ordering'}
+                />) : ''}
+            </div>
+
           </div>
+
+          {order?.createdAt ? (
+            <Link to='/checkout'>
+              <button
+                onClick={() => setCheckedItems(order?.items)}
+                className='justify-self-center w-fit bg-[var(--primary)] px-3 py-2 text-lg font-bold text-white rounded'>Buy Again</button>
+            </Link>
+          ): ''}
+
         </div>
       </DialogContent>
     </Dialog>

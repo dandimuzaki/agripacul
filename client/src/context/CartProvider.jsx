@@ -4,7 +4,6 @@ import { CartContext } from './CartContext';
 import { addToCartService, fetchCartService, removeCartService, updateCartService } from '@/services/cartService.js';
 
 export const CartProvider = ({ children }) => {
-  const { products } = useProduct();
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
