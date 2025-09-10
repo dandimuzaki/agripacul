@@ -22,9 +22,9 @@ const ProductCard = ({ product }) => {
   const stars = Array(5).fill(null);
 
   return (
-    <div className='p-3 rounded-lg grid grid-cols-[2fr_3fr] gap-x-3 bg-white'>
+    <div className='p-2 rounded-xl grid grid-cols-[2fr_3fr] gap-x-3 bg-white'>
       <Link to={`/product/${_id}`} className='w-full h-full overflow-hidden'>
-        <img className='w-full h-full rounded object-cover' src={image} alt={title} />
+        <img className='aspect-square h-full rounded-lg object-cover' src={image} alt={title} />
       </Link>
       <div className='flex flex-col justify-between'>
         <div>

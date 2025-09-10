@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import './HomePage.css';
 import { ArrowDownwardTwoTone, ArrowOutwardTwoTone } from '@mui/icons-material';
@@ -19,20 +19,7 @@ import ProductCardVertical from '@/components/customer/ProductCardVertical/Produ
 
 const HomePage = () => {
   const { products } = useProduct();
-  const { category } = useParams();
-  /*const filteredProducts = useMemo(() => {
-    return category
-      ? products.filter((item) => item.category === category)
-      : products;
-  }, [category, products]);*/
-  const getProducts = async () => {
-    const data = await getAllProducts();
-    return data;
-  };
-
-  const handleClick = () => {
-    console.log(getProducts);
-  };
+  const navigate = useNavigate()
 
   return (
     <>
@@ -53,7 +40,9 @@ const HomePage = () => {
       <section className="p-5 md:p-12 grid grid-cols-3 gap-3">
         <div className='row-span-2 bg-[var(--accent)] relative rounded-lg p-5 flex flex-col gap-3'>
           <p className='text-2xl font-bold'>Fresh Vegetables<br />to Make You Comfortable</p>
-          <button className='
+          <button
+          onClick={() => navigate('/products?category=vegetables')}
+          className='
               cursor-pointer w-fit
               rounded-full py-2 px-4
               text-sm font-bold
@@ -70,14 +59,14 @@ const HomePage = () => {
           <p>Ready to Harvest Today</p>
         </div>
         <div className='grid grid-cols-4 col-span-2 gap-3 flex-1'>
-          {products.filter((p) => p.category == 'vegetables').map((product) => (
+          {products.filter((p) => p.category == 'vegetables').slice(0,4).map((product) => (
             <ProductCardVertical key={product._id} product={product} />
           ))}
         </div>
       </section>
       <section className="p-5 md:p-12 grid grid-cols-3 gap-3">
         <div className='grid grid-rows-3 gap-3 flex-1'>
-          {products.map((product) => (
+          {products.filter(p => p.category == 'foods').slice(0,3).map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
@@ -98,23 +87,18 @@ const HomePage = () => {
           </div>
         </div>
         <div className='grid grid-rows-3 gap-3 flex-1'>
-          {products.map((product) => (
+          {products.filter(p => p.category == 'foods').slice(3,6).map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </section>
       <section className="p-5 md:p-12 grid grid-cols-3 gap-3">
-        <div className='grid grid-rows-2 gap-3 flex-1'>
-          {products.map((product) => (
+        <div className='grid grid-rows-2 grid-cols-2 col-span-2 gap-3 flex-1'>
+          {products.filter(p => p.category == 'tools').map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
 
-        <div className='grid grid-rows-2 gap-3 flex-1'>
-          {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
         <div className='bg-[var(--accent)] relative rounded-lg flex flex-col gap-3'>
           <img src={tools} className='absolute bottom-0 left-[50%] transform-[translate(-50%,0)] h-[70%] object-cover' />
           <div className='absolute flex flex-col gap-3 w-full p-5'>

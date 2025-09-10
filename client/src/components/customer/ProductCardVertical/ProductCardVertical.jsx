@@ -8,37 +8,22 @@ import { Link } from 'react-router-dom';
 const ProductCardVertical = ({ product }) => {
   const { title, price, image, amount, _id } = product;
   const { addToCart } = useCart();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleAddToCart = (id) => {
-    if (isProcessing) return;
-
-    setIsProcessing(true);
-    addToCart(id);
-
-
-    setTimeout(() => setIsProcessing(false), 500);
-  };
-
-  const stars = Array(5).fill(null);
 
   return (
-    <div className='rounded-lg bg-white p-3 flex flex-col'>
+    <div className='rounded-xl bg-white p-2 flex flex-col'>
       <Link to={`/product/${_id}`}>
-      <img src={image} alt={title} className='w-full aspect-square object-cover rounded' />
+        <img src={image} alt={title} className='w-full aspect-square object-cover rounded-lg' />
       </Link>
       <div className='flex flex-1 flex-col justify-between'>
         <div>
           <div className='text-yellow-500'>
-            {stars.map((_, i) =>
-              <Star key={i} fontSize='extra-small'/>)
-            }
+            <Star fontSize='extra-small'/>
           </div>
           <h4 className='text-[var(--black)] text-base/6 md:text-lg/6 font-bold'>{title}</h4>
           <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${amount ? ` /${amount}` : ''}`}</span></h5>
         </div>
         <div className='flex justify-end mt-2'>
-          <button onClick={() => handleAddToCart(id)} className='
+          <button onClick={() => addToCart(_id)} className='
               cursor-pointer w-fit
               rounded-full py-2 px-4
               text-sm font-bold

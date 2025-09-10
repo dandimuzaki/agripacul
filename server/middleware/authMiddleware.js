@@ -1,34 +1,32 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
 
 export const verifyToken = async (req, res, next) => {
-  let token;
+  const authHeader = req.headers.authorization;
 
-  if (req.headers.authorization?.startsWith('Bearer ')) {
-    token = req.headers.authorization.split(' ')[1];
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Not authorized, no token" });
+  }
+
+  const token = authHeader.split(' ')[1];
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.id).select('-password');
-
-      if (!user) {
-        return res.status(401).json({ message: 'Not authorized, user not found' });
-      }
-
-      req.user = user;
-      return next();
+      const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+      req.user = decoded;
+      next();
 
     } catch (err) {
-      return res.status(401).json({ message: 'Not authorized, token invalid', error: err.message });
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'Token expired' });
+      }
+      return res.status(401).json({ message: 'Not authorized, token invalid' });
     }
-  }
-
-  return res.status(401).json({ message: 'Not authorized, no token' });
 };
 
-export const isAdmin = (req, res, next) => {
-  if (req.user?.role !== 'admin') {
-    return res.status(403).json({ message: 'Admin access only' });
-  }
-  next();
+export const requireRole = (role) => {
+  return (req, res, next) => {
+    if (req.user?.role !== role) {
+      return res.status(403).json({ message: `${role} access only` });
+    }
+    next();
+  };
 };

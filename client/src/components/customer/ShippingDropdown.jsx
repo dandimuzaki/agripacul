@@ -46,8 +46,8 @@ const ShippingDropdown = () => {
           }}
           value={field.value}
         >
-          <SelectTrigger className="text-left py-7 w-full justify-between rounded-lg">
-            <SelectValue placeholder="Choose shipping option" className='w-full p-5' />
+          <SelectTrigger className="text-left py-6 w-full justify-between rounded-lg">
+            <SelectValue placeholder="Choose shipping option" className='w-full p-6' />
           </SelectTrigger>
           <SelectContent>
             {shippingOptions?.map((shipping) => (

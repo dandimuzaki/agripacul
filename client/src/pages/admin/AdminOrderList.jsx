@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { CheckBoxOutlineBlankOutlined, CheckBoxOutlined, RemoveRedEyeOutlined, Search } from '@mui/icons-material';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
-import AdminHeader from '../../components/admin/AdminHeader';
 import { useOrder } from '@/context/OrderContext';
 import { formatCurrency, formatDate } from '@/utils/format';
 import OrderModal from '@/components/admin/OrderModal';
@@ -112,20 +111,21 @@ const AdminOrderList = () => {
   });
 
   return (
-    <div className='ml-50 px-8 flex flex-col bg-white pb-8'>
-      <div className='h-8 bg-white z-100 sticky top-0'></div>
-      <div className='flex flex-col gap-3 bg-white pb-3'>
-        <p className='text-2xl font-bold'>Orders</p>
-        <AdminHeader/>
-        <div className='h-8 bg-white flex items-center justify-between'>
+    <div className='ml-50 px-8 grid bg-white'>
+      <div className='flex justify-between sticky top-0 pt-8 pb-3 bg-white'>
+        <p
+        onClick={() => console.log(orders)}
+        className='font-bold text-2xl'>Order Management</p>
+        <div className='h-8 bg-white flex items-center gap-3'>
           <div className='flex'>
             <input value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}  className='bg-white flex-1 rounded-l-md h-8 px-2 border-y border-l border-[var(--light-grey)]' type='text' placeholder="Search Order" />
             <button className='bg-white rounded-r-md h-8 px-2 hover:bg-[var(--light-grey)] border-y border-r border-[var(--light-grey)]'><Search /></button>
           </div>
         </div>
       </div>
+
       <table className='min-w-full text-sm'>
-        <thead className='sticky top-38'>
+        <thead className='sticky top-19'>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (

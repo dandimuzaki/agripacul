@@ -28,59 +28,69 @@ import { ShippingProvider } from './context/ShippingProvider';
 import { PaymentProvider } from './context/PaymentProvider';
 import { OrderProvider } from './context/OrderProvider';
 import ScrollToTop from './components/common/ScrollToTop';
+import { UserProvider } from './context/UserProvider';
+import UserList from './pages/admin/UserList';
+import SearchResult from './pages/customer/SearchResult';
+import AfterPurchase from './pages/customer/AfterPurchase';
 
 function App() {
 
   return (
     <>
       <AuthProvider>
-        <AddressProvider>
-          <ShippingProvider>
-            <PaymentProvider>
-              <Toaster/>
-              <ImageProvider>
-                <ProductProvider>
-                  <CartProvider>
-                    <CheckoutProvider>
-                      <OrderProvider>
+        <UserProvider>
+          <AddressProvider>
+            <ShippingProvider>
+              <PaymentProvider>
+                <Toaster/>
+                <ImageProvider>
+                  <ProductProvider>
+                    <CartProvider>
+                      <CheckoutProvider>
+                        <OrderProvider>
 
-                        <Routes>
-                          <Route path='/' element={<MainLayout/>}>
-                            <Route element={<NavbarLayout />}>
-                              <Route index element={<HomePage />} />
-                              <Route path='/ideas' element={<OrderPage />} />
-                              <Route path='/orders' element={<OrderPage/>} />
-                              <Route path='/profile' />
-                              <Route path='/:category' element={<HomePage />} />
-                              <Route path='/orders/1' element={<TransactionDetail/>}/>
+                          <Routes>
+                            <Route path='/' element={<MainLayout/>}>
+                              <Route element={<NavbarLayout />}>
+                                <Route index element={<HomePage />} />
+                                <Route path='/ideas' element={<OrderPage />} />
+                                <Route path='/orders' element={<OrderPage/>} />
+                                <Route path='/profile' />
+                                <Route path='/:category' element={<HomePage />} />
+                                <Route path='/orders/1' element={<TransactionDetail/>}/>
+                              </Route>
+
+                              <Route element={<PlainLayout />}>
+                                <Route path='/product/:productId' element={<ProductPage />} />
+                                <Route path='/products' element={<SearchResult/>} />
+                                <Route path='/cart' element={<CartPage />} />
+                                <Route path='/checkout' element={<CheckoutPage />} />
+                                <Route path='/about' element={<About/>}/>
+                                <Route path='/signup' element={<SignUpPage/>}/>
+                                <Route path='/login' element={<LogInPage/>}/>
+                                <Route path='/checkout/success/:orderId' element={<AfterPurchase/>} />
+                                <Route path='/settings' element={<AfterPurchase/>}/>
+                              </Route>
                             </Route>
+                            <Route path='/admin' element={<AdminLayout/>}>
+                              <Route path='products' element={<AdminProduct/>} />
+                              <Route path='orders' element={<AdminOrderList/>} />
+                              <Route path='summary' element={<AdminOrderSummary/>} />
+                              <Route path='users' element={<UserList/>}/>
 
-                            <Route element={<PlainLayout />}>
-                              <Route path='/product/:productId' element={<ProductPage />} />
-                              <Route path='/cart' element={<CartPage />} />
-                              <Route path='/checkout' element={<CheckoutPage />} />
-                              <Route path='/about' element={<About/>}/>
-                              <Route path='/signup' element={<SignUpPage/>}/>
-                              <Route path='/login' element={<LogInPage/>}/>
                             </Route>
-                          </Route>
-                          <Route path='/admin' element={<AdminLayout/>}>
-                            <Route path='products' element={<AdminProduct/>} />
-                            <Route path='orders' element={<AdminOrderList/>} />
-                            <Route path='summary' element={<AdminOrderSummary/>} />
+                          </Routes>
+                        </OrderProvider>
 
-                          </Route>
-                        </Routes>
-                      </OrderProvider>
+                      </CheckoutProvider>
+                    </CartProvider>
+                  </ProductProvider>
+                </ImageProvider>
+              </PaymentProvider>
+            </ShippingProvider>
 
-                    </CheckoutProvider>
-                  </CartProvider>
-                </ProductProvider>
-              </ImageProvider>
-            </PaymentProvider>
-          </ShippingProvider>
-
-        </AddressProvider>
+          </AddressProvider>
+        </UserProvider>
       </AuthProvider>
 
     </>

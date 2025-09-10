@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ProductContext } from './ProductContext.jsx';
 import { toast } from 'sonner';
-import { createProduct, deleteProduct, getAllProducts, getProductById, updateProduct } from '../services/productService.js';
+import { createProduct, deleteProduct, getProducts, getProductById, updateProduct } from '../services/productService.js';
 import { useImage } from './ImageContext.jsx';
+import { useDebounce } from 'react-use';
+import { useNavigate } from 'react-router-dom';
 
 
 export const ProductProvider = ({ children }) => {
@@ -13,6 +15,10 @@ export const ProductProvider = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState(null);
+  const [keyword, setKeyword] = useState('')
+  const [debounceKeyword, setDebounceKeyword] = useState('')
+
+  useDebounce(() => setDebounceKeyword(keyword), 500, [keyword])
 
   useEffect(() => {
     if (isModalOpen) {
@@ -27,7 +33,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchProducts = async () => {
     try {
-      const data = await getAllProducts();
+      const data = await getProducts();
       setProducts(data);
     } catch (err) {
       console.error('Failed to fetch products', err);
@@ -65,6 +71,13 @@ export const ProductProvider = ({ children }) => {
     'sold': 0,
     'status': ''
   });
+
+  const navigate = useNavigate()
+  const searchProduct = (search) => {
+    if (search.trim()) {
+      navigate(`/products?search=${encodeURIComponent(search)}`)
+    }
+  }
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -160,7 +173,8 @@ export const ProductProvider = ({ children }) => {
       triggerConfirm, closeConfirm,
       openModal, closeModal, handleSave, handleDelete,
       formProduct, setFormProduct,
-      isLoading, setIsLoading
+      isLoading, setIsLoading,
+      keyword, setKeyword, debounceKeyword, searchProduct
     }}>
       {children}
     </ProductContext.Provider>

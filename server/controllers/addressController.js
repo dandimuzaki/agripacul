@@ -3,7 +3,7 @@ import Location from '../models/Location.js';
 
 export const getAddressList = async (req, res) => {
   try {
-    const result = await AddressList.findOne({ user: req.user._id });
+    const result = await AddressList.findOne({ user: req.user.id });
     if (!result) {
       return res.status(404).json({ message: 'Please add your address' });
     }
@@ -41,13 +41,11 @@ export const addAddress = async (req, res) => {
       rajaOngkirId: subdistrictData.rajaOngkirId
     };
 
-    console.log(newAddress);
-
-    let result = await AddressList.findOne({ user: req.user._id });
+    let result = await AddressList.findOne({ user: req.user.id });
 
     if (!result) {
       result = new AddressList({
-        user: req.user._id,
+        user: req.user.id,
         addressList: [{ ...newAddress, mainAddress: true }]
       });
     } else if (result.addressList.length === 0) {
@@ -72,7 +70,7 @@ export const addAddress = async (req, res) => {
 };
 
 export const editAddress = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const addressId = req.params.addressId;
   const { province, city, district, subdistrict, ...rest } = req.body;
 
@@ -135,7 +133,7 @@ export const deleteAddress = async (req, res) => {
   const { addressId } = req.params;
 
   try {
-    const result = await AddressList.findOne({ user: req.user._id });
+    const result = await AddressList.findOne({ user: req.user.id });
     if (!result) {
       return res.status(404).json({ message: 'Address is empty' });
     }

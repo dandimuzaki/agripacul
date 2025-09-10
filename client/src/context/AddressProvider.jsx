@@ -3,6 +3,7 @@ import { AddressContext } from './AddressContext';
 import { addressDummy } from '@/utils/addressDummy';
 import { addNewAddress, getAddressList, removeAddress, updateAddress } from '@/services/addressApi';
 import { getCities, getDistricts, getProvinces, getSubdistricts } from '@/services/locationService';
+import { useAuth } from './AuthContext';
 
 export const AddressProvider = ({ children }) => {
   const [openAddressList, setOpenAddressList] = useState(false);
@@ -14,22 +15,28 @@ export const AddressProvider = ({ children }) => {
   const [cityList, setCityList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [subdistrictList, setSubdistrictList] = useState([]);
+  const { loadingAuth } = useAuth()
 
   useEffect(() => {
     const getUserAddressList = async () => {
       try {
         const addressData = await getAddressList();
-        setAddressList(addressData.data);
-        const mainAddress = addressData.data.find((address) => address.mainAddress);
-        if (mainAddress) {
-          setSelectedAddress(mainAddress);
+        if (addressData) {
+          setAddressList(addressData.data);
+          const mainAddress = addressData.data.find((address) => address.mainAddress);
+          if (mainAddress) {
+            setSelectedAddress(mainAddress);
+          }
         }
       } catch (err) {
         console.error('Error retrieving address list', err);
       }
     };
-    getUserAddressList();
-  }, []);
+    if (!loadingAuth) {
+      getUserAddressList();
+    }
+    
+  }, [loadingAuth]);
 
   const fetchProvinces = async () => {
     try {
@@ -73,7 +80,6 @@ export const AddressProvider = ({ children }) => {
   };
 
   const saveAddress = async (formData) => {
-    console.log(formData);
     if (currentEditAddress) {
       const updatedAddressList = await updateAddress({ addressId: currentEditAddress._id, formData });
       setAddressList(updatedAddressList.data);
@@ -106,7 +112,6 @@ export const AddressProvider = ({ children }) => {
   };
 
   const deleteAddress = async (addressId) => {
-    console.log(addressId);
     const updatedAddressList = await removeAddress(addressId);
     setAddressList(updatedAddressList.data);
   };

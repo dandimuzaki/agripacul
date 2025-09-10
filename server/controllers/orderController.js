@@ -4,8 +4,8 @@ import Product from '../models/Product.js';
 export const addToOrders = async (req, res) => {
   try {
     // 1. Create the order
-    const userId = req.user;
-    const newOrder = await Order.create({ ...req.body, user: userId });
+    const user = req.user.id;
+    const newOrder = await Order.create({ ...req.body, user: user });
 
     // 2. Extract product IDs from order items
     const productIds = newOrder.items.map((item) => item._id);
@@ -38,7 +38,7 @@ export const addToOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const { user } = req.user;
+    const user = req.user.id;
     const { status } = req.query;
 
     // Combine filters
@@ -63,8 +63,8 @@ export const getOrders = async (req, res) => {
 };
 
 export const getOrderById = async (req, res) => {
-  const { user } = req.user;
   const { orderId } = req.params;
+  console.log(orderId)
   try {
     const order = await Order.findById(orderId);
     if (!order) {

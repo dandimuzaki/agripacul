@@ -5,6 +5,8 @@ import { useShipping } from './ShippingContext';
 import { useCheckout } from './CheckoutContext';
 import { usePayment } from './PaymentContext';
 import { useEffect, useState } from 'react';
+import { useAuth } from './AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const OrderProvider = ({ children }) => {
   const { selectedAddress } = useAddress();
@@ -15,6 +17,9 @@ export const OrderProvider = ({ children }) => {
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [order, setOrder] = useState(null);
+  const { loadingAuth } = useAuth()
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -29,20 +34,23 @@ export const OrderProvider = ({ children }) => {
     const loadSingleOrder = async (orderId) => {
       try {
         const order = await getOrderByAdmin(orderId);
-        console.log(order);
         setOrder(order);
       } catch (err) {
         console.error('Failed to load the order', err);
       }
     };
-
-    loadOrders();
-    if (selectedOrder?._id) {
-      loadSingleOrder(selectedOrder?._id);
+    
+    if (!loadingAuth) {
+      loadOrders();
+      if (selectedOrder?._id) {
+        loadSingleOrder(selectedOrder?._id);
+      }
     }
-  }, [selectedOrder?._id]);
+  }, [selectedOrder?._id, loadingAuth]);
 
   const createNewOrder = async () => {
+    setLoading(true)
+    try {
     const orderData = {
       address: selectedAddress,
       items: checkedItems,
@@ -51,8 +59,13 @@ export const OrderProvider = ({ children }) => {
       shipping: selectedShipping,
       paymentMethod: selectedPayment
     };
-    const result = await createOrder(orderData);
-    console.log(result.data);
+    const result = await createOrder(orderData);   
+      navigate(`/checkout/success/${result.data._id}`);
+  } catch (err) {
+    console.error('Error creating order', err)
+  } finally {
+    setLoading(false)
+  }
   };
 
   const seeOrderDetail = (orderData) => {
@@ -90,7 +103,8 @@ export const OrderProvider = ({ children }) => {
       openOrderModal,
       setOpenOrderModal,
       confirmOrder,
-      order
+      order,
+      
     }}>
       {children}
     </OrderContext.Provider>

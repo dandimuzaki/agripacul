@@ -1,10 +1,11 @@
 import Product from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
-  const { category, sort } = req.query;
+  const { category, sort, search } = req.query;
 
   const filter = {
     ...(category ? { category } : {}),
+    ...(search ? { title: { $regex: search, $options: "i" } } : {}),
     stock: { $gt: 0 }
   };
 
@@ -35,14 +36,12 @@ export const getProductById = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  console.log(req.body);
   const product = new Product(req.body);
   const saved = await product.save();
   res.status(201).json(saved);
 };
 
 export const updateProduct = async (req, res) => {
-  console.log(req.body);
   try {
     const { productId } = req.params;
     const updatedProduct = req.body;
@@ -66,7 +65,6 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { productId } = req.params;
-    console.log('Trying to delete product:', productId);
     const deletedProduct = await Product.findByIdAndDelete(productId);
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });

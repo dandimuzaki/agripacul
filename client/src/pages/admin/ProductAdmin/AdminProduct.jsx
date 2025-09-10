@@ -110,21 +110,20 @@ const AdminProduct = () => {
   });
 
   return (
-    <div className='ml-50 px-8 flex flex-col bg-white pb-8'>
-      <div className='h-8 bg-white z-10 sticky top-0'></div>
-      <div className='flex flex-col gap-3 bg-white pb-3'>
-        <p className='text-2xl font-bold'>Product</p>
-        <AdminHeader/>
-        <div className='h-8 bg-white flex items-center justify-between'>
-          <button className='flex gap-2 font-bold cursor-pointer active:text-[var(--primary)]' onClick={() => openModal()}><Add/>Add Product</button>
+    <div className='ml-50 px-8 grid bg-white'>
+      <div className='flex justify-between sticky top-0 pt-8 pb-3 bg-white'>
+        <p className='font-bold text-2xl'>Product Management</p>
+        <div className='h-8 bg-white flex items-center gap-3'>
+          <button className='px-2 h-8 items-center rounded-md flex gap-1 font-bold cursor-pointer active:text-[var(--primary)] bg-[var(--light-grey)] active-[var(--dark-grey)]' onClick={() => openModal()}><Add/>Add Product</button>
           <div className='flex'>
             <input value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}  className='bg-white flex-1 rounded-l-md h-8 px-2 border-y border-l border-[var(--light-grey)]' type='text' placeholder="Search Product" />
             <button className='bg-white rounded-r-md h-8 px-2 hover:bg-[var(--light-grey)] border-y border-r border-[var(--light-grey)]'><Search /></button>
           </div>
         </div>
       </div>
+
       <table className='min-w-full text-sm'>
-        <thead className='sticky top-8'>
+        <thead className='sticky top-19'>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

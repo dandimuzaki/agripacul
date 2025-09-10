@@ -14,6 +14,7 @@ import PaymentMethod from '@/components/customer/PaymentMethod';
 import { usePayment } from '@/context/PaymentContext';
 import { useOrder } from '@/context/OrderContext';
 import { useCheckout } from '@/context/CheckoutContext';
+import { ClipLoader } from 'react-spinners';
 
 const CheckoutPage = () => {
   const { checkedItems, totalPrice, totalBill } = useCheckout();
@@ -24,24 +25,14 @@ const CheckoutPage = () => {
   } = useAddress();
   const { selectedShipping } = useShipping();
   const { selectedPayment } = usePayment();
-  const { createNewOrder } = useOrder();
-
-
-  const handleDebug = () => {
-    if (selectedAddress) {
-      console.log(selectedAddress);
-      console.log(selectedShipping);
-      console.log(selectedPayment);
-      console.log(checkedItems);
-    }
-  };
+  const { createNewOrder, loading } = useOrder();
 
   return (
-    <div className='p-5 pt-15'>
+    <div className='md:px-12 p-4 md:py-6 mt-15'>
       <PageNav path="/cart" text="Checkout" />
-      <div className='grid md:grid-cols-[1fr_350px] items-start gap-3 md:gap-5'>
+      <div className='grid md:grid-cols-[1fr_350px] items-start gap-4 md:gap-6'>
         <div className='grid gap-4'>
-          <div className='bg-white flex p-5 gap-5 rounded-lg'>
+          <div className='bg-white flex p-6 gap-6 rounded-lg'>
             <div className='flex-1 grid gap-2'>
               <p
                 onClick={() => console.log(capitalize(selectedAddress?.subdistrict.name))}
@@ -64,7 +55,7 @@ const CheckoutPage = () => {
               </button>
             </div>
           </div>
-          <div className='grid gap-3 bg-white rounded-lg p-5'>
+          <div className='grid gap-4 bg-white rounded-lg p-6'>
             {checkedItems.map((item, i) =>
               <CheckoutItem
                 key={i}
@@ -72,13 +63,13 @@ const CheckoutPage = () => {
               />
             )}
           </div>
-          <div className='bg-white grid gap-2 p-5 rounded-lg'>
+          <div className='bg-white grid gap-2 p-6 rounded-lg'>
             <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
             <ShippingDropdown/>
           </div>
 
         </div>
-        <div className='grid gap-5 bg-white p-5 rounded-lg'>
+        <div className='grid gap-6 bg-white p-6 rounded-lg'>
           <div className='grid gap-2'>
             <p className='uppercase font-bold text-gray-500'>Payment Method</p>
 
@@ -104,13 +95,16 @@ const CheckoutPage = () => {
             </div>
           </div>
           <button
+            disabled={loading}
             onClick={createNewOrder}
-            type='click' className='active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>Pay Now</button>
+            type='click' className='flex items-center justify-center gap-2 active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>
+              {loading ? <ClipLoader color='#ffffff' size={20}/> : '' }
+              Pay Now
+            </button>
 
         </div>
         <AddressForm/>
         <AddressList/>
-        <div className='w-8 h-8 bg-green-500' onClick={handleDebug}></div>
       </div>
     </div>
   );

@@ -1,69 +1,79 @@
-import { createAccount, login } from '@/services/authService';
+import { createAccount, login, silentLogin } from '@/services/authService';
 import { AuthContext } from './AuthContext';
 import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api, { getAccessToken } from '@/api/axios';
 
 export const AuthProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-
-  const handleRegister = async (data) => {
-    setIsLoading(true);
-    try {
-      const newUser = await createAccount(data);
-      setUser(newUser.user);
-      setToken(newUser.token);
-
-      localStorage.setItem('user', JSON.stringify(newUser.user));
-      localStorage.setItem('token', newUser.token);
-    } catch (err) {
-      console.error('Register error:', err);
-      toast.error(err?.response?.data?.message || 'Failed to register');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleLogin = async (data) => {
-    setIsLoading(true);
-    try {
-      const loggedUser = await login(data);
-      setUser(loggedUser.user);
-      setToken(loggedUser.token);
-
-      localStorage.setItem('user', JSON.stringify(loggedUser.user));
-      localStorage.setItem('token', loggedUser.token);
-    } catch (err) {
-      console.error('Login error:', err);
-      toast.error(err?.response?.data?.message || 'Failed to login');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const navigate = useNavigate();
+  const [accessToken, setAccessToken] = useState(null)
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
-
-    try {
-      setUser(storedUser ? JSON.parse(storedUser) : null);
-    } catch (err) {
-      console.warn('Failed to parse stored user:', err);
-      setUser(null);
+    const getNewToken = async () => {
+      try {
+      const result = await silentLogin();
+      if (result) {
+        setAccessToken(result.accessToken);
+        setUser(result.user);
+        getAccessToken(result.accessToken)
+      }
+      } catch (err) {
+        console.error('Failed to silent login', err);
+        setAccessToken(null)
+        setUser(null)
+      } finally {
+        setLoadingAuth(false)
+      }
     }
 
-    setToken(storedToken || null);
+    getNewToken();
   }, []);
+
+  const handleLogin = async (data) => {
+    try {
+    const res = await login(data)
+    setAccessToken(res.accessToken);
+    setUser(res.user);
+    navigate("/");
+    } catch (err) {
+      console.error('Error login', err)
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
+
+  const handleRegister = async (data) => {
+    try {
+    const res = await createAccount(data);
+    setAccessToken(res.accessToken);
+    setUser(res.user);
+    navigate("/");
+    } catch (err) {
+      console.error('Error register', err)
+    } finally {
+      setLoadingAuth(false)
+    }
+  };
+
+  // 🔴 Logout function
+  const handleLogout = async () => {
+    await api.post("/auth/logout");
+    localStorage.removeItem("accessToken");
+    setUser(null);
+    navigate("/login");
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        handleRegister,
         handleLogin,
-        isLoading,
+        loadingAuth,
         user,
-        token,
+        handleRegister,
+        accessToken
       }}
     >
       {children}

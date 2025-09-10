@@ -1,16 +1,16 @@
-import { AnalyticsOutlined, AssignmentOutlined, SettingsOutlined, ShoppingBasketOutlined } from '@mui/icons-material';
+import { AccountCircleOutlined, AnalyticsOutlined, AssignmentOutlined, SettingsOutlined, ShoppingBasketOutlined, StoreOutlined } from '@mui/icons-material';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const AdminSidebar = () => {
   return (
     <div className='fixed top-0 w-50 h-screen bg-[var(--primary)] text-white'>
-      <div
-        to='/admin/'
+      <Link
+        to='/admin'
         className='bg-[var(--primary)] font-bold px-5 py-2 flex gap-2 items-center'
       >
         <p>Agripacul</p>
-      </div>
+      </Link>
       <NavLink
         to='/admin/products'
         className={({ isActive }) => `${isActive ? 'bg-[var(--dark-primary)] font-bold' : 'bg-[var(--primary]'} px-5 py-2 flex gap-2 items-center`
@@ -30,9 +30,14 @@ const AdminSidebar = () => {
         <AnalyticsOutlined/> Order Summary
       </NavLink>
       <NavLink
-        to='/admin/settings'
+        to='/admin/users'
         className={({ isActive }) => `${isActive ? 'bg-[var(--dark-primary)] font-bold' : 'bg-[var(--primary]'} px-5 py-2 flex gap-2 items-center`}
-      ><SettingsOutlined/> Settings
+      ><AccountCircleOutlined/> User
+      </NavLink>
+      <NavLink
+        to='/'
+        className={({ isActive }) => `${isActive ? 'bg-[var(--dark-primary)] font-bold' : 'bg-[var(--primary]'} px-5 py-2 flex gap-2 items-center`}
+      ><StoreOutlined/> Store
       </NavLink>
     </div>
   );
