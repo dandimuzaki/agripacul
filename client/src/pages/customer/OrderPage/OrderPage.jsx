@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './OrderPage.css';
 import { useCart } from '../../../context/CartContext';
 import PageNav from '../../../components/customer/PageNav/PageNav';
@@ -6,59 +6,98 @@ import SearchBar from '../../../components/common/SearchBar/SearchBar';
 import CartButton from '../../../components/common/CartButton/CartButton';
 import OrderCard from '../../../components/customer/OrderCard/OrderCard';
 import { useOrder } from '@/context/OrderContext';
+import SectionTitle from '@/components/customer/SectionTitle';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { capitalize } from '@/utils/format';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getOrdersByUser } from '@/services/orderService';
+import { useAuth } from '@/context/AuthContext';
 
 
 const OrderPage = () => {
-  const { cart } = useCart();
-  const { orders } = useOrder();
+  const {loadingAuth, accessToken} = useAuth()
+  const statusOptions = ['pending','processing','shipped','delivered']
+  const [selectedStatus, setSelectedStatus] = useState('')
 
-  const handleClick = () => {
-    console.log(orders);
-  };
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const { lastUpdated, setLastUpdated } = useOrder()
+
+  const status = searchParams.get('status')
+
+  useEffect(() => {
+    if (loadingAuth) return;
+  if (!accessToken) return;
+
+    setSelectedStatus(status || '')
+    const query = new URLSearchParams()
+
+    if (status) query.append('status',status)
+
+    const loadOrders = async (query) => {
+      setLoading(true);
+      try {
+        const result = await getOrdersByUser(query)
+        if (result) {
+          setOrders(result.data)
+        }
+      } catch (err) {
+        console.error('Error load orders', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (!loadingAuth && accessToken) {
+      loadOrders(query)
+    }
+  }, [status, loadingAuth, accessToken, lastUpdated])
 
   return (
-    <div className='md:relative md:mt-15 md:ml-75 '>
-      <PageNav text="My Orders" />
-      <div className='header-order md:hidden'>
-        <div className="flex gap-3 flex-1">
-          <SearchBar placeholder="Find your transaction" />
-          <CartButton cart={cart} />
-        </div>
+    <div className='mt-15 md:px-12 p-4 md:py-6'>
+      <div className='grid md:grid-cols-[1fr_3fr] items-start gap-4 md:gap-6'>
+        <section className='md:sticky top-21 grid gap-6 bg-white p-6 rounded-lg'>
+        <div className='grid gap-2'>
+          <p className='font-bold'>Select By Status</p>
+          <RadioGroup
+            value={selectedStatus}
+            onValueChange={(value) => {
+              setSelectedStatus(value);
+              const newParams = new URLSearchParams(searchParams);
+              if (value) {
+                newParams.set('status', value);
+              } else {
+                newParams.delete('status');
+              }
+              setLastUpdated(Date.now())
+              navigate(`/orders?${newParams.toString()}`);
+            }}
+          >
+            <label className='flex gap-2 cursor-pointer'>
+              <RadioGroupItem value=''/>
+              All
+            </label>
+            {statusOptions.map((status, index) => (
+              <label key={index} className='flex gap-2 cursor-pointer'>
+              <RadioGroupItem value={status}/>
+              {capitalize(status)}
+            </label>
+            ))}
+            
+          </RadioGroup>
+        </div>  
+        
+          <p className='font-bold'>Choose transaction date</p>
+        </section>
+        <section className='md:gap-5 grid gap-4'>
+          <SectionTitle title='My Orders'/>
+          {orders?.map((order) => (
+            <OrderCard key={order._id} order={order}></OrderCard>
+          ))}
+        </section>
       </div>
-      <section className='bg-white md:fixed hidden md:flex flex-col gap-3 top-20 left-5 rounded-lg p-3'>
-        <SearchBar placeholder="Find your transaction" />
-        <p className='font-bold text-lg'>Status</p>
-        <div className='flex flex-col gap-2'>
-          <label className='flex gap-3'>
-            <input type='radio' />
-            All
-          </label>
-          <label className='flex gap-3'>
-            <input type='radio' />
-            Pending
-          </label>
-          <label className='flex gap-3'>
-            <input type='radio' />
-            Processing
-          </label>
-          <label className='flex gap-3'>
-            <input type='radio' />
-            Shipped
-          </label>
-          <label className='flex gap-3'>
-            <input type='radio' />
-            Delivered
-          </label>
-        </div>
-        <p className='font-bold'>Choose transaction date</p>
-      </section>
-      <section className='md:p-5 md:gap-5 p-3 flex flex-col gap-3 pb-22'>
-        {orders && orders.map((order) => (
-          <OrderCard key={order._id} order={order}></OrderCard>
-        ))}
-        <div className='h-10 w-10 bg-orange-500' onClick={handleClick}></div>
-
-      </section>
     </div>
   );
 };

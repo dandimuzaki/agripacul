@@ -1,6 +1,6 @@
 import api from '@/api/axios';
 
-export const getProducts = async (query = "") => {
+export const getProducts = async (query = '') => {
   const res = await api.get(`/product?${query}`);
   return res.data;
 };

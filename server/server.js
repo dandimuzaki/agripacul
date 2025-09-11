@@ -18,10 +18,10 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cookieParser())
+app.use(cookieParser());
 
 const allowedOrigins = [
-  "http://localhost:5173", 
+  'http://localhost:5173',
 ];
 
 app.use(cors({
@@ -29,7 +29,7 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, origin);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true

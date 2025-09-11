@@ -35,17 +35,17 @@ export const login = async (data) => {
 
 export const logout = async (data) => {
   try {
-    const res = await api.post('/auth/logout', data)
+    const res = await api.post('/auth/logout', data);
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-}
+};
 
 export const silentLogin = async () => {
   try {
     const res = await api.get('/auth/silent-login');
     return res.data;
   } catch (err) {
-    console.error('Error get new token', err)
+    console.error('Error get new token', err);
   }
-}
+};

@@ -114,8 +114,8 @@ const AdminOrderList = () => {
     <div className='ml-50 px-8 grid bg-white'>
       <div className='flex justify-between sticky top-0 pt-8 pb-3 bg-white'>
         <p
-        onClick={() => console.log(orders)}
-        className='font-bold text-2xl'>Order Management</p>
+          onClick={() => console.log(orders)}
+          className='font-bold text-2xl'>Order Management</p>
         <div className='h-8 bg-white flex items-center gap-3'>
           <div className='flex'>
             <input value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}  className='bg-white flex-1 rounded-l-md h-8 px-2 border-y border-l border-[var(--light-grey)]' type='text' placeholder="Search Order" />

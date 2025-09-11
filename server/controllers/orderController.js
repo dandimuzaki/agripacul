@@ -48,7 +48,7 @@ export const getOrders = async (req, res) => {
 
     const orders = await Order.find(filters);
 
-    if (!orders || orders.length === 0) {
+    if (!orders) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
@@ -64,7 +64,7 @@ export const getOrders = async (req, res) => {
 
 export const getOrderById = async (req, res) => {
   const { orderId } = req.params;
-  console.log(orderId)
+  console.log(orderId);
   try {
     const order = await Order.findById(orderId);
     if (!order) {

@@ -9,6 +9,6 @@ router.post('/register', register);
 router.get('/register/:email', getEmail);
 router.post('/login', login);
 router.get('/silent-login', silentLogin);
-router.post('/logout', logout)
+router.post('/logout', logout);
 
 export default router;

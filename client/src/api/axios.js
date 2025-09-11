@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 let accessToken = null;
 
 export const getAccessToken = (token) => {
   accessToken = token;
-}
+};
 
 const api = axios.create({
   baseURL: API_URL,
@@ -14,7 +14,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   if (accessToken) {
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
   }
   return config;
 });

@@ -24,7 +24,7 @@ const PaymentMethod = () => {
       }}
     >
       {paymentOptions.map((payment) => (
-        <div key={payment.code} className={`flex items-center justify-between space-x-3 p-2 border rounded ${(selectedPayment && selectedPayment.code == payment.code) ? 'bg-[var(--primary)]/20' : ''}`}>
+        <div key={payment.code} className={`flex items-center justify-between space-x-3 p-2 border rounded ${(selectedPayment?.code == payment.code) ? 'bg-[var(--primary)]/20' : ''}`}>
           <label htmlFor={payment.code} className="flex-1 cursor-pointer text-sm">
             {payment.name}
           </label>

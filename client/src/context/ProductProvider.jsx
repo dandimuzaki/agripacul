@@ -15,10 +15,10 @@ export const ProductProvider = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState(null);
-  const [keyword, setKeyword] = useState('')
-  const [debounceKeyword, setDebounceKeyword] = useState('')
+  const [keyword, setKeyword] = useState('');
+  const [debounceKeyword, setDebounceKeyword] = useState('');
 
-  useDebounce(() => setDebounceKeyword(keyword), 500, [keyword])
+  useDebounce(() => setDebounceKeyword(keyword), 500, [keyword]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -72,12 +72,12 @@ export const ProductProvider = ({ children }) => {
     'status': ''
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const searchProduct = (search) => {
     if (search.trim()) {
-      navigate(`/products?search=${encodeURIComponent(search)}`)
+      navigate(`/products?search=${encodeURIComponent(search)}`);
     }
-  }
+  };
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 

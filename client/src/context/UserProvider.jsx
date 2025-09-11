@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext';
 
 export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
-  const { loadingAuth } = useAuth()
+  const { loadingAuth } = useAuth();
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -20,13 +20,13 @@ export const UserProvider = ({ children }) => {
     if (!loadingAuth) {
       loadUsers();
     }
-    
+
   }, [loadingAuth]);
 
   const handleDeleteUser = async (userId) => {
-    await deleteUser(userId)
-    setUsers((prev) => prev.filter(u => u._id != userId))
-  }
+    await deleteUser(userId);
+    setUsers((prev) => prev.filter((u) => u._id != userId));
+  };
 
   return (
     <UserContext.Provider

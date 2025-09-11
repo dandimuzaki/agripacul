@@ -9,7 +9,7 @@ nodeCron.schedule('0 15 * * *', async () => {
     { $set: { status: 'shipped', shippedAt: now } }
   );
   console.log('Orders shipped at 15:00');
-},{
+}, {
   timezone: 'Asia/Jakarta'
 });
 

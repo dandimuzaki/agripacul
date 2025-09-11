@@ -1,8 +1,8 @@
 import api from '@/api/axios';
 
-export const getOrdersByUser = async () => {
+export const getOrdersByUser = async (query) => {
   try {
-    const res = await api.get('/orders');
+    const res = await api.get(`/orders?${query}`);
     return res.data;
   } catch (err) {
     console.error('Failed to fetch user orders', err);

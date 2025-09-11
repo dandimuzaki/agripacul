@@ -17,9 +17,10 @@ export const OrderProvider = ({ children }) => {
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [order, setOrder] = useState(null);
-  const { loadingAuth } = useAuth()
+  const { loadingAuth, accessToken } = useAuth();
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [lastUpdated, setLastUpdated] = useState(Date.now());
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -39,33 +40,34 @@ export const OrderProvider = ({ children }) => {
         console.error('Failed to load the order', err);
       }
     };
-    
-    if (!loadingAuth) {
+
+    if (!loadingAuth && accessToken) {
       loadOrders();
       if (selectedOrder?._id) {
         loadSingleOrder(selectedOrder?._id);
       }
     }
-  }, [selectedOrder?._id, loadingAuth]);
+  }, [selectedOrder?._id, loadingAuth, lastUpdated]);
 
   const createNewOrder = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-    const orderData = {
-      address: selectedAddress,
-      items: checkedItems,
-      totalPrice: totalPrice,
-      totalBill: totalBill,
-      shipping: selectedShipping,
-      paymentMethod: selectedPayment
-    };
-    const result = await createOrder(orderData);   
+      const orderData = {
+        address: selectedAddress,
+        items: checkedItems,
+        totalPrice: totalPrice,
+        totalBill: totalBill,
+        shipping: selectedShipping,
+        paymentMethod: selectedPayment
+      };
+      const result = await createOrder(orderData);
+      setLastUpdated(Date.now());
       navigate(`/checkout/success/${result.data._id}`);
-  } catch (err) {
-    console.error('Error creating order', err)
-  } finally {
-    setLoading(false)
-  }
+    } catch (err) {
+      console.error('Error creating order', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const seeOrderDetail = (orderData) => {
@@ -104,7 +106,7 @@ export const OrderProvider = ({ children }) => {
       setOpenOrderModal,
       confirmOrder,
       order,
-      
+      lastUpdated, setLastUpdated
     }}>
       {children}
     </OrderContext.Provider>

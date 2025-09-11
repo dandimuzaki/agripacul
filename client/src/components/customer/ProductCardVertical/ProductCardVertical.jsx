@@ -5,14 +5,18 @@ import { formatCurrency } from '../../../utils/format.js';
 import { Link } from 'react-router-dom';
 
 
-const ProductCardVertical = ({ product }) => {
+const ProductCardVertical = ({ product, loading }) => {
   const { title, price, image, amount, _id } = product;
   const { addToCart } = useCart();
 
   return (
     <div className='rounded-xl bg-white p-2 flex flex-col'>
       <Link to={`/product/${_id}`}>
-        <img src={image} alt={title} className='w-full aspect-square object-cover rounded-lg' />
+        {
+          loading ? (<div className='w-full aspect-square rounded-lg bg-[var(--light-grey)]'></div>) :
+
+            <img src={image} alt={title} className='w-full aspect-square object-cover rounded-lg' />
+        }
       </Link>
       <div className='flex flex-1 flex-col justify-between'>
         <div>

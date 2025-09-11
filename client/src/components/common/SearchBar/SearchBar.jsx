@@ -6,20 +6,20 @@ const SearchBar = ({ placeholder, keyword, setKeyword, submitFunction }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     submitFunction();
-    setKeyword('')
-  }
+    setKeyword('');
+  };
 
   return (
     <form
-    onSubmit={handleSubmit}
-    className='h-9 flex items-center'
+      onSubmit={handleSubmit}
+      className='h-9 flex items-center'
     >
       <input
-      className={`bg-white flex-1 rounded-l-full h-full px-3 ${isOrders ? 'border border-[var(--grey)] border-r-0' : ''}`}
-      type='text' 
-      placeholder={placeholder}
-      value={keyword}
-      onChange={(e) => setKeyword(e.target.value)}
+        className={`bg-white flex-1 rounded-l-full h-full px-3 ${isOrders ? 'border border-[var(--grey)] border-r-0' : ''}`}
+        type='text'
+        placeholder={placeholder}
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
       />
       <button className={`bg-white rounded-r-full h-full px-3 hover:bg-[var(--light-grey)] ${isOrders ? 'border border-[var(--grey)] border-l-0' : ''}`}><Search /></button>
     </form>

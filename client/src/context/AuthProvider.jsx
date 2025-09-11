@@ -9,61 +9,67 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const navigate = useNavigate();
-  const [accessToken, setAccessToken] = useState(null)
+  const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
     const getNewToken = async () => {
       try {
-      const result = await silentLogin();
-      if (result) {
-        setAccessToken(result.accessToken);
-        setUser(result.user);
-        getAccessToken(result.accessToken)
-      }
+        const result = await silentLogin();
+        if (result) {
+          setAccessToken(result.accessToken);
+          setUser(result.user);
+          getAccessToken(result.accessToken);
+        }
       } catch (err) {
         console.error('Failed to silent login', err);
-        setAccessToken(null)
-        setUser(null)
+        setAccessToken(null);
+        setUser(null);
       } finally {
-        setLoadingAuth(false)
+        setLoadingAuth(false);
       }
-    }
+    };
 
     getNewToken();
   }, []);
 
   const handleLogin = async (data) => {
+    setLoadingAuth(true);
     try {
-    const res = await login(data)
-    setAccessToken(res.accessToken);
-    setUser(res.user);
-    navigate("/");
+      const res = await login(data);
+      console.log(res.accessToken);
+      setAccessToken(res.accessToken);
+      setUser(res.user);
+      getAccessToken(res.accessToken);
+      navigate('/');
     } catch (err) {
-      console.error('Error login', err)
+      console.error('Error login', err);
     } finally {
       setLoadingAuth(false);
     }
   };
 
   const handleRegister = async (data) => {
+    setLoadingAuth(true);
     try {
-    const res = await createAccount(data);
-    setAccessToken(res.accessToken);
-    setUser(res.user);
-    navigate("/");
+      const res = await createAccount(data);
+      console.log(res.accessToken);
+      setAccessToken(res.accessToken);
+      setUser(res.user);
+      getAccessToken(res.accessToken);
+      navigate('/');
     } catch (err) {
-      console.error('Error register', err)
+      console.error('Error register', err);
     } finally {
-      setLoadingAuth(false)
+      setLoadingAuth(false);
     }
   };
 
   // 🔴 Logout function
   const handleLogout = async () => {
-    await api.post("/auth/logout");
-    localStorage.removeItem("accessToken");
+    await api.post('/auth/logout');
+    localStorage.removeItem('accessToken');
     setUser(null);
-    navigate("/login");
+    navigate('/login');
   };
 
   return (

@@ -1,19 +1,19 @@
 import Product from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
-  const { category, sort, search } = req.query;
+  const { category, sortByPrice, sortByRating, search } = req.query;
 
   const filter = {
     ...(category ? { category } : {}),
-    ...(search ? { title: { $regex: search, $options: "i" } } : {}),
+    ...(search ? { title: { $regex: search, $options: 'i' } } : {}),
     stock: { $gt: 0 }
   };
 
   let sortOption = {};
-  if (sort === 'price_asc') sortOption = { price: 1 };
-  else if (sort === 'price_desc') sortOption = { price: -1 };
-  else if (sort === 'alphabet_asc') sortOption = { title: 1 };
-  else if (sort === 'alphabet_desc') sortOption = { title: -1 };
+  if (sortByPrice === 'asc') sortOption = { price: 1 };
+  else if (sortByPrice === 'desc') sortOption = { price: -1 };
+  else if (sortByRating === 'asc') sortOption = { rating: 1 };
+  else if (sortByRating === 'desc') sortOption = { rating: -1 };
 
   try {
     const products = await Product.find(filter).sort(sortOption);

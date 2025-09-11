@@ -15,7 +15,7 @@ export const AddressProvider = ({ children }) => {
   const [cityList, setCityList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const [subdistrictList, setSubdistrictList] = useState([]);
-  const { loadingAuth } = useAuth()
+  const { loadingAuth, accessToken } = useAuth();
 
   useEffect(() => {
     const getUserAddressList = async () => {
@@ -32,10 +32,10 @@ export const AddressProvider = ({ children }) => {
         console.error('Error retrieving address list', err);
       }
     };
-    if (!loadingAuth) {
+    if (!loadingAuth && accessToken) {
       getUserAddressList();
     }
-    
+
   }, [loadingAuth]);
 
   const fetchProvinces = async () => {

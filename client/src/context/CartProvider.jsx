@@ -7,7 +7,7 @@ import { useAuth } from './AuthContext.jsx';
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { loadingAuth } = useAuth()
+  const { loadingAuth, accessToken } = useAuth();
 
   // Load cart
   useEffect(() => {
@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    if (!loadingAuth) {
+    if (!loadingAuth && accessToken) {
       loadCart();
     }
   }, [loadingAuth]);

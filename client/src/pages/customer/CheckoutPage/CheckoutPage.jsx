@@ -15,6 +15,7 @@ import { usePayment } from '@/context/PaymentContext';
 import { useOrder } from '@/context/OrderContext';
 import { useCheckout } from '@/context/CheckoutContext';
 import { ClipLoader } from 'react-spinners';
+import SectionTitle from '@/components/customer/SectionTitle';
 
 const CheckoutPage = () => {
   const { checkedItems, totalPrice, totalBill } = useCheckout();
@@ -29,9 +30,9 @@ const CheckoutPage = () => {
 
   return (
     <div className='md:px-12 p-4 md:py-6 mt-15'>
-      <PageNav path="/cart" text="Checkout" />
       <div className='grid md:grid-cols-[1fr_350px] items-start gap-4 md:gap-6'>
         <div className='grid gap-4'>
+          <SectionTitle title="Checkout" />
           <div className='bg-white flex p-6 gap-6 rounded-lg'>
             <div className='flex-1 grid gap-2'>
               <p
@@ -98,9 +99,9 @@ const CheckoutPage = () => {
             disabled={loading}
             onClick={createNewOrder}
             type='click' className='flex items-center justify-center gap-2 active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>
-              {loading ? <ClipLoader color='#ffffff' size={20}/> : '' }
+            {loading ? <ClipLoader color='#ffffff' size={20}/> : '' }
               Pay Now
-            </button>
+          </button>
 
         </div>
         <AddressForm/>

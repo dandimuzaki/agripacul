@@ -30,11 +30,11 @@ export const register = async (req, res) => {
     const refreshToken = generateRefreshToken(newUser);
     await newUser.save();
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    })
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
     res.status(200).json({
       accessToken,
       user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role }
@@ -70,12 +70,12 @@ export const login = async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    })
-    
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
+
     res.status(200).json({
       accessToken,
       user: { id: user._id, name: user.name, email: user.email, role: user.role }
@@ -97,10 +97,10 @@ export const silentLogin = (req, res) => {
       if (!dbUser) return res.sendStatus(404);
 
       const newRefreshToken = generateRefreshToken(dbUser);
-      res.cookie("refreshToken", newRefreshToken, {
+      res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       });
 
       const accessToken = generateAccessToken(dbUser);
@@ -118,8 +118,8 @@ export const silentLogin = (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  })
-  res.json({ message: "Logged out"})
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
+  res.json({ message: 'Logged out' });
 };
