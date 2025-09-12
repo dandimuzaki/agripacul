@@ -27,7 +27,7 @@ export const CartProvider = ({ children }) => {
     if (!loadingAuth && accessToken) {
       loadCart();
     }
-  }, [loadingAuth]);
+  }, [loadingAuth, accessToken]);
 
   const addToCart = async (productId) => {
     try {

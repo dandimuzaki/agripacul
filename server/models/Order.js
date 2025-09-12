@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const productOrderedSchema = new mongoose.Schema({
+const productSnapshotSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -21,11 +21,24 @@ const productOrderedSchema = new mongoose.Schema({
   weight: Number,
 }, { timestamps: false });
 
-const orderItemSchema = new mongoose.Schema({
-  product: productOrderedSchema,
+const itemSnapshotSchema = new mongoose.Schema({
+  product: productSnapshotSchema,
   quantity: {
     type: Number,
     required: true,
+  }
+}, { _id: false });
+
+const orderItemSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    default: 1
   }
 }, { _id: false });
 
@@ -36,6 +49,7 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  itemsSnapshot: [itemSnapshotSchema],
   items: [orderItemSchema],
   address: {
     recipientName: {

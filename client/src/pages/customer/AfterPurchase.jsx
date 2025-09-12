@@ -46,7 +46,7 @@ const AfterPurchase = () => {
       <div className='grid grid-cols-[2fr_1fr] gap-6'>
         <div className='grid grid-cols-2 gap-2 bg-white rounded-lg p-6'>
           <p className='col-span-2 font-bold text-lg'>Order Summary</p>
-          {orderCreated?.items.map((item, i) =>
+          {orderCreated?.itemsSnapshot.map((item, i) =>
             <CheckoutItem
               key={i}
               item={item}

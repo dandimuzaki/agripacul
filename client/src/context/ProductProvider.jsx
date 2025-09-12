@@ -17,6 +17,7 @@ export const ProductProvider = ({ children }) => {
   const [product, setProduct] = useState(null);
   const [keyword, setKeyword] = useState('');
   const [debounceKeyword, setDebounceKeyword] = useState('');
+  const [lastUpdated, setLastUpdated] = useState(Date.now())
 
   useDebounce(() => setDebounceKeyword(keyword), 500, [keyword]);
 
@@ -57,7 +58,7 @@ export const ProductProvider = ({ children }) => {
     if (selectedProduct?._id) {
       fetchSingleProduct(selectedProduct?._id);
     }
-  }, [selectedProduct?._id]);
+  }, [selectedProduct?._id, lastUpdated]);
 
   const [formProduct, setFormProduct] = useState({
     'title': '',
@@ -106,16 +107,17 @@ export const ProductProvider = ({ children }) => {
           ...data,
           image: uploadedImageUrl,
         });
-        console.log(updatedProduct);
         setProducts((prev) =>
           prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
         );
+        setLastUpdated(Date.now())
         toast(`${updatedProduct.title} has been updated at`, {
           description: `${formatted}`,
         });
       } else {
         const newProduct = await createProduct({ ...data, image: uploadedImageUrl });
         setProducts((prev) => [...prev, newProduct]);
+        setLastUpdated(Date.now())
         toast(`${newProduct.title} has been created at`, {
           description: `${formatted}`,
         });
@@ -174,7 +176,8 @@ export const ProductProvider = ({ children }) => {
       openModal, closeModal, handleSave, handleDelete,
       formProduct, setFormProduct,
       isLoading, setIsLoading,
-      keyword, setKeyword, debounceKeyword, searchProduct
+      keyword, setKeyword, debounceKeyword, searchProduct,
+      lastUpdated, setLastUpdated
     }}>
       {children}
     </ProductContext.Provider>

@@ -73,7 +73,8 @@ const AdminProduct = () => {
         <button onClick={() => column.toggleSorting()} className='cursor-pointer'>
           Rating {column.getIsSorted() === 'asc' ? (<ArrowUpward fontSize='small'/>) : column.getIsSorted() === 'desc' ? (<ArrowDownward fontSize='small'/>) : (<Sort fontSize='small'/>)}
         </button>
-      )
+      ),
+      cell: ({row}) => (<p>{row.original.rating.toFixed(2)}</p>)
     },
     {
       header: 'Action',

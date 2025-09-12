@@ -3,29 +3,25 @@ import Product from '../models/Product.js';
 
 export const addToOrders = async (req, res) => {
   try {
-    // 1. Create the order
     const user = req.user.id;
     const newOrder = await Order.create({ ...req.body, user: user });
 
-    // 2. Extract product IDs from order items
-    const productIds = newOrder.items.map((item) => item._id);
+    const productIds = newOrder.items.map((item) => item.product._id);
 
-    // 3. Create a map of product ID to quantity
     const productMap = {};
     newOrder.items.forEach((item) => {
-      productMap[item._id] = item.quantity;
+      productMap[item.product._id] = item.quantity;
     });
 
-    // 4. Fetch products from DB and reduce their stock
     const products = await Product.find({ _id: { $in: productIds } });
 
     for (const product of products) {
-      const quantityOrdered = productMap[product._id.toString()] || 1;
+      const quantityOrdered = productMap[product._id];
       product.stock -= quantityOrdered;
+      product.sold += quantityOrdered;
       await product.save();
     }
 
-    // 5. Return the created order
     res.status(201).json({
       success: true,
       message: 'Order created succesfully',
@@ -38,12 +34,11 @@ export const addToOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const user = req.user.id;
     const { status } = req.query;
 
     // Combine filters
     const filters = {};
-    if (user) {filters.user = user;} else {};
+    if (req.user.role != 'admin') {filters.user = req.user.id;} else {};
     if (status) {filters.status = status;} else {};
 
     const orders = await Order.find(filters);
@@ -64,7 +59,6 @@ export const getOrders = async (req, res) => {
 
 export const getOrderById = async (req, res) => {
   const { orderId } = req.params;
-  console.log(orderId);
   try {
     const order = await Order.findById(orderId);
     if (!order) {

@@ -45,6 +45,7 @@ export const updateProduct = async (req, res) => {
   try {
     const { productId } = req.params;
     const updatedProduct = req.body;
+    console.log(updatedProduct)
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -52,7 +53,17 @@ export const updateProduct = async (req, res) => {
     }
 
     Object.keys(updatedProduct).forEach((key) => {
+      if (key === 'rating') {
+        const newRating = updatedProduct["rating"];
+        console.log(newRating)
+        console.log(product.rating)
+        const totalRating =
+          product.rating * product.ratingCount + newRating;
+        product.ratingCount += 1;
+        product.rating = totalRating / product.ratingCount;
+      } else {
       product[key] = updatedProduct[key];
+      }
     });
 
     const saved = await product.save();

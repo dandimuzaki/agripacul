@@ -21,6 +21,9 @@ export const OrderProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [lastUpdated, setLastUpdated] = useState(Date.now());
+  const [openRatingModal, setOpenRatingModal] = useState(false);
+  const [itemsRate, setItemsRate] = useState([])
+  const [rateList, setRateList] = useState([])
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -54,12 +57,14 @@ export const OrderProvider = ({ children }) => {
     try {
       const orderData = {
         address: selectedAddress,
+        itemsSnapshot: checkedItems,
         items: checkedItems,
         totalPrice: totalPrice,
         totalBill: totalBill,
         shipping: selectedShipping,
         paymentMethod: selectedPayment
       };
+      console.log(orderData)
       const result = await createOrder(orderData);
       setLastUpdated(Date.now());
       navigate(`/checkout/success/${result.data._id}`);
@@ -95,6 +100,17 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
+  const handleRatingModal = (items) => {
+    setOpenRatingModal(true)
+    setItemsRate(items)
+  }
+
+  const closeRatingModal = () => {
+    setOpenRatingModal(false)
+    setItemsRate([])
+    setRateList([])
+  }
+
   return (
     <OrderContext.Provider value={{
       createNewOrder,
@@ -106,7 +122,9 @@ export const OrderProvider = ({ children }) => {
       setOpenOrderModal,
       confirmOrder,
       order,
-      lastUpdated, setLastUpdated
+      lastUpdated, setLastUpdated,
+      openRatingModal, handleRatingModal, closeRatingModal,
+      itemsRate, rateList, setRateList
     }}>
       {children}
     </OrderContext.Provider>

@@ -34,7 +34,7 @@ const AdminOrderList = () => {
       cell: ({ row }) => (row.original.address.recipientName)
     },
     {
-      accessorKey: 'items',
+      accessorKey: 'itemsSnapshot',
       header: 'Items',
       cell: (info) => (
         <div>

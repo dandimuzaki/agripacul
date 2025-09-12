@@ -133,12 +133,12 @@ const SearchResult = () => {
         </div>
 
       </section>
-      <div className='grid gap-3 grid-cols-4'>
+      <section className='grid gap-3 grid-cols-4'>
         <p className='col-span-4'>Showing <strong>{products.length}</strong> results {search ? (<span>for <strong>"{search}"</strong></span>) : ''}</p>
         {products?.map((p) => (
           <ProductCardVertical key={p._id} product={p} loading={loading}/>
         ))}
-      </div>
+      </section>
     </div>
   );
 };

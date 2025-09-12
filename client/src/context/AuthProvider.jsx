@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const getNewToken = async () => {
+      setLoadingAuth(true);
       try {
         const result = await silentLogin();
         if (result) {

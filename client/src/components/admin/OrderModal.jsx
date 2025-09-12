@@ -6,20 +6,18 @@ import CheckoutItem from '../customer/CheckoutItem/CheckoutItem';
 import OrderStatus from '../common/OrderStatus';
 import { Link } from 'react-router-dom';
 import { useCheckout } from '@/context/CheckoutContext';
+import Rating from '../customer/Rating';
+import RatingModal from '../customer/RatingModal';
 
 const OrderModal = () => {
-  const { openOrderModal, setOpenOrderModal, order } = useOrder();
+  const { openOrderModal, setOpenOrderModal, order, handleRatingModal } = useOrder();
   const { setCheckedItems } = useCheckout();
-
-  const handleClick = () => {
-    console.log(order);
-  };
 
   return (
     <Dialog open={openOrderModal} onOpenChange={setOpenOrderModal}>
       <DialogContent className='overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle onClick={handleClick}>Order Detail</DialogTitle>
+          <DialogTitle>Order Detail</DialogTitle>
         </DialogHeader>
         <div className='grid gap-5 text-sm'>
           <div className='grid p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
@@ -30,7 +28,7 @@ const OrderModal = () => {
           <div className='grid p-4 gap-2 rounded-lg shadow-[0_0_4px_rgba(0,0,0,0.2)]'>
             <p className='text-base font-bold'>Product Detail</p>
             <div className='grid gap-4'>
-              {order?.items?.map((item, index) => (
+              {order?.itemsSnapshot?.map((item, index) => (
                 <CheckoutItem key={index} item={item}/>
               ))}
             </div>
@@ -83,19 +81,29 @@ const OrderModal = () => {
                   text='Order delivered at'
                   description={'Thank you for ordering'}
                 />) : ''}
-            </div>
 
+              
+            </div>
+            {order?.createdAt ? (
+                <button
+                onClick={() => handleRatingModal(order?.itemsSnapshot)}
+                className='justify-self-center w-fit bg-[var(--accent)] px-3 py-2 font-bold rounded cursor-pointer'>Rate Your Order</button>
+            
+              ) : ''}
           </div>
 
           {order?.createdAt ? (
+            <div className='w-full flex justify-center gap-4'>
             <Link to='/checkout'>
               <button
-                onClick={() => setCheckedItems(order?.items)}
-                className='justify-self-center w-fit bg-[var(--primary)] px-3 py-2 text-lg font-bold text-white rounded'>Buy Again</button>
+                onClick={() => setCheckedItems(order?.itemsSnapshot)}
+                className='w-fit bg-[var(--primary)] px-3 py-2 text-lg font-bold text-white rounded cursor-pointer'>Buy Again</button>
             </Link>
+            </div>
           ): ''}
 
         </div>
+      <RatingModal/>
       </DialogContent>
     </Dialog>
   );
