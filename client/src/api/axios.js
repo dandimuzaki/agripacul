@@ -9,12 +9,15 @@ export const getAccessToken = (token) => {
 
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
+  withCredentials: true
 });
 
 api.interceptors.request.use((config) => {
   if (accessToken) {
     config.headers['Authorization'] = `Bearer ${accessToken}`;
+    console.log('🔑 Sending token:', accessToken);
+  } else {
+    console.warn('⚠️ No token set, request is unauthenticated');
   }
   return config;
 });

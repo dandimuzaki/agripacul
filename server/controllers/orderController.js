@@ -15,6 +15,14 @@ export const addToOrders = async (req, res) => {
 
     const products = await Product.find({ _id: { $in: productIds } });
 
+    if (!products) {
+      res.status(404).json({
+      success: false,
+      message: 'Product you ordered is not found',
+      errors: null
+    });
+    }
+
     for (const product of products) {
       const quantityOrdered = productMap[product._id];
       product.stock -= quantityOrdered;
@@ -28,7 +36,11 @@ export const addToOrders = async (req, res) => {
       data: newOrder
     });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create order',
+      errors: err.message
+    });
   }
 };
 
@@ -44,7 +56,11 @@ export const getOrders = async (req, res) => {
     const orders = await Order.find(filters);
 
     if (!orders) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({
+      success: false,
+      message: 'Order not found',
+      errors: null
+    });
     }
 
     res.status(200).json({
@@ -53,7 +69,11 @@ export const getOrders = async (req, res) => {
       data: orders
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch order',
+      errors: err.message
+    });
   }
 };
 
@@ -62,11 +82,23 @@ export const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(orderId);
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({
+      success: false,
+      message: 'Order not found',
+      errors: null
+    });
     }
-    res.status(200).json(order);
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully',
+      errors: err.message
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch order',
+      errors: err.message
+    });
   }
 };
 
@@ -80,11 +112,19 @@ export const updateOrderStatus = async (req, res) => {
 
     const order = await Order.findById(orderId);
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({
+      success: false,
+      message: 'Order not found',
+      errors: null
+    });
     }
     const validStatus = ['pending', 'processing', 'shipped', 'delivered'];
     if (!validStatus.includes(status)) {
-      return res.status(400).json({ message: 'Invalid status value' });
+      return res.status(400).json({
+      success: false,
+      message: 'Invalid status value',
+      errors: null
+    });
     }
     order.status = status;
 
@@ -107,6 +147,10 @@ export const updateOrderStatus = async (req, res) => {
       data: saved
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update order',
+      errors: err.message
+    });
   }
 };

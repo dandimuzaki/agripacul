@@ -38,7 +38,7 @@ export const OrderProvider = ({ children }) => {
     const loadSingleOrder = async (orderId) => {
       try {
         const order = await getOrderByAdmin(orderId);
-        setOrder(order);
+        setOrder(order.data);
       } catch (err) {
         console.error('Failed to load the order', err);
       }
@@ -64,7 +64,6 @@ export const OrderProvider = ({ children }) => {
         shipping: selectedShipping,
         paymentMethod: selectedPayment
       };
-      console.log(orderData)
       const result = await createOrder(orderData);
       setLastUpdated(Date.now());
       navigate(`/checkout/success/${result.data._id}`);

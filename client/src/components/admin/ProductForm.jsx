@@ -126,7 +126,7 @@ const ProductForm = () => {
 
                   </SelectContent>
                 </Select>
-                {errors.stock && (
+                {errors.category && (
                   <p className="text-red-500 text-xs">{errors.category.message}</p>
                 )}
               </div>

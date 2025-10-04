@@ -34,8 +34,8 @@ export const ProductProvider = ({ children }) => {
 
   const fetchProducts = async () => {
     try {
-      const data = await getProducts();
-      setProducts(data);
+      const products = await getProducts();
+      setProducts(products.data);
     } catch (err) {
       console.error('Failed to fetch products', err);
     }
@@ -44,8 +44,8 @@ export const ProductProvider = ({ children }) => {
   const fetchSingleProduct = async (productId) => {
     setIsLoading(true);
     try {
-      const fresh = await getProductById(productId);
-      setProduct(fresh);
+      const product = await getProductById(productId);
+      setProduct(product.data);
     } catch (err) {
       console.error('Failed to fetch product', err);
     } finally {
@@ -85,7 +85,6 @@ export const ProductProvider = ({ children }) => {
   const openModal = (productData = null) => {
     setSelectedProduct(productData);
     setIsModalOpen(true);
-    console.log(product);
   };
 
   const closeModal = () => {
@@ -94,7 +93,6 @@ export const ProductProvider = ({ children }) => {
     setPreview(null);
     setIsModalOpen(false);
     setProduct(null);
-    console.log(product);
   };
 
   const handleSave = async (data) => {
@@ -108,17 +106,17 @@ export const ProductProvider = ({ children }) => {
           image: uploadedImageUrl,
         });
         setProducts((prev) =>
-          prev.map((p) => (p._id === updatedProduct._id ? updatedProduct : p))
+          prev.map((p) => (p._id === updatedProduct.data._id ? updatedProduct.data : p))
         );
         setLastUpdated(Date.now())
-        toast(`${updatedProduct.title} has been updated at`, {
+        toast(`${updatedProduct.data.title} has been updated at`, {
           description: `${formatted}`,
         });
       } else {
         const newProduct = await createProduct({ ...data, image: uploadedImageUrl });
         setProducts((prev) => [...prev, newProduct]);
         setLastUpdated(Date.now())
-        toast(`${newProduct.title} has been created at`, {
+        toast(`${newProduct.data.title} has been created at`, {
           description: `${formatted}`,
         });
       }

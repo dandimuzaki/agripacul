@@ -5,7 +5,11 @@ export const getAddressList = async (req, res) => {
   try {
     const result = await AddressList.findOne({ user: req.user.id });
     if (!result) {
-      return res.status(404).json({ message: 'Please add your address' });
+      res.status(404).json({
+        success: false,
+        message: 'Address list is empty',
+        errors: null
+      });
     }
     return res.status(200).json({
       success: true,
@@ -13,7 +17,11 @@ export const getAddressList = async (req, res) => {
       data: result.addressList
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch address',
+      errors: err.message
+    });
   }
 };
 
@@ -29,7 +37,11 @@ export const addAddress = async (req, res) => {
     ]);
 
     if (!provinceData || !cityData || !districtData || !subdistrictData) {
-      return res.status(400).json({ error: 'Invalid location selection' });
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid location selection',
+        errors: null
+      });
     }
 
     const newAddress = {
@@ -65,7 +77,11 @@ export const addAddress = async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to add address',
+      errors: err.message
+    });
   }
 };
 
@@ -77,23 +93,28 @@ export const editAddress = async (req, res) => {
   try {
     const addressDoc = await AddressList.findOne({ user: userId });
     if (!addressDoc) {
-      return res.status(404).json({ message: 'No addresses found for this user' });
+      return res.status(404).json({
+        success: false,
+        message: 'No addresses found for this user',
+        errors: null
+      });
     }
 
-    // Reset mainAddress if needed
     if (req.body.mainAddress) {
       addressDoc.addressList.forEach((addr) => {
         addr.mainAddress = false;
       });
     }
 
-    // Find the address to update
     const address = addressDoc.addressList.id(addressId);
     if (!address) {
-      return res.status(404).json({ message: 'Address not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Address not found',
+        errors: null
+      });
     }
 
-    // 🔄 If any location ID is passed, fetch its document
     let provinceData, cityData, districtData, subdistrictData;
 
     if (province) provinceData = await Location.findById(province);
@@ -101,7 +122,6 @@ export const editAddress = async (req, res) => {
     if (district) districtData = await Location.findById(district);
     if (subdistrict) subdistrictData = await Location.findById(subdistrict);
 
-    // 🔄 Update fields
     if (rest.recipientName !== undefined) address.recipientName = rest.recipientName;
     if (rest.phoneNumber !== undefined) address.phoneNumber = rest.phoneNumber;
     if (rest.label !== undefined) address.label = rest.label;
@@ -124,7 +144,11 @@ export const editAddress = async (req, res) => {
       data: addressDoc.addressList,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to edit address',
+      errors: err.message
+    });
   }
 };
 
@@ -135,14 +159,22 @@ export const deleteAddress = async (req, res) => {
   try {
     const result = await AddressList.findOne({ user: req.user.id });
     if (!result) {
-      return res.status(404).json({ message: 'Address is empty' });
+      return res.status(404).json({
+        success: false,
+        message: 'Address is empty',
+        errors: null
+      });
     }
 
     const initialLength = result.addressList.length;
     result.addressList = result.addressList.filter((address) => address._id.toString() !== addressId);
 
     if (result.addressList.length === initialLength) {
-      return res.status(404).json({ message: 'Address not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Address not found',
+        errors: null
+      });
     }
 
     await result.save();
@@ -152,6 +184,10 @@ export const deleteAddress = async (req, res) => {
       data: result.addressList
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete address',
+      errors: err.message
+    });
   }
 };

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import cherry_tomato from '../../assets/cherry_tomato.png';
 import { Close } from '@mui/icons-material';
 import { useProduct } from '../../context/ProductContext';
 import { useForm } from 'react-hook-form';
@@ -8,7 +7,6 @@ import * as z from 'zod';
 import { useImage } from '@/context/ImageContext';
 import { Spinner } from '@heroui/spinner';
 import { ClipLoader } from 'react-spinners';
-import { getProductById } from '@/services/productService';
 
 const ProductModal = () => {
   const { product, isModalOpen, closeModal, handleSave, selectedProduct, isLoading } = useProduct();

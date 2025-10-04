@@ -27,7 +27,11 @@ export const addToCart = async (req, res) => {
       data: cart
     });
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error', err });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to add product to the cart', 
+      errors: err.message
+    });
   }
 };
 
@@ -36,7 +40,11 @@ export const getCart = async (req, res) => {
     const cart = await Cart.findOne({ user: req.user.id })
       .populate('items.product');
     if (!cart) {
-      return res.status(404).json({ message: 'Cart not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Cart not found', 
+        errors: null
+      });
     }
     res.status(200).json({
       success: true,
@@ -44,7 +52,11 @@ export const getCart = async (req, res) => {
       data: cart
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch cart', 
+      errors: err.message
+    });
   }
 };
 
@@ -54,10 +66,18 @@ export const updateCart = async (req, res) => {
     const { change } = req.body;
 
     const cart = await Cart.findOne({ user: req.user.id });
-    if (!cart) return res.status(404).json({ message: 'Cart not found' });
+    if (!cart) return res.status(404).json({
+      success: false,
+      message: 'Cart not found', 
+      errors: null
+    });
 
     const item = cart.items.find((i) => i.product.toString() === productId);
-    if (!item) return res.status(404).json({ message: 'Item not found' });
+    if (!item) return res.status(404).json({
+      success: false,
+      message: 'Item not found', 
+      errors: null
+    });
 
     item.quantity += change;
 
@@ -73,7 +93,11 @@ export const updateCart = async (req, res) => {
       data: cart
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update cart', 
+      errors: err.message
+    });
   }
 };
 
@@ -83,14 +107,22 @@ export const deleteItem = async (req, res) => {
 
     const cart = await Cart.findOne({ user: req.user.id });
     if (!cart) {
-      return res.status(404).json({ message: 'Cart not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Cart not found', 
+        errors: null
+      });
     }
 
     const initialLength = cart.items.length;
     cart.items = cart.items.filter((item) => item.product.toString() !== productId);
 
     if (cart.items.length === initialLength) {
-      return res.status(404).json({ message: 'Product not found in the cart' });
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found in the cart', 
+        errors: null
+      });
     }
 
     await cart.populate('items.product');
@@ -101,6 +133,10 @@ export const deleteItem = async (req, res) => {
       data: cart
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to remove item from cart', 
+      errors: err.message
+    });
   }
 };

@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     const loadUsers = async () => {
       try {
         const usersData = await fetchAllUsers();
-        setUsers(usersData);
+        setUsers(usersData.data);
       } catch (err) {
         console.error('Failed to load users', err);
       }

@@ -3,13 +3,17 @@ import rajaOngkirServices from '../services/rajaOngkirServices.js';
 
 export const fetchProvinces = async (req, res) => {
   try {
-    // Check if we already have provinces data in the database
     let provinces = await Location.find({ type: 'province' });
 
     if (provinces.length === 0) {
-      // Hit RajaOngkir API through RajaOngkir services to get provinces data (id and name)
       const fetchedProvinces = await rajaOngkirServices.fetchProvinces();
-      // Store each province into the database
+      if (!fetchedProvinces) {
+        return res.status(404).json({
+          success: false,
+          message: 'Provinces are not found', 
+          errors: null
+        });
+      }
       for (const prov of fetchedProvinces.data) {
         await Location.updateOne(
           { rajaOngkirId: prov.id, type: 'province' },
@@ -18,8 +22,14 @@ export const fetchProvinces = async (req, res) => {
         );
       }
 
-      // Fetch again the provinces after we created them in the database
       provinces = await Location.find({ type: 'province' });
+      if (!provinces) {
+        return res.status(404).json({
+          success: false,
+          message: 'Provinces are not found', 
+          errors: null
+        });
+      }
     }
 
     return res.status(200).json({
@@ -28,7 +38,11 @@ export const fetchProvinces = async (req, res) => {
       data: provinces
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch provinces', 
+      errors: err.message
+    });
   }
 };
 
@@ -37,10 +51,25 @@ export const fetchCities = async (req, res) => {
     const { provinceId } = req.params;
     const parent = await Location.findById(provinceId);
 
+    if (!parent) {
+      return res.status(404).json({
+        success: false,
+        message: 'Target province is not found', 
+        errors: null
+      });
+    }
+
     let cities = await Location.find({ type: 'city', parent: parent._id });
 
     if (cities.length === 0) {
       const fetchedCities = await rajaOngkirServices.fetchCities(parent.rajaOngkirId);
+      if (!fetchedCities) {
+        return res.status(404).json({
+          success: false,
+          message: 'Cities are not found', 
+          errors: null
+        });
+      }
       for (const city of fetchedCities.data) {
         await Location.updateOne(
           { rajaOngkirId: city.id, type: 'city' },
@@ -50,6 +79,13 @@ export const fetchCities = async (req, res) => {
       }
 
       cities = await Location.find({ type: 'city', parent: parent._id });
+      if (!cities) {
+        return res.status(404).json({
+          success: false,
+          message: 'Cities are not found', 
+          errors: null
+        });
+      }
     }
     return res.status(200).json({
       success: true,
@@ -57,7 +93,11 @@ export const fetchCities = async (req, res) => {
       data: cities
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch cities', 
+      errors: err.message
+    });
   }
 };
 
@@ -65,11 +105,26 @@ export const fetchDistricts = async (req, res) => {
   try {
     const { cityId } = req.params;
     const parent = await Location.findById(cityId);
+    if (!parent) {
+      return res.status(404).json({
+        success: false,
+        message: 'Target city is not found', 
+        errors: null
+      });
+    }
 
     let districts = await Location.find({ type: 'district', parent: parent._id });
 
     if (districts.length === 0) {
       const fetchedDistricts = await rajaOngkirServices.fetchDistricts(parent.rajaOngkirId);
+      if (!fetchedDistricts) {
+        return res.status(404).json({
+          success: false,
+          message: 'Districts are not found', 
+          errors: null
+        });
+      }
+
       for (const district of fetchedDistricts.data) {
         await Location.updateOne(
           { rajaOngkirId: district.id, type: 'district' },
@@ -79,6 +134,13 @@ export const fetchDistricts = async (req, res) => {
       }
 
       districts = await Location.find({ type: 'district', parent: parent._id });
+      if (!districts) {
+        return res.status(404).json({
+          success: false,
+          message: 'Districts are not found', 
+          errors: null
+        });
+      }
     }
 
     return res.status(200).json({
@@ -87,7 +149,11 @@ export const fetchDistricts = async (req, res) => {
       data: districts
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch districts', 
+      errors: err.message
+    });
   }
 };
 
@@ -96,10 +162,25 @@ export const fetchSubdistricts = async (req, res) => {
     const { districtId } = req.params;
     const parent = await Location.findById(districtId);
 
+    if (!parent) {
+      return res.status(404).json({
+        success: false,
+        message: 'Target district is not found', 
+        errors: err.message
+      });
+    }
+
     let subdistricts = await Location.find({ type: 'subdistrict', parent: parent._id });
 
     if (subdistricts.length === 0) {
       const fetchedSubdistricts = await rajaOngkirServices.fetchSubdistricts(parent.rajaOngkirId);
+      if (!fetchedSubdistricts) {
+        return res.status(404).json({
+          success: false,
+          message: 'Subdistricts are not found', 
+          errors: null
+        });
+      }
       for (const subdistrict of fetchedSubdistricts.data) {
         await Location.updateOne(
           { rajaOngkirId: subdistrict.id, type: 'subdistrict' },
@@ -109,6 +190,13 @@ export const fetchSubdistricts = async (req, res) => {
       }
 
       subdistricts = await Location.find({ type: 'subdistrict', parent: parent._id });
+      if (!subdistricts) {
+        return res.status(404).json({
+          success: false,
+          message: 'Sub-districts are not found', 
+          errors: null
+        });
+      }
     }
 
     return res.status(200).json({
@@ -116,7 +204,11 @@ export const fetchSubdistricts = async (req, res) => {
       message: 'Sub-districts fetched successfully',
       data: subdistricts
     });
-  } catch (err) {[
-    res.status(500).json({ message: err.message })
-  ];}
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch sub-district', 
+      errors: err.message
+    });
+  }
 };
