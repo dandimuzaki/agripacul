@@ -24,9 +24,9 @@ export const register = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({
       success: false,
-      message: "Email already exists",
+      message: 'Email already exists',
       errors: null
-    })
+    });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({ name, email, password: hashedPassword });
@@ -40,7 +40,7 @@ export const register = async (req, res) => {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
 
-    const {password: _, ...safeUser} = newUser
+    const safeUser = { name, email }
 
     res.status(201).json({
       accessToken,
@@ -49,9 +49,9 @@ export const register = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Failed to register",
+      message: 'Failed to register',
       errors: err.message
-    })
+    });
   }
 };
 
@@ -62,21 +62,21 @@ export const getEmail = async (req, res) => {
     if (registeredEmail) {
       return res.status(200).json({
         success: true,
-        message: "Email is registered",
-      })
+        message: 'Email is registered',
+      });
     } else {
       return res.status(400).json({
         success: false,
-        message: "Email is registered",
+        message: 'Email is registered',
         errors: null
-      })
+      });
     }
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Failed to get email",
+      message: 'Failed to get email',
       errors: err.message
-    })
+    });
   }
 };
 
@@ -86,16 +86,16 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({
       success: false,
-      message: "Email does not exist",
+      message: 'Email does not exist',
       errors: null
-    })
+    });
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({
       success: false,
-      message: "Incorrect password",
+      message: 'Incorrect password',
       errors: null
-    })
+    });
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
@@ -106,7 +106,8 @@ export const login = async (req, res) => {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
 
-    const {password: _, ...safeUser} = user
+    const { name } = user;
+    const safeUser = { name, email };
 
     res.status(200).json({
       accessToken,
@@ -115,9 +116,9 @@ export const login = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Failed to login",
+      message: 'Failed to login',
       errors: err.message
-    })
+    });
   }
 };
 
@@ -132,7 +133,8 @@ export const silentLogin = (req, res) => {
       const dbUser = await User.findById(decoded.id);
       if (!dbUser) return res.sendStatus(404);
 
-      const { password: _, ...safeUser } = dbUser;
+      const { name, email } = dbUser;
+      const safeUser = { name, email };
 
       const newRefreshToken = generateRefreshToken(dbUser);
       res.cookie('refreshToken', newRefreshToken, {
@@ -143,6 +145,8 @@ export const silentLogin = (req, res) => {
 
       const accessToken = generateAccessToken(dbUser);
 
+      console.log(safeUser);
+
       res.status(200).json({
         accessToken,
         user: safeUser
@@ -150,7 +154,7 @@ export const silentLogin = (req, res) => {
     } catch (err) {
       res.status(500).json({
         success: false,
-        message: 'Failed to silent login', 
+        message: 'Failed to silent login',
         errors: err.message
       });
     }
@@ -159,19 +163,19 @@ export const silentLogin = (req, res) => {
 
 export const logout = (req, res) => {
   try {
-  res.clearCookie('refreshToken', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  });
-  res.status(200).json({
-    success: true,
-    message: 'Logged out successfully',
-  });
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
+    res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to logout', 
+      message: 'Failed to logout',
       errors: err.message
     });
   }

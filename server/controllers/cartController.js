@@ -29,7 +29,7 @@ export const addToCart = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to add product to the cart', 
+      message: 'Failed to add product to the cart',
       errors: err.message
     });
   }
@@ -42,7 +42,7 @@ export const getCart = async (req, res) => {
     if (!cart) {
       return res.status(404).json({
         success: false,
-        message: 'Cart not found', 
+        message: 'Cart not found',
         errors: null
       });
     }
@@ -54,7 +54,7 @@ export const getCart = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch cart', 
+      message: 'Failed to fetch cart',
       errors: err.message
     });
   }
@@ -68,14 +68,14 @@ export const updateCart = async (req, res) => {
     const cart = await Cart.findOne({ user: req.user.id });
     if (!cart) return res.status(404).json({
       success: false,
-      message: 'Cart not found', 
+      message: 'Cart not found',
       errors: null
     });
 
     const item = cart.items.find((i) => i.product.toString() === productId);
     if (!item) return res.status(404).json({
       success: false,
-      message: 'Item not found', 
+      message: 'Item not found',
       errors: null
     });
 
@@ -95,7 +95,7 @@ export const updateCart = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to update cart', 
+      message: 'Failed to update cart',
       errors: err.message
     });
   }
@@ -109,7 +109,7 @@ export const deleteItem = async (req, res) => {
     if (!cart) {
       return res.status(404).json({
         success: false,
-        message: 'Cart not found', 
+        message: 'Cart not found',
         errors: null
       });
     }
@@ -120,7 +120,7 @@ export const deleteItem = async (req, res) => {
     if (cart.items.length === initialLength) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found in the cart', 
+        message: 'Product not found in the cart',
         errors: null
       });
     }
@@ -135,7 +135,7 @@ export const deleteItem = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to remove item from cart', 
+      message: 'Failed to remove item from cart',
       errors: err.message
     });
   }

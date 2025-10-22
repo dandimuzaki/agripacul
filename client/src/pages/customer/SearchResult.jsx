@@ -2,15 +2,17 @@ import ProductCardVertical from '@/components/customer/ProductCardVertical/Produ
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useProduct } from '@/context/ProductContext';
 import { getProducts } from '@/services/productService';
+import { ArrowBack, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { capitalize } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 
 const SearchResult = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
+  const [countProducts, setCountProducts] = useState(0);
   const categoryOptions = [
     'vegetables',
     'foods',
@@ -19,40 +21,52 @@ const SearchResult = () => {
   ];
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortPrice, setSortPrice] = useState('');
-  const [sortRating, setSortRating] = useState('')
+  const [sortRating, setSortRating] = useState('');
   const [loading, setLoading] = useState(true);
+  const [hasNext, setHasNext] = useState(false);
 
   const category = searchParams.get('category');
   const sortByPrice = searchParams.get('sortByPrice');
   const minPrice = searchParams.get('minPrice');
   const search = searchParams.get('search');
+  const page = parseInt(searchParams.get('page') || 1);
+
+  const loadProducts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const result = await getProducts(searchParams);
+      if (result.data) {
+        setProducts(result.data);
+        setHasNext(result.meta.hasNextPage);
+        setCountProducts(result.meta.total);
+      }} catch (err) {
+      console.error('Error load products', err);
+    } finally {
+      setLoading(false);
+
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     setSelectedCategory(category || '');
+    loadProducts();
+  }, [category, loadProducts]);
 
-    const query = new URLSearchParams();
+  const nextPage = () => {
+    console.log(page);
+    const newPage = parseInt(page) + 1;
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', newPage);
+    setSearchParams(newParams);
+  };
 
-    if (category) query.append('category', category);
-    if (sortByPrice) query.append('sortByPrice', sortByPrice);
-    if (minPrice) query.append('minPrice', minPrice);
-    if (search) query.append('search', search);
-
-    const loadProducts = async (query) => {
-      setLoading(true);
-      try {
-        const result = await getProducts(query);
-        if (result) {
-          setProducts(result);
-        }} catch (err) {
-        console.error('Error load products', err);
-      } finally {
-          setLoading(false);
-
-      }
-    };
-
-    loadProducts(query);
-  }, [category, sortByPrice, minPrice, search]);
+  const prevPage = () => {
+    console.log(page);
+    const newPage = Math.max(1, parseInt(page) - 1);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', newPage);
+    setSearchParams(newParams);
+  };
 
   return (
     <div className='px-12 py-6 mt-15 grid md:grid-cols-[1fr_3fr] gap-6 items-start'>
@@ -133,12 +147,35 @@ const SearchResult = () => {
         </div>
 
       </section>
-      <section className='grid gap-3 grid-cols-4'>
+      <section className='grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 relative'>
         <p className='col-span-4'>Showing <strong>{products.length}</strong> results {search ? (<span>for <strong>"{search}"</strong></span>) : ''}</p>
         {products?.map((p) => (
           <ProductCardVertical key={p._id} product={p} loading={loading}/>
         ))}
+
+        <div className='grid grid-cols-3 sticky bottom-6 col-span-4 items-center'>
+          {page > 1 ? <button
+            onClick={prevPage}
+            disabled={page===1}
+            className='w-fit py-2 pr-4 pl-2 bg-gray-300 rounded flex items-center gap-1'
+          >
+            <ChevronLeft/>
+            Previous
+          </button> : <div></div>}
+
+          <p className='text-center'>{page}</p>
+
+          {hasNext ? <button
+            onClick={nextPage}
+            disabled={!hasNext}
+            className='w-fit justify-self-end py-2 pl-4 pr-2 bg-gray-300 rounded flex items-center gap-1'
+          >
+            Next
+            <ChevronRight/>
+          </button> : <div></div>}
+        </div>
       </section>
+
     </div>
   );
 };

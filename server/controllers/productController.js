@@ -1,22 +1,30 @@
 import Product from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
-  const { category, sortByPrice, sortByRating, search } = req.query;
-
-  const filter = {
-    ...(category ? { category } : {}),
-    ...(search ? { title: { $regex: search, $options: 'i' } } : {}),
-    stock: { $gt: 0 }
-  };
-
-  let sortOption = {};
-  if (sortByPrice === 'asc') sortOption = { price: 1 };
-  else if (sortByPrice === 'desc') sortOption = { price: -1 };
-  else if (sortByRating === 'asc') sortOption = { rating: 1 };
-  else if (sortByRating === 'desc') sortOption = { rating: -1 };
-
   try {
-    const products = await Product.find(filter).sort(sortOption);
+    const { category, sortByPrice, sortByRating, search } = req.query;
+
+    const filter = {
+      ...(category ? { category } : {}),
+      ...(search ? { title: { $regex: search, $options: 'i' } } : {}),
+      stock: { $gt: 0 }
+    };
+
+    let sortOption = {};
+    if (sortByPrice === 'asc') sortOption = { price: 1 };
+    else if (sortByPrice === 'desc') sortOption = { price: -1 };
+    else if (sortByRating === 'asc') sortOption = { rating: 1 };
+    else if (sortByRating === 'desc') sortOption = { rating: -1 };
+
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(parseInt(req.query.limit) || 3, 100);
+    const skip = (page - 1) * limit;
+
+    const [products, total] = await Promise.all([
+      Product.find(filter).sort(sortOption).skip(skip).limit(limit),
+      Product.countDocuments(filter)
+    ]);
+
     if (!products) {
       return res.status(404).json({
         success: false,
@@ -28,7 +36,14 @@ export const getProducts = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Products fetched successfully',
-      data: products
+      data: products,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page * limit < total
+      }
     });
   } catch (err) {
     res.status(500).json({
@@ -52,7 +67,7 @@ export const getProductById = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Product fetched successfully',
-      errors: err.message
+      data: product
     });
   } catch (err) {
     res.status(500).json({
@@ -65,13 +80,13 @@ export const getProductById = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-  const product = new Product(req.body);
-  const saved = await product.save();
-  res.status(201).json({
-    success: true,
-    message: 'Product created successfully',
-    data: saved
-  });
+    const product = new Product(req.body);
+    const saved = await product.save();
+    res.status(201).json({
+      success: true,
+      message: 'Product created successfully',
+      data: saved
+    });
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -97,13 +112,13 @@ export const updateProduct = async (req, res) => {
 
     Object.keys(updatedProduct).forEach((key) => {
       if (key === 'rating') {
-        const newRating = updatedProduct["rating"];
+        const newRating = updatedProduct['rating'];
         const totalRating =
           product.rating * product.ratingCount + newRating;
         product.ratingCount += 1;
         product.rating = totalRating / product.ratingCount;
       } else {
-      product[key] = updatedProduct[key];
+        product[key] = updatedProduct[key];
       }
     });
 

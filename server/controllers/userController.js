@@ -6,20 +6,20 @@ export const getAllUsers = async (req, res) => {
     if (!users) {
       return res.status(404).json({
         success: false,
-        message: 'Users not found', 
+        message: 'Users not found',
         errors: null
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Users fetched successfully', 
+      message: 'Users fetched successfully',
       data: users
     });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch users', 
+      message: 'Failed to fetch users',
       errors: err.message
     });
   }
@@ -33,7 +33,7 @@ export const deleteUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User is not found', 
+        message: 'User is not found',
         errors: null
       });
     }
@@ -46,7 +46,7 @@ export const deleteUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to delete user', 
+      message: 'Failed to delete user',
       errors: err.message
     });
   }

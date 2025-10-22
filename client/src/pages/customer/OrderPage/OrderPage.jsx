@@ -15,87 +15,89 @@ import { useAuth } from '@/context/AuthContext';
 
 
 const OrderPage = () => {
-  const {loadingAuth, accessToken} = useAuth()
-  const statusOptions = ['pending','processing','shipped','delivered']
-  const [selectedStatus, setSelectedStatus] = useState('')
+  const { loadingAuth, accessToken } = useAuth();
+  const statusOptions = ['pending', 'processing', 'shipped', 'delivered'];
+  const [selectedStatus, setSelectedStatus] = useState('');
 
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const [orders, setOrders] = useState([])
-  const [loading, setLoading] = useState(true)
-  const { lastUpdated, setLastUpdated } = useOrder()
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { lastUpdated, setLastUpdated } = useOrder();
 
-  const status = searchParams.get('status')
+  const status = searchParams.get('status');
 
   useEffect(() => {
     if (loadingAuth) return;
-  if (!accessToken) return;
+    if (!accessToken) return;
 
-    setSelectedStatus(status || '')
-    const query = new URLSearchParams()
+    setSelectedStatus(status || '');
+    const query = new URLSearchParams();
 
-    if (status) query.append('status',status)
+    if (status) query.append('status', status);
 
     const loadOrders = async (query) => {
       setLoading(true);
       try {
-        const result = await getOrdersByUser(query)
+        const result = await getOrdersByUser(query);
         if (result) {
-          setOrders(result.data)
+          setOrders(result.data);
         }
       } catch (err) {
-        console.error('Error load orders', err)
+        console.error('Error load orders', err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     if (!loadingAuth && accessToken) {
-      loadOrders(query)
+      loadOrders(query);
     }
-  }, [status, loadingAuth, accessToken, lastUpdated])
+  }, [status, loadingAuth, accessToken, lastUpdated]);
 
   return (
     <div className='mt-15 md:px-12 p-4 md:py-6'>
       <div className='grid md:grid-cols-[1fr_3fr] items-start gap-4 md:gap-6'>
         <section className='md:sticky top-21 grid gap-6 bg-white p-6 rounded-lg'>
-        <div className='grid gap-2'>
-          <p className='font-bold'>Select By Status</p>
-          <RadioGroup
-            value={selectedStatus}
-            onValueChange={(value) => {
-              setSelectedStatus(value);
-              const newParams = new URLSearchParams(searchParams);
-              if (value) {
-                newParams.set('status', value);
-              } else {
-                newParams.delete('status');
-              }
-              setLastUpdated(Date.now())
-              navigate(`/orders?${newParams.toString()}`);
-            }}
-          >
-            <label className='flex gap-2 cursor-pointer'>
-              <RadioGroupItem value=''/>
+          <div className='grid gap-2'>
+            <p className='font-bold'>Select By Status</p>
+            <RadioGroup
+              value={selectedStatus}
+              onValueChange={(value) => {
+                setSelectedStatus(value);
+                const newParams = new URLSearchParams(searchParams);
+                if (value) {
+                  newParams.set('status', value);
+                } else {
+                  newParams.delete('status');
+                }
+                setLastUpdated(Date.now());
+                navigate(`/orders?${newParams.toString()}`);
+              }}
+            >
+              <label className='flex gap-2 cursor-pointer'>
+                <RadioGroupItem value=''/>
               All
-            </label>
-            {statusOptions.map((status, index) => (
-              <label key={index} className='flex gap-2 cursor-pointer'>
-              <RadioGroupItem value={status}/>
-              {capitalize(status)}
-            </label>
-            ))}
-            
-          </RadioGroup>
-        </div>  
-        
+              </label>
+              {statusOptions.map((status, index) => (
+                <label key={index} className='flex gap-2 cursor-pointer'>
+                  <RadioGroupItem value={status}/>
+                  {capitalize(status)}
+                </label>
+              ))}
+
+            </RadioGroup>
+          </div>
+
           <p className='font-bold'>Choose transaction date</p>
         </section>
         <section className='md:gap-5 grid gap-4'>
           <SectionTitle title='My Orders'/>
-          {orders?.map((order) => (
+          {orders.length > 0 ? orders?.map((order) => (
             <OrderCard key={order._id} order={order}></OrderCard>
-          ))}
+          )) : (
+            <p>You have not made any order</p>
+          )}
         </section>
       </div>
     </div>

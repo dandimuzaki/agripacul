@@ -17,10 +17,10 @@ export const addToOrders = async (req, res) => {
 
     if (!products) {
       res.status(404).json({
-      success: false,
-      message: 'Product you ordered is not found',
-      errors: null
-    });
+        success: false,
+        message: 'Product you ordered is not found',
+        errors: null
+      });
     }
 
     for (const product of products) {
@@ -50,17 +50,17 @@ export const getOrders = async (req, res) => {
 
     // Combine filters
     const filters = {};
-    if (req.user.role != 'admin') {filters.user = req.user.id;} else {};
-    if (status) {filters.status = status;} else {};
+    if (req.user.role != 'admin') {filters.user = req.user.id;};
+    if (status) {filters.status = status;};
 
-    const orders = await Order.find(filters);
+    const orders = await Order.find(filters).populate('items.product');
 
     if (!orders) {
       return res.status(404).json({
-      success: false,
-      message: 'Order not found',
-      errors: null
-    });
+        success: false,
+        message: 'Order not found',
+        errors: null
+      });
     }
 
     res.status(200).json({
@@ -83,15 +83,15 @@ export const getOrderById = async (req, res) => {
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({
-      success: false,
-      message: 'Order not found',
-      errors: null
-    });
+        success: false,
+        message: 'Order not found',
+        errors: null
+      });
     }
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully',
-      errors: err.message
+      data: order
     });
   } catch (err) {
     res.status(500).json({
@@ -113,18 +113,18 @@ export const updateOrderStatus = async (req, res) => {
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({
-      success: false,
-      message: 'Order not found',
-      errors: null
-    });
+        success: false,
+        message: 'Order not found',
+        errors: null
+      });
     }
     const validStatus = ['pending', 'processing', 'shipped', 'delivered'];
     if (!validStatus.includes(status)) {
       return res.status(400).json({
-      success: false,
-      message: 'Invalid status value',
-      errors: null
-    });
+        success: false,
+        message: 'Invalid status value',
+        errors: null
+      });
     }
     order.status = status;
 
@@ -150,6 +150,31 @@ export const updateOrderStatus = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to update order',
+      errors: err.message
+    });
+  }
+};
+
+export const deleteOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const deletedOrder = await Product.findByIdAndDelete(orderId);
+    if (!deletedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+        errors: null
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Order deleted successfully',
+      data: deletedOrder
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete order',
       errors: err.message
     });
   }

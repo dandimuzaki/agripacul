@@ -16,9 +16,9 @@ const productSchema = new mongoose.Schema({
     default: 0
   },
   ratingCount: {
-      type: Number,
-      default: 0
-    },
+    type: Number,
+    default: 0
+  },
   location: String,
   stock: Number,
   image: String,

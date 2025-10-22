@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '../ui/navigation-menu';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 const ProfileButton = ({ text }) => {
   const [scrolled, setScrolled] = useState(false);
+  const { handleLogout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +37,13 @@ const ProfileButton = ({ text }) => {
                   <Link to='/settings'>
                 Settings
                   </Link>
+                </NavigationMenuLink>
+              </li>
+              <li>
+                <NavigationMenuLink>
+                  <button className='text-left' onClick={() => handleLogout()}>
+                  Logout
+                  </button>
                 </NavigationMenuLink>
               </li>
             </ul>

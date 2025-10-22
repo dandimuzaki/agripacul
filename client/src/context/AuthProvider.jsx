@@ -1,45 +1,52 @@
 import { createAccount, login, silentLogin } from '@/services/authService';
 import { AuthContext } from './AuthContext';
-import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api, { getAccessToken } from '@/api/axios';
+import Cookies from 'js-cookie';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState(null);
+  const [logged, setLogged] = useState(false);
+
+  const getNewToken = async () => {
+    try {
+      setLoadingAuth(true);
+      const result = await silentLogin();
+      if (result) {
+        setAccessToken(result.accessToken);
+        setUser(result.user);
+        setLogged(true);
+        getAccessToken(result.accessToken);
+      } else {
+        setLogged(false);
+      }
+    } catch (err) {
+      console.error('Failed to silent login', err);
+      setAccessToken(null);
+      setUser(null);
+      setLogged(false);
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
 
   useEffect(() => {
-    const getNewToken = async () => {
-      setLoadingAuth(true);
-      try {
-        const result = await silentLogin();
-        if (result) {
-          setAccessToken(result.accessToken);
-          setUser(result.user);
-          getAccessToken(result.accessToken);
-        }
-      } catch (err) {
-        console.error('Failed to silent login', err);
-        setAccessToken(null);
-        setUser(null);
-      } finally {
-        setLoadingAuth(false);
-      }
-    };
-
+    const refreshToken = Cookies.get('refreshToken');
+    if (!refreshToken) return;
     getNewToken();
   }, []);
 
   const handleLogin = async (data) => {
-    setLoadingAuth(true);
     try {
+      setLoadingAuth(true);
       const res = await login(data);
-      console.log(res.accessToken);
       setAccessToken(res.accessToken);
       setUser(res.user);
+      setLogged(true);
       getAccessToken(res.accessToken);
       navigate('/');
     } catch (err) {
@@ -53,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     setLoadingAuth(true);
     try {
       const res = await createAccount(data);
-      console.log(res.accessToken);
+      setLogged(true);
       setAccessToken(res.accessToken);
       setUser(res.user);
       getAccessToken(res.accessToken);
@@ -65,13 +72,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔴 Logout function
   const handleLogout = async () => {
     await api.post('/auth/logout');
-    localStorage.removeItem('accessToken');
+    setAccessToken(null);
     setUser(null);
-    navigate('/login');
-  };
+    setLogged(false);
+    localStorage.removeItem('accessToken');
+    navigate('/');
+};
 
   return (
     <AuthContext.Provider
@@ -80,7 +88,8 @@ export const AuthProvider = ({ children }) => {
         loadingAuth,
         user,
         handleRegister,
-        accessToken
+        accessToken,
+        handleLogout
       }}
     >
       {children}

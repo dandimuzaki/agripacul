@@ -22,6 +22,7 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'https://vercel.com/dandi-muhamad-zakis-projects/agripacul'
 ];
 
 app.use(cors({
@@ -38,7 +39,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/product', productRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', uploadRoutes);

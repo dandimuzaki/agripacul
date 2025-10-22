@@ -16,13 +16,16 @@ const OrderCard = ({ order }) => {
         </p>
       </div>
       <div className='order-item flex gap-3'>
-        <div className='h-25 aspect-square overflow-hidden rounded-md'>
-          <img src={items[0].product.image} className='aspect-square object-cover' />
+        <div className='h-25 aspect-square overflow-hidden rounded-md' onClick={() => console.log(items[0].product.image)}>
+          {items[0]?.product?.image
+            ? <img src={items[0].product.image} className='aspect-square object-cover' />
+            : <div className='w-full h-full bg-gray-200'></div>
+          }
         </div>
         <div className='flex justify-between flex-col'>
           <div>
-            <p className='font-bold text-lg'>{items[0].product.title}</p>
-            <p className='text-sm'>{items[0].quantity} item x <span>{formatCurrency(items[0].product.price)}</span></p>
+            {/*<p className='font-bold text-lg'>{items[0].product.title}</p>
+            <p className='text-sm'>{items[0].quantity} item x <span>{formatCurrency(items[0].product.price)}</span></p>*/}
           </div>
           <p className='text-sm mt-3'>+{items.length - 1} more product</p>
         </div>

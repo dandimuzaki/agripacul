@@ -10,7 +10,7 @@ export const fetchProvinces = async (req, res) => {
       if (!fetchedProvinces) {
         return res.status(404).json({
           success: false,
-          message: 'Provinces are not found', 
+          message: 'Provinces are not found',
           errors: null
         });
       }
@@ -26,7 +26,7 @@ export const fetchProvinces = async (req, res) => {
       if (!provinces) {
         return res.status(404).json({
           success: false,
-          message: 'Provinces are not found', 
+          message: 'Provinces are not found',
           errors: null
         });
       }
@@ -40,7 +40,7 @@ export const fetchProvinces = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch provinces', 
+      message: 'Failed to fetch provinces',
       errors: err.message
     });
   }
@@ -54,7 +54,7 @@ export const fetchCities = async (req, res) => {
     if (!parent) {
       return res.status(404).json({
         success: false,
-        message: 'Target province is not found', 
+        message: 'Target province is not found',
         errors: null
       });
     }
@@ -66,7 +66,7 @@ export const fetchCities = async (req, res) => {
       if (!fetchedCities) {
         return res.status(404).json({
           success: false,
-          message: 'Cities are not found', 
+          message: 'Cities are not found',
           errors: null
         });
       }
@@ -82,7 +82,7 @@ export const fetchCities = async (req, res) => {
       if (!cities) {
         return res.status(404).json({
           success: false,
-          message: 'Cities are not found', 
+          message: 'Cities are not found',
           errors: null
         });
       }
@@ -95,7 +95,7 @@ export const fetchCities = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch cities', 
+      message: 'Failed to fetch cities',
       errors: err.message
     });
   }
@@ -108,7 +108,7 @@ export const fetchDistricts = async (req, res) => {
     if (!parent) {
       return res.status(404).json({
         success: false,
-        message: 'Target city is not found', 
+        message: 'Target city is not found',
         errors: null
       });
     }
@@ -120,7 +120,7 @@ export const fetchDistricts = async (req, res) => {
       if (!fetchedDistricts) {
         return res.status(404).json({
           success: false,
-          message: 'Districts are not found', 
+          message: 'Districts are not found',
           errors: null
         });
       }
@@ -137,7 +137,7 @@ export const fetchDistricts = async (req, res) => {
       if (!districts) {
         return res.status(404).json({
           success: false,
-          message: 'Districts are not found', 
+          message: 'Districts are not found',
           errors: null
         });
       }
@@ -151,7 +151,7 @@ export const fetchDistricts = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch districts', 
+      message: 'Failed to fetch districts',
       errors: err.message
     });
   }
@@ -165,7 +165,7 @@ export const fetchSubdistricts = async (req, res) => {
     if (!parent) {
       return res.status(404).json({
         success: false,
-        message: 'Target district is not found', 
+        message: 'Target district is not found',
         errors: err.message
       });
     }
@@ -177,7 +177,7 @@ export const fetchSubdistricts = async (req, res) => {
       if (!fetchedSubdistricts) {
         return res.status(404).json({
           success: false,
-          message: 'Subdistricts are not found', 
+          message: 'Subdistricts are not found',
           errors: null
         });
       }
@@ -193,7 +193,7 @@ export const fetchSubdistricts = async (req, res) => {
       if (!subdistricts) {
         return res.status(404).json({
           success: false,
-          message: 'Sub-districts are not found', 
+          message: 'Sub-districts are not found',
           errors: null
         });
       }
@@ -207,7 +207,7 @@ export const fetchSubdistricts = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch sub-district', 
+      message: 'Failed to fetch sub-district',
       errors: err.message
     });
   }

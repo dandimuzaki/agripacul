@@ -1,19 +1,19 @@
-import { useOrder } from '@/context/OrderContext'
-import { Star } from '@mui/icons-material'
-import React, { useState } from 'react'
+import { useOrder } from '@/context/OrderContext';
+import { Star } from '@mui/icons-material';
+import React, { useState } from 'react';
 
-const Rating = ({item}) => {
-  const { setRateList, rateList } = useOrder()
-  const [rating, setRating] = useState(0)
-  const [hover, setHover] = useState(0)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+const Rating = ({ item }) => {
+  const { setRateList, rateList } = useOrder();
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleClick = (star) => {
     if (isSubmitted) return;
-    setRateList((prev) => ([...prev, {_id: item.product._id, rating: star}]))
-    setRating(star)
-    console.log(rateList)
-  }
+    setRateList((prev) => ([...prev, { _id: item.product._id, rating: star }]));
+    setRating(star);
+    console.log(rateList);
+  };
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -30,8 +30,8 @@ const Rating = ({item}) => {
               style={{
                 color:
                   starValue <= (hover || rating)
-                    ? "gold"
-                    : "lightgray",
+                    ? 'gold'
+                    : 'lightgray',
               }}
             >
               <Star/>
@@ -40,7 +40,7 @@ const Rating = ({item}) => {
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Rating
+export default Rating;

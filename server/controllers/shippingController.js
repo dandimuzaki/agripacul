@@ -9,7 +9,7 @@ export const fetchShippingOptions = async (req, res) => {
     if (cache.has(key)) {
       return res.status(200).json({
         success: true,
-        message: 'Shipping options fetched successfully', 
+        message: 'Shipping options fetched successfully',
         data: cache.get(key)
       });
     }
@@ -20,7 +20,7 @@ export const fetchShippingOptions = async (req, res) => {
     if (!shippingOptions) {
       return res.status(404).json({
         success: false,
-        message: 'Shipping options are not found', 
+        message: 'Shipping options are not found',
         errors: null
       });
     }
@@ -34,7 +34,7 @@ export const fetchShippingOptions = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch shipping options', 
+      message: 'Failed to fetch shipping options',
       errors: err.message
     });
   }

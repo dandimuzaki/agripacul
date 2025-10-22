@@ -58,15 +58,27 @@ const Header = ({ cart }) => {
         {user ?
           (
             <>
-              <ProfileButton text={`Hi, ${getFirstName(user.name)}`}/>
+              <ProfileButton text={`Hi, ${getFirstName(user.name)}!`}/>
             </>
           )
-          : (<><Link to='/signup'>
-            <button className={`shrink-0 font-bold cursor-pointer rounded-full h-full px-4 bg-[var(--primary)] ${scrolled ? 'bg-white text-[var(--primary) active:bg-[var(--light-grey)] text-[var(--primary)]':'text-white active:bg-[var(--dark-primary)]'}`}>Sign Up</button>
-          </Link>
-          <Link to='/login'>
-            <button className={`shrink-0 font-bold cursor-pointer border-2 rounded-full text-white h-full px-4 text-[var(--primary)] ${scrolled ? 'hover:border-white active:bg-[var(--light-grey)] border-[var(--primary)] hover:bg-white hover:text-[var(--primary)] active:border-[var(--light-grey)] active:text-[var(--primary)]':'active:border-[var(--dark-primary)] border-white active:bg-[var(--dark-primary)] active:text-white'}`}>Log In</button>
-          </Link></>)}
+          : (<>
+            <button
+              className={`shrink-0 font-bold cursor-pointer rounded-full h-full px-4 bg-[var(--primary)] 
+              ${scrolled ? 'bg-white text-[var(--primary)] hover:text-white hover:bg-[var(--dark-primary)]'
+              :'text-white hover:bg-[var(--dark-primary)]'}`}>
+              <Link to='/signup'>
+              Sign Up
+              </Link>
+            </button>
+            <button
+              className={`shrink-0 font-bold cursor-pointer border-2 rounded-full text-white h-full px-4 text-[var(--primary)] 
+              ${scrolled ? 'bg-transparent text-[var(--primary)] hover:text-white hover:bg-[var(--dark-primary)]'
+              :'border-white hover:bg-white hover:text-[var(--primary)]'}`}>
+              <Link to='/login'>
+                Log In
+              </Link>
+            </button>
+          </>)}
       </div>
       <div className='flex gap-3 md:hidden'>
         {user ?

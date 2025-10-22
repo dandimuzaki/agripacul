@@ -1,16 +1,26 @@
 import { useCart } from '@/context/CartContext';
-import { Star } from '@mui/icons-material';
+import { Add, AddShoppingCart, Star, StarBorder, StarHalf } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { formatCurrency } from '../../../utils/format.js';
 import { Link } from 'react-router-dom';
 
 
 const ProductCardVertical = ({ product, loading }) => {
-  const { title, price, image, amount, _id } = product;
+  const { title, price, image, amount, _id, rating } = product;
   const { addToCart } = useCart();
 
+  const half = rating - parseInt(rating);
+  const ratingArr = new Array(5);
+  for (let i=0; i<parseInt(rating); i++) {
+    ratingArr[i] = 1;
+  }
+  ratingArr[parseInt(rating)] = half;
+  for (let i=parseInt(rating)+1; i<5; i++) {
+    ratingArr[i] = 0;
+  }
+
   return (
-    <div className='rounded-xl bg-white p-2 flex flex-col'>
+    <div className='rounded-xl bg-white p-2 flex flex-col gap-2'>
       <Link to={`/product/${_id}`}>
         {
           loading ? (<div className='w-full aspect-square rounded-lg bg-[var(--light-grey)]'></div>) :
@@ -19,23 +29,23 @@ const ProductCardVertical = ({ product, loading }) => {
         }
       </Link>
       <div className='flex flex-1 flex-col justify-between'>
-        <div>
+        <div className='grid gap-1'>
           <div className='text-yellow-500'>
-            <Star fontSize='extra-small'/>
+            {ratingArr.map((r) => r == 1 ? <Star fontSize='extra-small'/> : r == 0 ? <StarBorder fontSize='extra-small'/> : <StarHalf fontSize='extra-small'/>)}
           </div>
           <h4 className='text-[var(--black)] text-base/6 md:text-lg/6 font-bold'>{title}</h4>
-          <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${amount ? ` /${amount}` : ''}`}</span></h5>
         </div>
-        <div className='flex justify-end mt-2'>
+        <div className='items-center flex justify-between mt-2'>
+          <h5 className='text-yellow-500 font-bold'>{formatCurrency(price)}<span className='text-gray-500 text-xs'>{`${amount ? ` /${amount}` : ''}`}</span></h5>
           <button onClick={() => addToCart(_id)} className='
               cursor-pointer w-fit
-              rounded-full py-2 px-4
+              rounded-full p-2
               text-sm font-bold
               bg-[var(--primary)] text-white
               active:bg-[var(--dark-primary)] active:text-white
               active:outline active:outline-[var(--dark-primary)]
               self-end
-              '>Add to cart</button>
+              '><AddShoppingCart/></button>
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@ export const ProductProvider = ({ children }) => {
   const [product, setProduct] = useState(null);
   const [keyword, setKeyword] = useState('');
   const [debounceKeyword, setDebounceKeyword] = useState('');
-  const [lastUpdated, setLastUpdated] = useState(Date.now())
+  const [lastUpdated, setLastUpdated] = useState(Date.now());
 
   useDebounce(() => setDebounceKeyword(keyword), 500, [keyword]);
 
@@ -108,14 +108,14 @@ export const ProductProvider = ({ children }) => {
         setProducts((prev) =>
           prev.map((p) => (p._id === updatedProduct.data._id ? updatedProduct.data : p))
         );
-        setLastUpdated(Date.now())
+        setLastUpdated(Date.now());
         toast(`${updatedProduct.data.title} has been updated at`, {
           description: `${formatted}`,
         });
       } else {
         const newProduct = await createProduct({ ...data, image: uploadedImageUrl });
         setProducts((prev) => [...prev, newProduct]);
-        setLastUpdated(Date.now())
+        setLastUpdated(Date.now());
         toast(`${newProduct.data.title} has been created at`, {
           description: `${formatted}`,
         });

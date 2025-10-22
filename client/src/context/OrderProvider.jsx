@@ -22,8 +22,8 @@ export const OrderProvider = ({ children }) => {
   const navigate = useNavigate();
   const [lastUpdated, setLastUpdated] = useState(Date.now());
   const [openRatingModal, setOpenRatingModal] = useState(false);
-  const [itemsRate, setItemsRate] = useState([])
-  const [rateList, setRateList] = useState([])
+  const [itemsRate, setItemsRate] = useState([]);
+  const [rateList, setRateList] = useState([]);
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -100,15 +100,15 @@ export const OrderProvider = ({ children }) => {
   };
 
   const handleRatingModal = (items) => {
-    setOpenRatingModal(true)
-    setItemsRate(items)
-  }
+    setOpenRatingModal(true);
+    setItemsRate(items);
+  };
 
   const closeRatingModal = () => {
-    setOpenRatingModal(false)
-    setItemsRate([])
-    setRateList([])
-  }
+    setOpenRatingModal(false);
+    setItemsRate([]);
+    setRateList([]);
+  };
 
   return (
     <OrderContext.Provider value={{

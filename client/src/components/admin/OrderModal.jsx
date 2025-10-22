@@ -82,28 +82,28 @@ const OrderModal = () => {
                   description={'Thank you for ordering'}
                 />) : ''}
 
-              
+
             </div>
             {order?.createdAt ? (
-                <button
+              <button
                 onClick={() => handleRatingModal(order?.itemsSnapshot)}
                 className='justify-self-center w-fit bg-[var(--accent)] px-3 py-2 font-bold rounded cursor-pointer'>Rate Your Order</button>
-            
-              ) : ''}
+
+            ) : ''}
           </div>
 
           {order?.createdAt ? (
             <div className='w-full flex justify-center gap-4'>
-            <Link to='/checkout'>
-              <button
-                onClick={() => setCheckedItems(order?.itemsSnapshot)}
-                className='w-fit bg-[var(--primary)] px-3 py-2 text-lg font-bold text-white rounded cursor-pointer'>Buy Again</button>
-            </Link>
+              <Link to='/checkout'>
+                <button
+                  onClick={() => setCheckedItems(order?.itemsSnapshot)}
+                  className='w-fit bg-[var(--primary)] px-3 py-2 text-lg font-bold text-white rounded cursor-pointer'>Buy Again</button>
+              </Link>
             </div>
           ): ''}
 
         </div>
-      <RatingModal/>
+        <RatingModal/>
       </DialogContent>
     </Dialog>
   );
