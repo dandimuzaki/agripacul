@@ -22,7 +22,7 @@ const AfterPurchase = () => {
     const loadOrderCreated = async (orderId) => {
       const result = await getOrderById(orderId);
       if (result) {
-        setOrderCreated(result);
+        setOrderCreated(result.data);
       }
     };
 
@@ -34,7 +34,9 @@ const AfterPurchase = () => {
   return (
     <div className='mt-15 md:px-12 p-6 grid gap-6'>
       <div className='grid gap-4 text-center py-4'>
-        <p className='text-2xl font-bold flex gap-2 items-center justify-center'>
+        <p
+          onClick={() => console.log(orderCreated.itemsSnapshot)}
+          className='text-2xl font-bold flex gap-2 items-center justify-center'>
           {loading ? <ClipLoader color='#ffffff'/> :
             <CheckCircleOutlineOutlined className='text-[var(--primary)]' fontSize='large'/>
           }
@@ -46,9 +48,9 @@ const AfterPurchase = () => {
       <div className='grid grid-cols-[2fr_1fr] gap-6'>
         <div className='grid grid-cols-2 gap-2 bg-white rounded-lg p-6'>
           <p className='col-span-2 font-bold text-lg'>Order Summary</p>
-          {orderCreated?.itemsSnapshot.map((item, i) =>
+          {orderCreated?.itemsSnapshot?.map((item, index) =>
             <CheckoutItem
-              key={i}
+              key={index}
               item={item}
             />
           )}
@@ -63,7 +65,7 @@ const AfterPurchase = () => {
             </div>
             <div className='flex justify-between'>
               <p>Total Shipping Cost</p>
-              <p>{formatCurrency(orderCreated?.shipping.cost)}</p>
+              <p>{formatCurrency(orderCreated?.shipping?.cost)}</p>
             </div>
             <div className='flex justify-between font-bold'>
               <p>Total Bill</p>
@@ -73,10 +75,10 @@ const AfterPurchase = () => {
           <div className='flex items-center justify-center gap-4'>
             <button
               onClick={() => navigate('/')}
-              className='bg-[var(--light-grey)] px-3 py-2 rounded-full font-bold active:bg-[var(--grey)] cursor-pointer'>Back to Home</button>
+              className='bg-[var(--light-grey)] px-4 py-2 rounded-full font-bold active:bg-[var(--grey)] cursor-pointer'>Back to Home</button>
             <button
               onClick={() => navigate('/orders')}
-              className='bg-[var(--primary)] px-3 py-2 rounded-full text-white font-bold active:bg-[var(--primary-dark)] cursor-pointer'>Track My Order</button>
+              className='bg-[var(--primary)] px-4 py-2 rounded-full text-white font-bold active:bg-[var(--primary-dark)] cursor-pointer'>Track My Order</button>
 
           </div>
         </div>

@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { CheckBoxOutlineBlankOutlined, CheckBoxOutlined, RemoveRedEyeOutlined, Search } from '@mui/icons-material';
+import { Cancel, CheckBoxOutlineBlankOutlined, CheckBoxOutlined, RemoveRedEyeOutlined, Search } from '@mui/icons-material';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useOrder } from '@/context/OrderContext';
 import { formatCurrency, formatDate } from '@/utils/format';
 import OrderModal from '@/components/admin/OrderModal';
 
 const AdminOrderList = () => {
-  const { orders, seeOrderDetail, confirmOrder } = useOrder();
+  const { orders, seeOrderDetail, confirmOrder, requestCancelOrder, approveCancelOrder, rejectCancelOrder } = useOrder();
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -61,6 +61,10 @@ const AdminOrderList = () => {
       header: 'Status'
     },
     {
+      accessorKey: 'cancel',
+      header: 'Cancel State'
+    },
+    {
       accessorKey: 'updatedAt',
       header: 'Updated At',
       cell: ({ row }) => (
@@ -90,6 +94,41 @@ const AdminOrderList = () => {
             <RemoveRedEyeOutlined fontSize='small'/>
             Detail
           </button>
+          { row.original.cancel === 'never' ?
+            (<button
+              onClick={() => approveCancelOrder(row.original._id)}
+              className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+              <Cancel fontSize='small'/>
+              Cancel
+            </button>)
+            : row.original.cancel === 'approved' ?
+              (<button
+                className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+                <Cancel fontSize='small'/>
+                Cancelled
+              </button>)
+              : ''
+          }
+
+          { row.original.cancel === 'requested' ?
+            (<button
+              onClick={() => rejectCancelOrder(row.original._id)}
+              className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+              <Cancel fontSize='small'/>
+              Reject Cancel
+            </button>)
+            : ''
+          }
+
+          { row.original.cancel === 'requested' ?
+            (<button
+              onClick={() => approveCancelOrder(row.original._id)}
+              className='flex items-center gap-1 p-1 text-[var(--black)] bg-[var(--light-grey)] active:bg-[var(--grey)] rounded cursor-pointer'>
+              <Cancel fontSize='small'/>
+              Approve Cancel
+            </button>)
+            : ''
+          }
         </div>
       )
     }
@@ -113,9 +152,7 @@ const AdminOrderList = () => {
   return (
     <div className='ml-50 px-8 grid bg-white'>
       <div className='flex justify-between sticky top-0 pt-8 pb-3 bg-white'>
-        <p
-          onClick={() => console.log(orders)}
-          className='font-bold text-2xl'>Order Management</p>
+        <p className='font-bold text-2xl'>Order Management</p>
         <div className='h-8 bg-white flex items-center gap-3'>
           <div className='flex'>
             <input value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}  className='bg-white flex-1 rounded-l-md h-8 px-2 border-y border-l border-[var(--light-grey)]' type='text' placeholder="Search Order" />

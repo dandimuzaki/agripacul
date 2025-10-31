@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react';
 import { CheckoutContext } from './CheckoutContext.jsx';
 import { useCart } from './CartContext.jsx';
 import { useShipping } from './ShippingContext.jsx';
+import { useProduct } from './ProductContext.jsx';
 
 export const CheckoutProvider = ({ children }) => {
   const { cart } = useCart();
   const [checkedItems, setCheckedItems] = useState([]);
-  const [isAllChecked, setIsAllChecked] = useState(false);
+  const { isAllChecked, setIsAllChecked } = useProduct();
   const { selectedShipping } = useShipping();
 
-  const totalPrice = checkedItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const totalPrice = checkedItems?.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
   const totalBill = totalPrice + selectedShipping?.cost;
 
   const handleCheckout = (item) => {
-    const isAlreadyChecked = checkedItems.some(
+    const isAlreadyChecked = checkedItems?.some(
       (checked) => checked.product._id === item.product._id
     );
 
@@ -39,10 +40,10 @@ export const CheckoutProvider = ({ children }) => {
 
   useEffect(() => {
     const compareAllChecked =
-      cart.length > 0 &&
-      cart.every((cartItem) =>
-        checkedItems.some(
-          (checked) => checked.product._id === cartItem.product._id
+      cart?.length > 0 &&
+      cart?.every((cartItem) =>
+        checkedItems?.some(
+          (checked) => checked.product._id === cartItem?.product._id
         )
       );
 
@@ -58,7 +59,8 @@ export const CheckoutProvider = ({ children }) => {
         isAllChecked,
         totalPrice,
         totalBill,
-        setCheckedItems
+        setCheckedItems,
+        setIsAllChecked
       }}
     >
       {children}

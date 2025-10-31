@@ -50,10 +50,10 @@ export const getOrders = async (req, res) => {
 
     // Combine filters
     const filters = {};
-    if (req.user.role != 'admin') {filters.user = req.user.id;};
+    /*if (req.user.role != 'admin') {filters.user = req.user.id;};*/
     if (status) {filters.status = status;};
 
-    const orders = await Order.find(filters).populate('items.product');
+    const orders = await Order.find(filters);
 
     if (!orders) {
       return res.status(404).json({
@@ -105,11 +105,12 @@ export const getOrderById = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { status } = req.body;
-    const confirmedAt = req.body?.confirmedAt;
-    const shippedAt = req.body?.shippedAt;
-    const deliveredAt = req.body?.deliveredAt;
+    const {
+      status,
+      cancel
+    } = req.body;
 
+    // 1️⃣ Fetch order and validate existence
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({
@@ -118,29 +119,99 @@ export const updateOrderStatus = async (req, res) => {
         errors: null
       });
     }
-    const validStatus = ['pending', 'processing', 'shipped', 'delivered'];
-    if (!validStatus.includes(status)) {
+
+    // 2️⃣ Validate status field
+    const validStatus = [
+      'pending',
+      'processing',
+      'shipped',
+      'delivered',
+      'cancelled',
+      'finished'
+    ];
+    if (status && !validStatus.includes(status)) {
       return res.status(400).json({
         success: false,
         message: 'Invalid status value',
         errors: null
       });
     }
-    order.status = status;
 
-    if (confirmedAt) {
-      order.confirmedAt = confirmedAt;
+    const validCancel = [
+      'requested',
+      'never',
+      'approved',
+      'rejected',
+    ];
+    if (cancel && !validCancel.includes(cancel)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid cancel value',
+        errors: null
+      });
     }
 
-    if (shippedAt) {
-      order.shippedAt = shippedAt;
+    // 3️⃣ Apply updates safely
+    if (status) order.status = status;
+    if (cancel) order.cancel = cancel;
+
+    if (status === 'processing') {
+      order.confirmedAt = new Date();
     }
 
-    if (deliveredAt) {
-      order.deliveredAt = deliveredAt;
+    if (status === 'shipped') {
+      order.shippedAt = new Date();
     }
 
+    if (status === 'delivered') {
+      order.deliveredAt = new Date();
+    }
+
+    if (status === 'finished') {
+      order.finishedAt = new Date();
+    }
+
+    // 4️⃣ Handle cancellation logic cleanly
+    if (cancel === 'requested') {
+      // If already shipped or delivered, auto reject
+      if (order.shippedAt || order.deliveredAt) {
+        order.cancel = 'rejected';
+        order.cancelRejectedAt = new Date();
+      } else {
+        order.cancelRequestedAt = new Date();
+      }
+    }
+
+    // 5️⃣ Handle confirmed cancellation
+    if (cancel === 'approved') {
+      // Restock products
+      const productMap = {};
+      order.items.forEach((item) => {
+        productMap[item.product._id] = item.quantity;
+      });
+
+      const productIds = Object.keys(productMap);
+      const products = await Product.find({ _id: { $in: productIds } });
+
+      for (const product of products) {
+        const qty = productMap[product._id];
+        product.stock += qty;
+        product.sold -= qty;
+        await product.save();
+      }
+
+      order.status = 'cancelled';
+      order.cancelApprovedAt = new Date();
+    }
+
+    // 6️⃣ Handle cancel rejection
+    if (cancel === 'rejected') {
+      order.cancelRejectedAt = new Date();
+    }
+
+    // 8️⃣ Save changes
     const saved = await order.save();
+
     res.status(200).json({
       success: true,
       message: 'Order updated successfully',
@@ -158,7 +229,7 @@ export const updateOrderStatus = async (req, res) => {
 export const deleteOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const deletedOrder = await Product.findByIdAndDelete(orderId);
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
     if (!deletedOrder) {
       return res.status(404).json({
         success: false,

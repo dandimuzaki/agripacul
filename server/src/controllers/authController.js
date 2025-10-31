@@ -40,7 +40,7 @@ export const register = async (req, res) => {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
 
-    const safeUser = { name, email }
+    const safeUser = { name, email, role: newUser.role };
 
     res.status(201).json({
       accessToken,
@@ -106,8 +106,8 @@ export const login = async (req, res) => {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
 
-    const { name } = user;
-    const safeUser = { name, email };
+    const { name, role } = user;
+    const safeUser = { name, email, role };
 
     res.status(200).json({
       accessToken,
@@ -133,8 +133,8 @@ export const silentLogin = (req, res) => {
       const dbUser = await User.findById(decoded.id);
       if (!dbUser) return res.sendStatus(404);
 
-      const { name, email } = dbUser;
-      const safeUser = { name, email };
+      const { name, email, role } = dbUser;
+      const safeUser = { name, email, role };
 
       const newRefreshToken = generateRefreshToken(dbUser);
       res.cookie('refreshToken', newRefreshToken, {
@@ -144,8 +144,6 @@ export const silentLogin = (req, res) => {
       });
 
       const accessToken = generateAccessToken(dbUser);
-
-      console.log(safeUser);
 
       res.status(200).json({
         accessToken,

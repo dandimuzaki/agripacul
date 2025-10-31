@@ -34,27 +34,17 @@ const AddressForm = () => {
     setValue,
     reset,
     watch,
-    formState: { errors }
   } = useForm({
     defaultValues: {
-      'recipientName': currentEditAddress?.recipientName,
-      'phoneNumber': currentEditAddress?.phoneNumber,
-      'label': currentEditAddress?.label,
-      'province': currentEditAddress?.province.id,
-      'city': currentEditAddress?.city.id,
-      'district': currentEditAddress?.district.id,
-      'subdistrict': currentEditAddress?.subdistrict.id,
-      'detail': currentEditAddress?.detail,
-      'mainAddress': currentEditAddress?.mainAddress,
-    } || {
-      'recipientName': '',
-      'phoneNumber': '',
-      'label': '',
-      'province': '',
-      'city': '',
-      'subdistrict': '',
-      'detail': '',
-      'mainAddress': false,
+      'recipientName': currentEditAddress?.recipientName || '',
+      'phoneNumber': currentEditAddress?.phoneNumber || '',
+      'label': currentEditAddress?.label || '',
+      'province': currentEditAddress?.province.id || '',
+      'city': currentEditAddress?.city.id || '',
+      'district': currentEditAddress?.district.id || '',
+      'subdistrict': currentEditAddress?.subdistrict.id || '',
+      'detail': currentEditAddress?.detail || '',
+      'mainAddress': currentEditAddress?.mainAddress || '',
     }
   });
 
@@ -87,7 +77,7 @@ const AddressForm = () => {
     if (openAddressForm) {
       fetchProvinces();
     }
-  }, [openAddressForm]);
+  }, [openAddressForm, fetchProvinces]);
 
   const watchProvince = watch('province');
   const watchCity = watch('city');
@@ -99,27 +89,26 @@ const AddressForm = () => {
       setDistrictList([]);
       setSubdistrictList([]);
     }
-  }, [watchProvince]);
+  }, [watchProvince, fetchCities, setDistrictList, setSubdistrictList]);
 
   useEffect(() => {
     if (watchCity) {
       fetchDistricts(watchCity);
       setSubdistrictList([]);
     }
-  }, [watchCity]);
+  }, [watchCity, fetchDistricts, setSubdistrictList]);
 
   useEffect(() => {
     if (watchDistrict) {
       fetchSubdistricts(watchDistrict);
     }
-  }, [watchDistrict]);
+  }, [watchDistrict, fetchSubdistricts]);
 
   return (
     <Dialog open={openAddressForm} onOpenChange={() => setOpenAddressForm(false)}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle
-            onClick={() => console.log(watchCity)}
           >{currentEditAddress ? 'Edit' : 'Add'} Address</DialogTitle>
         </DialogHeader>
         <form
@@ -145,7 +134,6 @@ const AddressForm = () => {
             render={({ field }) => (
               <div className="grid gap-3">
                 <Label
-                  onClick={() => {console.log(field);}}
                   htmlFor="province">Province</Label>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className='w-full'>
@@ -195,10 +183,6 @@ const AddressForm = () => {
             render={({ field }) => (
               <div className="grid gap-3">
                 <Label htmlFor="district"
-                  onClick={() => {
-                    console.log(field.value);
-                    console.log(currentEditAddress?.district.id);
-                  }}
                 >District</Label>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className='w-full'>
@@ -260,7 +244,7 @@ const AddressForm = () => {
               Save
             </Button>
           </div>
-          <div className='w-10 h-10 bg-green-500' onClick={() => console.log(watchProvince)}></div>
+          <div className='w-10 h-10 bg-green-500'></div>
         </form>
       </DialogContent>
     </Dialog>

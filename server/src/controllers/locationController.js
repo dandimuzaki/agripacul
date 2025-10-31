@@ -166,7 +166,7 @@ export const fetchSubdistricts = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: 'Target district is not found',
-        errors: err.message
+        errors: null
       });
     }
 

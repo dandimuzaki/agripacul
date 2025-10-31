@@ -12,7 +12,7 @@ const CartCard = ({ item }) => {
   const isChecked = checkedItems.includes(item);
 
   return (
-    <div className={'relative flex gap-3 p-2 rounded-lg h-30 bg-white'}>
+    <div className='relative flex gap-4 p-2 rounded-lg h-24 bg-white'>
       <div role="checkbox" onClick={() => handleCheckout(item)} type='checkbox' className={`${isChecked?'border-0':'border'} border border-gray-500 h-7 w-7 rounded-md relative self-center cursor-pointer`} >
         <CheckBox fontSize='large' className={`${isChecked?'':'sr-only'} text-[var(--orange)] absolute top-[-4px] left-[-4px]`} />
       </div>
@@ -22,8 +22,7 @@ const CartCard = ({ item }) => {
       <div className='flex flex-col justify-between flex-1'>
         <div className='flex flex-col gap-1'>
           <p className='text-gray-500'>{title}</p>
-          <p className='text-[var(--black)] text-lg'>{formatCurrency(price)} <span className='text-sm py-1 px-2 rounded-full text-red-500 bg-red-200'>10% off</span></p>
-          <p className='text-sm text-gray-300 line-through'>15.000</p>
+          <p className='text-xl font-bold'>{formatCurrency(price)}</p>
         </div>
         <div className='flex justify-end items-center'>
           <div className='w-8 h-6 text-[var(--orange)]' onClick={() => deleteItem(_id)}>

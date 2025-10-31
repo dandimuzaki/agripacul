@@ -36,6 +36,7 @@ export const updateOrder = async (orderId, orderUpdates) => {
     return res.data;
   } catch (err) {
     console.error('Failed to update order', err);
+    throw err;
   }
 };
 
@@ -45,6 +46,7 @@ export const getOrderById = async (orderId) => {
     return res.data;
   } catch (err) {
     console.error('Failed to fetch the order', err);
+    throw err;
   }
 };
 
@@ -54,5 +56,16 @@ export const getOrderByAdmin = async (orderId) => {
     return res.data;
   } catch (err) {
     console.error('Failed to fetch the order', err);
+    throw err;
+  }
+};
+
+export const deleteOrderByAdmin = async (orderId) => {
+  try {
+    const res = await api.delete(`/admin/orders/${orderId}`);
+    return res.data;
+  } catch (err) {
+    console.error('Failed to delete the order', err.message);
+    throw err;
   }
 };

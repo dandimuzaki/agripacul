@@ -133,6 +133,14 @@ const ProductForm = () => {
             )}/>
 
           <div className='grid gap-2'>
+            <Label htmlFor='price'>Price</Label>
+            <Input type='number' {...register('price')} id='price' name='price' />
+            {errors.price && (
+              <p className="text-red-500 text-xs">{errors.price.message}</p>
+            )}
+          </div>
+
+          <div className='grid gap-2'>
             <Label htmlFor='stock'>Stock</Label>
             <Input type='number' {...register('stock')} id='stock' name='stock' />
             {errors.stock && (

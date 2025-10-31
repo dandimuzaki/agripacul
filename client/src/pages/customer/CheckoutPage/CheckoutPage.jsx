@@ -30,7 +30,7 @@ const CheckoutPage = () => {
 
   return (
     <div className='md:px-12 p-4 md:py-6 mt-15'>
-      <div className='grid md:grid-cols-[1fr_350px] items-start gap-4 md:gap-6'>
+      <div className='grid md:grid-cols-[1fr_400px] items-start gap-4 md:gap-6'>
         <div className='grid gap-4'>
           <SectionTitle title="Checkout" />
           <div className='bg-white flex p-6 gap-6 rounded-lg'>
@@ -64,45 +64,46 @@ const CheckoutPage = () => {
               />
             )}
           </div>
+        </div>
+        <div className='grid gap-6'>
           <div className='bg-white grid gap-2 p-6 rounded-lg'>
             <p className='uppercase font-bold text-gray-500'>Shipping Option</p>
             <ShippingDropdown/>
           </div>
+          <div className='grid gap-6 bg-white p-6 rounded-lg'>
+            <div className='grid gap-2'>
+              <p className='uppercase font-bold text-gray-500'>Payment Method</p>
 
-        </div>
-        <div className='grid gap-6 bg-white p-6 rounded-lg'>
-          <div className='grid gap-2'>
-            <p className='uppercase font-bold text-gray-500'>Payment Method</p>
-
-            <PaymentMethod/>
-          </div>
-          <div className='flex flex-col gap-2 text-black'>
-            <p className='uppercase font-bold text-gray-500'>Shopping Summary</p>
-            <div className='flex flex-col gap-1 text-sm'>
-              <div className='flex justify-between'>
-                <p>Total Price</p>
-                <p>
-                  {formatCurrency(totalPrice)}
-                </p>
-              </div>
-              <div className='flex justify-between'>
-                <p>Total Shipping Cost</p>
-                <p>{formatCurrency(selectedShipping?.cost)}</p>
-              </div>
-              <div className='flex justify-between font-bold'>
-                <p>Total Bill</p>
-                <p>{formatCurrency(totalBill)}</p>
+              <PaymentMethod/>
+            </div>
+            <div className='flex flex-col gap-2 text-black'>
+              <p className='uppercase font-bold text-gray-500'>Shopping Summary</p>
+              <div className='flex flex-col gap-1 text-sm'>
+                <div className='flex justify-between'>
+                  <p>Total Price</p>
+                  <p>
+                    {formatCurrency(totalPrice)}
+                  </p>
+                </div>
+                <div className='flex justify-between'>
+                  <p>Total Shipping Cost</p>
+                  <p>{formatCurrency(selectedShipping?.cost)}</p>
+                </div>
+                <div className='flex justify-between font-bold'>
+                  <p>Total Bill</p>
+                  <p>{formatCurrency(totalBill)}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <button
-            disabled={loading}
-            onClick={createNewOrder}
-            type='click' className='flex items-center justify-center gap-2 active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>
-            {loading ? <ClipLoader color='#ffffff' size={20}/> : '' }
-              Pay Now
-          </button>
+            <button
+              disabled={loading}
+              onClick={createNewOrder}
+              type='click' className='flex items-center justify-center gap-2 active:bg-[var(--dark-primary)] rounded-lg bg-[var(--primary)] font-bold text-lg text-white p-2 w-full cursor-pointer'>
+              {loading ? <ClipLoader color='#ffffff' size={20}/> : '' }
+                Pay Now
+            </button>
 
+          </div>
         </div>
         <AddressForm/>
         <AddressList/>

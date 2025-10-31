@@ -11,6 +11,7 @@ import addressRoutes from './routes/addressRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
 import shippingRoutes from './routes/shippingRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import analyticRoutes from './routes/analyticRoutes.js';
 import './cron.js';
 import cookieParser from 'cookie-parser';
 
@@ -48,6 +49,7 @@ app.use('/api/user/address', addressRoutes);
 app.use('/api/location', locationRoutes);
 app.use('/api/shipping', shippingRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api', analyticRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

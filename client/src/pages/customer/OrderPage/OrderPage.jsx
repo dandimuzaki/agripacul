@@ -12,6 +12,9 @@ import { capitalize } from '@/utils/format';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getOrdersByUser } from '@/services/orderService';
 import { useAuth } from '@/context/AuthContext';
+import DateRange from '@/components/common/DateRange';
+import DateDropdown from '@/components/common/DateDropdown';
+import OrderModal from '@/components/admin/OrderModal';
 
 
 const OrderPage = () => {
@@ -55,25 +58,28 @@ const OrderPage = () => {
     }
   }, [status, loadingAuth, accessToken, lastUpdated]);
 
+  const selectOrderStatus = (value) => {
+    setSelectedStatus(value);
+    const newParams = new URLSearchParams(searchParams);
+    if (value) {
+      newParams.set('status', value);
+    } else {
+      newParams.delete('status');
+    }
+    setLastUpdated(Date.now());
+    navigate(`/orders?${newParams.toString()}`);
+  };
+
   return (
     <div className='mt-15 md:px-12 p-4 md:py-6'>
       <div className='grid md:grid-cols-[1fr_3fr] items-start gap-4 md:gap-6'>
-        <section className='md:sticky top-21 grid gap-6 bg-white p-6 rounded-lg'>
+        <section className='md:sticky top-21 grid gap-4 bg-white p-6 rounded-lg'>
+          <h2 className='font-semibold text-lg text-gray-800 border-b pb-2'>Filters</h2>
           <div className='grid gap-2'>
-            <p className='font-bold'>Select By Status</p>
+            <h3 className='text-sm font-medium text-gray-600'>Status</h3>
             <RadioGroup
               value={selectedStatus}
-              onValueChange={(value) => {
-                setSelectedStatus(value);
-                const newParams = new URLSearchParams(searchParams);
-                if (value) {
-                  newParams.set('status', value);
-                } else {
-                  newParams.delete('status');
-                }
-                setLastUpdated(Date.now());
-                navigate(`/orders?${newParams.toString()}`);
-              }}
+              onValueChange={(value) => selectOrderStatus(value)}
             >
               <label className='flex gap-2 cursor-pointer'>
                 <RadioGroupItem value=''/>
@@ -89,17 +95,22 @@ const OrderPage = () => {
             </RadioGroup>
           </div>
 
-          <p className='font-bold'>Choose transaction date</p>
+          <div className='grid gap-2'>
+            <h3 className='text-sm font-medium text-gray-600'>Range</h3>
+            {/*<DateRange/>
+            <DateDropdown/>*/}
+          </div>
         </section>
         <section className='md:gap-5 grid gap-4'>
           <SectionTitle title='My Orders'/>
-          {orders.length > 0 ? orders?.map((order) => (
-            <OrderCard key={order._id} order={order}></OrderCard>
+          {orders?.length > 0 ? orders?.map((order) => (
+            <OrderCard key={order._id} order={order}/>
           )) : (
             <p>You have not made any order</p>
           )}
         </section>
       </div>
+      <OrderModal/>
     </div>
   );
 };

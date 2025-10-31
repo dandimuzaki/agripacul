@@ -50,7 +50,7 @@ export const OrderProvider = ({ children }) => {
         loadSingleOrder(selectedOrder?._id);
       }
     }
-  }, [selectedOrder?._id, loadingAuth, lastUpdated]);
+  }, [selectedOrder?._id, loadingAuth, lastUpdated, accessToken]);
 
   const createNewOrder = async () => {
     setLoading(true);
@@ -68,7 +68,12 @@ export const OrderProvider = ({ children }) => {
       setLastUpdated(Date.now());
       navigate(`/checkout/success/${result.data._id}`);
     } catch (err) {
-      console.error('Error creating order', err);
+      if (err.response) {
+        const message = err.response.data.errors || 'Error creating order';
+        alert(message);
+      } else {
+        alert('Network error, please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -79,7 +84,7 @@ export const OrderProvider = ({ children }) => {
     setOpenOrderModal(true);
   };
 
-  const closeOrderModal = (orderData) => {
+  const closeOrderModal = () => {
     setSelectedOrder(null);
     setOrder(null);
     setOpenOrderModal(false);
@@ -87,15 +92,53 @@ export const OrderProvider = ({ children }) => {
 
   const confirmOrder = async (orderId) => {
     try {
-      const now = new Date();
-      await updateOrder(orderId, { 'status': 'processing', 'confirmedAt': now });
+      await updateOrder(orderId, { 'status': 'processing' });
       setOrders((prev) =>
         prev.map((o) =>
-          o._id == orderId ? { ...o, status: 'processing', confirmedAt: now } : o
+          o._id == orderId ? { ...o, status: 'processing' } : o
         )
       );
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const requestCancelOrder = async (orderId, reason) => {
+    try {
+      await updateOrder(orderId, { 'cancel': 'requested', 'cancelReason': reason });
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id == orderId ? { ...o, cancel: 'requested' } : o
+        )
+      );
+    } catch (err) {
+      console.error('Failed to cancel order', err.message);
+    }
+  };
+
+  const rejectCancelOrder = async (orderId, reason) => {
+    try {
+      await updateOrder(orderId, { 'cancel': 'rejected', 'rejectCancelReason': reason });
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id == orderId ? { ...o, cancel: 'rejected' } : o
+        )
+      );
+    } catch (err) {
+      console.error('Failed to reject order cancellation', err.message);
+    }
+  };
+
+  const approveCancelOrder = async (orderId) => {
+    try {
+      await updateOrder(orderId, { 'cancel': 'approved' });
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id == orderId ? { ...o, cancel: 'approved' } : o
+        )
+      );
+    } catch (err) {
+      console.error('Failed to approve order cancellation', err.message);
     }
   };
 
@@ -123,7 +166,8 @@ export const OrderProvider = ({ children }) => {
       order,
       lastUpdated, setLastUpdated,
       openRatingModal, handleRatingModal, closeRatingModal,
-      itemsRate, rateList, setRateList
+      itemsRate, rateList, setRateList,
+      requestCancelOrder, rejectCancelOrder, approveCancelOrder
     }}>
       {children}
     </OrderContext.Provider>

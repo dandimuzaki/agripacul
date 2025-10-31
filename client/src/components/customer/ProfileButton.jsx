@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const ProfileButton = ({ text }) => {
   const [scrolled, setScrolled] = useState(false);
-  const { handleLogout } = useAuth()
+  const { handleLogout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {

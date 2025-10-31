@@ -30,10 +30,17 @@ const confirmOrder = async () => {
   }, 20000);
 };
 
-confirmOrder();
-
 export const capitalize = (string) => {
   const arr = string.split(' ');
   const newString = arr.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
   return newString.join(' ');
 };
+
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth();
+const date = today.getDate();
+const last30 = new Date(year, month, date-30);
+
+console.log(today);
+console.log('Last 30 days is: ', last30);

@@ -18,6 +18,7 @@ export const ProductProvider = ({ children }) => {
   const [keyword, setKeyword] = useState('');
   const [debounceKeyword, setDebounceKeyword] = useState('');
   const [lastUpdated, setLastUpdated] = useState(Date.now());
+  const [isAllChecked, setIsAllChecked] = useState(false);
 
   useDebounce(() => setDebounceKeyword(keyword), 500, [keyword]);
 
@@ -175,7 +176,8 @@ export const ProductProvider = ({ children }) => {
       formProduct, setFormProduct,
       isLoading, setIsLoading,
       keyword, setKeyword, debounceKeyword, searchProduct,
-      lastUpdated, setLastUpdated
+      lastUpdated, setLastUpdated,
+      isAllChecked, setIsAllChecked
     }}>
       {children}
     </ProductContext.Provider>

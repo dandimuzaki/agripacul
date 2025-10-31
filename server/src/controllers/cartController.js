@@ -37,7 +37,7 @@ export const addToCart = async (req, res) => {
 
 export const getCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id })
+    const cart = await Cart.findOne(req.user._id)
       .populate('items.product');
     if (!cart) {
       return res.status(404).json({
@@ -139,4 +139,14 @@ export const deleteItem = async (req, res) => {
       errors: err.message
     });
   }
+};
+
+export const deleteCart = async (req, res) => {
+  const { cartId } = req.params;
+  const deletedCart = await Cart.findByIdAndDelete(cartId);
+  res.status(200).json({
+    success: true,
+    message: 'Item deleted successfully',
+    data: deletedCart
+  });
 };

@@ -28,15 +28,12 @@ const AdminProduct = () => {
       cell: ({ row }) => (
         <div className='h-full w-full flex justify-center'>
           <img
-            src={row.original.image}
+            src={row.original?.image}
             alt="product"
             className="h-10 aspect-square object-cover rounded-md"
           />
         </div>
       ),
-      meta: {
-        className: ''
-      }
     },
     {
       header: 'Category',
@@ -74,7 +71,7 @@ const AdminProduct = () => {
           Rating {column.getIsSorted() === 'asc' ? (<ArrowUpward fontSize='small'/>) : column.getIsSorted() === 'desc' ? (<ArrowDownward fontSize='small'/>) : (<Sort fontSize='small'/>)}
         </button>
       ),
-      cell: ({ row }) => (<p>{row.original.rating.toFixed(2)}</p>)
+      cell: ({ row }) => (<p>{row.original?.rating?.toFixed(2)}</p>)
     },
     {
       header: 'Action',
@@ -139,7 +136,7 @@ const AdminProduct = () => {
                       >
                         <option value="">Category</option>
                         {uniqueCategories.map((cat) => (
-                          <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+                          <option key={cat} value={cat}>{cat?.charAt(0).toUpperCase() + cat?.slice(1)}</option>
                         ))}
                       </select>
                     </th>

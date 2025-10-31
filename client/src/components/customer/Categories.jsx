@@ -25,6 +25,13 @@ const Categories = () => {
             <ul>
               <li>
                 <NavigationMenuLink asChild>
+                  <Link to='/products'>
+                  All
+                  </Link>
+                </NavigationMenuLink>
+              </li>
+              <li>
+                <NavigationMenuLink asChild>
                   <Link to='/products?category=vegetables'>
                   Vegetables
                   </Link>

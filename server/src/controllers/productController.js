@@ -17,7 +17,7 @@ export const getProducts = async (req, res) => {
     else if (sortByRating === 'desc') sortOption = { rating: -1 };
 
     const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(parseInt(req.query.limit) || 3, 100);
+    const limit = Math.min(parseInt(req.query.limit) || 20, 100);
     const skip = (page - 1) * limit;
 
     const [products, total] = await Promise.all([
@@ -140,7 +140,7 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { productId } = req.params;
-    const deletedProduct = await Product.findByIdAndDelete(productId);
+    const deletedProduct = await Product.findOneAndDelete({ _id: productId });
     if (!deletedProduct) {
       return res.status(404).json({
         success: false,

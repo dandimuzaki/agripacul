@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AddressContext } from './AddressContext';
-import { addressDummy } from '@/utils/addressDummy';
 import { addNewAddress, getAddressList, removeAddress, updateAddress } from '@/services/addressApi';
 import { getCities, getDistricts, getProvinces, getSubdistricts } from '@/services/locationService';
 import { useAuth } from './AuthContext';
@@ -17,62 +16,63 @@ export const AddressProvider = ({ children }) => {
   const [subdistrictList, setSubdistrictList] = useState([]);
   const { loadingAuth, accessToken } = useAuth();
 
-  useEffect(() => {
-    const getUserAddressList = async () => {
-      try {
-        const addressData = await getAddressList();
-        if (addressData) {
-          setAddressList(addressData.data);
-          const mainAddress = addressData.data.find((address) => address.mainAddress);
-          if (mainAddress) {
-            setSelectedAddress(mainAddress);
-          }
+  const getUserAddressList = useCallback(async () => {
+    try {
+      const addressData = await getAddressList();
+      if (addressData) {
+        setAddressList(addressData.data);
+        const mainAddress = addressData.data.find((address) => address.mainAddress);
+        if (mainAddress) {
+          setSelectedAddress(mainAddress);
         }
-      } catch (err) {
-        console.error('Error retrieving address list', err);
       }
-    };
+    } catch (err) {
+      console.error('Error retrieving address list', err.message);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!loadingAuth && accessToken) {
       getUserAddressList();
     }
 
-  }, [loadingAuth]);
+  }, [loadingAuth, accessToken, getUserAddressList]);
 
-  const fetchProvinces = async () => {
+  const fetchProvinces = useCallback(async () => {
     try {
       const provinces = await getProvinces();
       setProvinceList(provinces.data);
     } catch (err) {
       console.error('Error fetching provinces', err);
     }
-  };
+  }, []);
 
-  const fetchCities = async (provinceId) => {
+  const fetchCities = useCallback(async (provinceId) => {
     try {
       const cities = await getCities(provinceId);
       setCityList(cities.data);
     } catch (err) {
       console.error('Error fetching cities', err);
     }
-  };
+  }, []);
 
-  const fetchDistricts = async (cityId) => {
+  const fetchDistricts = useCallback(async (cityId) => {
     try {
       const districts = await getDistricts(cityId);
       setDistrictList(districts.data);
     } catch (err) {
       console.error('Error fetching districts', err);
     }
-  };
+  }, []);
 
-  const fetchSubdistricts = async (districtId) => {
+  const fetchSubdistricts = useCallback(async (districtId) => {
     try {
       const subdistricts = await getSubdistricts(districtId);
       setSubdistrictList(subdistricts.data);
     } catch (err) {
       console.error('Error fetching subdistricts', err);
     }
-  };
+  }, []);
 
   const selectAddress = (address) => {
     setSelectedAddress(address);

@@ -135,8 +135,28 @@ const orderSchema = new mongoose.Schema({
   totalBill: { type: Number, required: true },
   status: {
     type: String,
-    enum: ['pending', 'processing', 'shipped', 'delivered'],
+    enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'finished'],
     default: 'pending'
+  },
+  cancel: {
+    type: String,
+    enum: ['never', 'requested', 'approved', 'rejected'],
+    default: 'never'
+  },
+  cancelReason: {
+    type: String,
+  },
+  rejectCancelReason: {
+    type: String,
+  },
+  cancelRequestedAt: {
+    type: Date,
+  },
+  cancelApprovedAt: {
+    type: Date,
+  },
+  cancelRejectedAt: {
+    type: Date,
   },
   confirmedAt: {
     type: Date,
@@ -145,6 +165,9 @@ const orderSchema = new mongoose.Schema({
     type: Date
   },
   deliveredAt: {
+    type: Date
+  },
+  finishedAt: {
     type: Date
   }
 }, { timestamps: true });

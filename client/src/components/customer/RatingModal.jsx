@@ -23,7 +23,6 @@ const RatingModal = () => {
       <DialogContent className='overflow-y-auto'>
         <DialogHeader>
           <DialogTitle
-            onClick={() => console.log(rateList)}
           >Share Your Rating</DialogTitle>
         </DialogHeader>
         <div className='grid gap-4'>

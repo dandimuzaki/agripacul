@@ -12,7 +12,6 @@ const Rating = ({ item }) => {
     if (isSubmitted) return;
     setRateList((prev) => ([...prev, { _id: item.product._id, rating: star }]));
     setRating(star);
-    console.log(rateList);
   };
 
   return (
