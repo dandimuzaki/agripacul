@@ -1,10 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import AdminHeader from '../../../components/admin/AdminHeader';
 import { useProduct } from '../../../context/ProductContext';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { Add, ArrowDownward, ArrowUpward, Delete, DeleteOutlined, Edit, Search, Sort } from '@mui/icons-material';
-import ProductModal from '../../../components/admin/ProductModal';
-import lettuce from '../../../assets/lettuce.jpg';
 import Confirmation from '../../../components/admin/Confirmation';
 import ProductForm from '@/components/admin/ProductForm';
 
