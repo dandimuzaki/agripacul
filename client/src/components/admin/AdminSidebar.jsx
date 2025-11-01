@@ -1,4 +1,4 @@
-import { AccountCircleOutlined, AnalyticsOutlined, AssignmentOutlined, SettingsOutlined, ShoppingBasketOutlined, StoreOutlined } from '@mui/icons-material';
+import { AccountCircleOutlined, AnalyticsOutlined, AssignmentOutlined, BarChart, SettingsOutlined, ShoppingBasketOutlined, StoreOutlined } from '@mui/icons-material';
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
@@ -11,6 +11,13 @@ const AdminSidebar = () => {
       >
         <p>Agripacul</p>
       </Link>
+      <NavLink
+        to='/admin/overview'
+        className={({ isActive }) => `${isActive ? 'bg-[var(--dark-primary)] font-bold' : 'bg-[var(--primary]'} px-5 py-2 flex gap-2 items-center`
+        }
+      >
+        <BarChart/> Overview
+      </NavLink>
       <NavLink
         to='/admin/products'
         className={({ isActive }) => `${isActive ? 'bg-[var(--dark-primary)] font-bold' : 'bg-[var(--primary]'} px-5 py-2 flex gap-2 items-center`

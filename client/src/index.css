@@ -23,7 +23,10 @@ body{
   /*#d1f5e9*/
   --primary-dark: #229d74;
   --primary-light: #d4f8ed;
+  --primary-2: #d1f0e7;
   --secondary: #e6ffaa;
+  --secondary-2: #f1ffbe;
+  --background-2: #f4faf8;
   --accent: #babdb3;
   --neutral-900: #1e1e1e;
   --neutral-700: #555;

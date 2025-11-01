@@ -32,6 +32,7 @@ import { UserProvider } from './context/UserProvider';
 import UserList from './pages/admin/UserList';
 import SearchResult from './pages/customer/SearchResult';
 import AfterPurchase from './pages/customer/AfterPurchase';
+import Overview from './pages/admin/Overview';
 
 function App() {
 
@@ -77,6 +78,7 @@ function App() {
                               <Route path='orders' element={<AdminOrderList/>} />
                               <Route path='summary' element={<AdminOrderSummary/>} />
                               <Route path='users' element={<UserList/>}/>
+                              <Route path='overview' element={<Overview/>}/>
 
                             </Route>
                           </Routes>

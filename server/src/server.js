@@ -21,7 +21,7 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://agripacul.vercel.app/'
+  'https://agripacul.vercel.app'
 ];
 
 app.use(cors({

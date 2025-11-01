@@ -16,11 +16,22 @@ export const getMonthlyStats = async (req, res) => {
             month: { $month: '$createdAt' },
             category: '$itemsSnapshot.product.category'
           },
-          totalOrders: { $sum: 1 },
-          totalSales: { $sum: '$itemsSnapshot.quantity' },
-          totalRevenue: { $sum: '$totalPrice' },
-          totalRating: { $sum: '$itemsSnapshot.product.rating' },
-          totalRatingCount: { $sum: '$itemsSnapshot.product.ratingCount' },
+          completedOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, 1, 0]
+            } },
+          cancelledOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'cancelled']}, 1, 0]
+            } },
+          totalSales: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$itemsSnapshot.quantity', 0]
+            } },
+          totalRevenue: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$totalPrice', 0]
+            } },
         }
       },
 
@@ -31,17 +42,26 @@ export const getMonthlyStats = async (req, res) => {
             year: '$_id.year',
             month: '$_id.month'
           },
-          totalOrders: { $sum: '$totalOrders' },
-          totalRevenue: { $sum: '$totalRevenue' },
-          totalSales: { $sum: '$totalSales' },
-          totalRating: { $sum: '$totalRating' },
-          totalRatingCount: { $sum: '$totalRatingCount' },
+          completedOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, 1, 0]
+            } },
+          cancelledOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'cancelled']}, 1, 0]
+            } },
+          totalSales: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$itemsSnapshot.quantity', 0]
+            } },
+          totalRevenue: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$totalPrice', 0]
+            } },
           categories: {
             $push: {
               category: '$_id.category',
               sales: '$totalSales',
-              rating: '$totalRating',
-              ratingCount: '$totalRatingCount',
             }
           }
         }
@@ -82,28 +102,48 @@ export const getTotalStats = async (req, res) => {
           _id: {
             category: '$itemsSnapshot.product.category'
           },
-          totalOrders: { $sum: 1 },
-          totalSales: { $sum: '$itemsSnapshot.quantity' },
-          totalRevenue: { $sum: '$totalPrice' },
-          totalRating: { $sum: '$itemsSnapshot.product.rating' },
-          totalRatingCount: { $sum: '$itemsSnapshot.product.ratingCount' },
+          completedOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, 1, 0]
+            } },
+          cancelledOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'cancelled']}, 1, 0]
+            } },
+          totalSales: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$itemsSnapshot.quantity', 0]
+            } },
+          totalRevenue: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$totalPrice', 0]
+            } },
         }
       },
 
       {
         $group: {
           _id: null,
-          totalRevenue: { $sum: '$totalPrice' },
-          totalOrders: { $sum: 1 },
-          totalRating: { $sum: '$itemsSnapshot.product.rating' },
-          totalRatingCount: { $sum: '$itemsSnapshot.product.ratingCount' },
-          totalSales: { $sum: '$itemsSnapshot.quantity' },
+          completedOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, 1, 0]
+            } },
+          cancelledOrders: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'cancelled']}, 1, 0]
+            } },
+          totalSales: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$itemsSnapshot.quantity', 0]
+            } },
+          totalRevenue: { 
+            $sum: {
+              $cond: [{ $eq: ['$status', 'finished']}, '$totalPrice', 0]
+            } },
           categories: {
             $push: {
               category: '$_id.category',
               sales: '$totalSales',
-              rating: '$totalRating',
-              ratingCount: '$totalRatingCount',
             }
           }
         }
