@@ -16,10 +16,8 @@ import './cron.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
-connectDB();
 
 const app = express();
-app.use(cookieParser());
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -33,7 +31,11 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+connectDB();
+
 app.use(express.json());
+app.use(cookieParser());
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/products', productRoutes);
